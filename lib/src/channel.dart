@@ -18,7 +18,9 @@ class Channel {
   }
 
   /// Returns true if this is the active channel
-  bool get isActive => (resolveSymLink(activePath).startsWith(pathToVersions));
+  bool get isActive =>
+      exists(activePath) &&
+      (resolveSymLink(activePath).startsWith(pathToVersions));
 
   void install() {
     if (isDownloaded()) {
@@ -27,9 +29,11 @@ class Channel {
     } else {
       var releases = Release.fetchReleases(name);
       var version = releases[0].version.toString();
+      print('Installing $name ($version) ...');
       download(version);
       currentVersion = version;
       _createChannelSymlink();
+      print('install of $name channel complete');
     }
   }
 
@@ -163,7 +167,7 @@ class Channel {
     var releases = Release.fetchReleases(name);
 
     var release = menu<Release>(
-        prompt: 'Select Version to install',
+        prompt: 'Select Version to install:',
         options: releases,
         limit: 20,
         format: (release) => release.version.toString());
@@ -194,6 +198,7 @@ class Channel {
       } else {
         _createChannelSymlink();
       }
+      print('upgrade of $name channel to $version complete');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
 
@@ -19,5 +20,6 @@ Unpins the $channel channel.
   void run() {
     var ch = Channel(channel);
     ch.unpin();
+    print(green('Channel $channel is now on ${ch.currentVersion}'));
   }
 }

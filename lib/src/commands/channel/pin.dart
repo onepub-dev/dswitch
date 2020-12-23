@@ -46,6 +46,7 @@ Selects the given version for the $channel channel and makes it the active versi
     }
 
     ch.pin(version);
+    print(green('Channel $channel is now pinned to $version'));
   }
 
   void installVersion(String version) {
