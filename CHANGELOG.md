@@ -1,3 +1,6 @@
+# 0.3.0
+Updated to dcli 0.39.1 which includes fixes for windows privileges and dev mode.
+
 # 0.2.0
 On windows we now require the user to be running in development mode so we can create symlinks.
 
