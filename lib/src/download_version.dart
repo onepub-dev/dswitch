@@ -120,7 +120,7 @@ class DownloadVersion {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
             Terminal().clearLine();
-            print('$progress %');
+            echo('$progress %');
             last = progress;
           }
         });
