@@ -1,17 +1,18 @@
 #! /usr/bin/env dcli
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
+import 'package:dswitch/src/first_run.dart';
 
 void main(List<String> args) {
-  if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
-    print(run('You must run dswitch as an Administrator'));
-    exit(1);
-  }
+  // if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
+  //   print(run('You must run dswitch as an Administrator'));
+  //   exit(1);
+  // }
+
+  firstRun();
   doit(args);
 }
 
