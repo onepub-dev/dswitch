@@ -34,14 +34,17 @@ class DownloadVersion {
         platform: 'macos',
         version: version,
         architecture: 'x64');
+    expandSdk();
   }
 
-  void fetchWindowsChannel() {
+  void fetchWindowsChannel({bool useArchive}) {
     downloadDart(
-        channel: channel,
-        platform: 'windows',
-        version: version,
-        architecture: 'x64');
+      channel: channel,
+      platform: 'windows',
+      version: version,
+      architecture: 'x64',
+    );
+    expandSdk();
   }
 
   void fetchLinuxChannel() {
