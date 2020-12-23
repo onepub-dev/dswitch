@@ -33,4 +33,3 @@ class GlobalStatusCommand extends Command<void> {
     }
   }
 }
-
