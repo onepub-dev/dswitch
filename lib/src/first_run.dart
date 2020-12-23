@@ -6,6 +6,9 @@ import 'package:settings_yaml/settings_yaml.dart';
 
 var pathToSettings = join(HOME, '.dswitch', 'settings.yaml');
 void firstRun() {
+  if (!exists(dirname(pathToSettings))) {
+    createDir(dirname(pathToSettings), recursive: true);
+  }
   var settings = SettingsYaml.load(
     pathToSettings: pathToSettings,
   );
