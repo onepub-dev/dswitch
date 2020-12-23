@@ -78,13 +78,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.13"
-  completer_ex:
-    dependency: transitive
-    description:
-      name: completer_ex
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   convert:
     dependency: transitive
     description:
@@ -372,13 +365,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.3"
-  simple_logger:
-    dependency: transitive
-    description:
-      name: simple_logger
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.0"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -407,13 +393,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.6"
-  stacktrace_impl:
-    dependency: transitive
-    description:
-      name: stacktrace_impl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   stream_channel:
     dependency: transitive
     description:
