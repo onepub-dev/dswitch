@@ -30,19 +30,23 @@ Switches to the passed channel.
     channel = argResults.rest[0];
     var ch = Channel(channel);
 
-    if (!ch.isDownloaded()) {
-      print(orange('Downloading latest version for $channel'));
-      final version = ch.fetchLatestVersion();
-      ch.download(version);
-      ch.currentVersion = version;
+    if (ch.isActive) {
+      print('You are already on the $channel channele.');
+    } else {
+      if (!ch.isDownloaded()) {
+        final version = ch.fetchLatestVersion();
+        print(orange('Downloading latest version ($version) for $channel'));
+
+        ch.download(version);
+        ch.currentVersion = version;
+      }
+
+      ch.switchTo();
+      print(green('Switched to $channel (${ch.currentVersion})'));
+
+      print('');
+
+      print(red('You need to restart your terminal session.'));
     }
-
-    ch.switchTo();
-    print('Switched to $channel ${ch.currentVersion}');
-
-    print('');
-
-    print(
-        'You may need to restart your terminal session if your shell hashes the location of exes.');
   }
 }

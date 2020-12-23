@@ -120,10 +120,11 @@ class DownloadVersion {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
             Terminal().clearLine();
-            echo('$progress %');
+            echo('Fetching: $progress %');
             last = progress;
           }
         });
+    print('');
   }
 
   String sdkDownloadPath(String channel) =>
