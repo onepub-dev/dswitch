@@ -4,6 +4,7 @@
 .dart_tool/
 .packages
 build/
+.history
 
 
 # Directory created by dartdoc
@@ -11,3 +12,4 @@ build/
 doc/api/
 
 
+pubspec.yaml
