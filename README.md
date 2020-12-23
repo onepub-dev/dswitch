@@ -14,4 +14,4 @@ Switching between dart channels is as easy as:
 dswitch switch beta
 ```
 
-Full documenation is on [gitbooks](https://app.gitbook.com/@bsutton/s/dswitch/).
+Full documenation is on [gitbooks](https://bsutton.gitbook.io/dswitch/).

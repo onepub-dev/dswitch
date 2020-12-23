@@ -1,7 +1,7 @@
 name: dswitch
 version: 0.0.2
 description: A cli tool to rapidly switch between versions of dart.
-home: https://github.com/bsutton/dswitch
+repository: https://github.com/bsutton/dswitch
 environment: 
   sdk: '>=2.9.0 <3.0.0'
 dependencies: 
