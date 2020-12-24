@@ -32,9 +32,8 @@ class ListCommand extends Command<void> {
 
     if (showArchives) {
       var releases = Release.fetchReleases(channel);
-
       print(
-          'The following versions for the $channel are available to download:');
+          'The following versions for the $channel channel are available to download:');
 
       if (releases.isEmpty) {
         print(orange('None found.'));
@@ -45,12 +44,11 @@ class ListCommand extends Command<void> {
       }
     } else {
       var versions = ch.cachedVersions();
-
+      print(
+          'The following versions for the $channel channel are cached locally:');
       if (versions.isEmpty) {
         print(orange('None found.'));
       } else {
-        print('The following versions for the $channel are cached locally:');
-
         for (var version in versions) {
           print(basename(version));
         }

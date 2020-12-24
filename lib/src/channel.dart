@@ -19,8 +19,8 @@ class Channel {
 
   /// Returns true if this is the active channel
   bool get isActive =>
-      exists(activePath) &&
-      (resolveSymLink(activePath).startsWith(pathToVersions));
+      exists(activeSymlinkPath) &&
+      (resolveSymLink(activeSymlinkPath).startsWith(pathToVersions));
 
   void install() {
     if (isDownloaded()) {
@@ -46,10 +46,10 @@ class Channel {
   }
 
   void switchTo({bool forceDownload}) {
-    if (exists(activePath)) {
-      deleteSymlink(activePath);
+    if (exists(activeSymlinkPath)) {
+      deleteSymlink(activeSymlinkPath);
     }
-    symlink(pathToCurrentVersion, activePath);
+    symlink(pathToCurrentVersion, activeSymlinkPath);
 
     /// they may never run install so we need to create this.
     _createChannelSymlink();
@@ -106,7 +106,9 @@ class Channel {
       join(_pathToVersion(version), 'dart-sdk');
 
   /// Channel Symlink - ~/.dswitch/<channel>
-  String get _channelSymlink => join(dswitchPath, name);
+  String get _channelSymlink => channelSymlink(name);
+
+  static String channelSymlink(String channel) => join(dswitchPath, channel);
 
   bool isDownloaded() => currentVersion != null;
 
@@ -186,19 +188,24 @@ class Channel {
     } else {
       var version = fetchLatestVersion();
 
-      print('Downloading $version...');
-      download(version);
-
-      currentVersion = version;
-
-      if (isActive) {
-        /// if we are the active channel then calling swithTo
-        /// will update the symlinks to the new version
-        switchTo();
+      if (version == latestVersion) {
+        print(
+            'You are already on the latest version ($version) for the $name channel');
       } else {
-        _createChannelSymlink();
+        print('Downloading $version...');
+        download(version);
+
+        currentVersion = version;
+
+        if (isActive) {
+          /// if we are the active channel then calling swithTo
+          /// will update the symlinks to the new version
+          switchTo();
+        } else {
+          _createChannelSymlink();
+        }
+        print('upgrade of $name channel to $version complete');
       }
-      print('upgrade of $name channel to $version complete');
     }
   }
 }

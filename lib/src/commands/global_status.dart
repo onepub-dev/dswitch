@@ -17,7 +17,7 @@ class GlobalStatusCommand extends Command<void> {
     for (var channel in channels) {
       var ch = Channel(channel);
       if (ch.isActive) {
-        print(orange('The active channel is $channel on ${ch.currentVersion}'));
+        print(green('The active channel is $channel on ${ch.currentVersion}'));
         print('');
       }
     }

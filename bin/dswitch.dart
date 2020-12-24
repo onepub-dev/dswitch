@@ -1,5 +1,7 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/commands/commands.dart';
@@ -32,23 +34,33 @@ void doit(List<String> args) async {
 
 void checkConfig() {
   /// are we on the path
-  if (!Env().isOnPATH(activePath)) {
+  if (!Env().isOnPATH(activeSymlinkPath)) {
     printerr(red('You need to add dswitch to your path.'));
-    print('Prepend the following path to your PATH environment variable.');
-    print(activePath);
+
+    printPlatformPathMessage();
   } else {
     // check for other instances of dart on the path.
     var dartPaths = which('dart').paths;
     if (dartPaths.length > 1) {
-      if (!dartPaths[0].startsWith(activePath)) {
+      if (!dartPaths[0].startsWith(activeSymlinkPath)) {
         printerr(
             red('dswitch found another version of Dart that is being used.'));
         print(
             'Please check that the dswitch path is before any other dart paths');
         print('Prepend the following path to your PATH environment variable.');
-        print(activePath);
+        print(activeSymlinkPath);
         print('');
       }
     }
+  }
+}
+
+void printPlatformPathMessage() {
+  if (Platform.isLinux || Platform.isMacOS) {
+    print('Add the following to your shell start up script');
+    print('export PATH=$activeSymlinkPath:"\$PATH"');
+  } else if (Platform.isWindows) {
+    print('Prepend the following path to your PATH environment variable.');
+    print(activeSymlinkPath);
   }
 }

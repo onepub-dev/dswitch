@@ -1,3 +1,7 @@
+# 0.9.0
+fixed bug on first run if .dswitch directory didn' exist.
+fixed stack overflow on windows.
+
 # 0.3.0
 Updated to dcli 0.39.1 which includes fixes for windows privileges and dev mode.
 

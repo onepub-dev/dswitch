@@ -11,7 +11,7 @@ import 'global_switch.dart';
 
 CommandRunner buildCommandRunner() {
   var runner = CommandRunner<void>(
-      'dswitch', 'DSwitch manages Dart versions and channels');
+      'dswitch', green('DSwitch manages Dart versions and channels'));
 
   runner.argParser.addFlag('verbose',
       abbr: 'v',
