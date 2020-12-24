@@ -33,7 +33,7 @@ class Channel {
       download(version);
       currentVersion = version;
       _createChannelSymlink();
-      print('install of $name channel complete');
+      print('Install of $name channel complete');
     }
   }
 

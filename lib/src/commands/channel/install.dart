@@ -50,13 +50,13 @@ If you pass the --select switch then a menu is displayed with the version availa
     var ch = Channel(channel);
 
     ch.download(ch.select());
-    print('install of $channel channel complete');
+    print('Install of $channel channel complete');
   }
 
   void installVersion(String version) {
     print('Installing $channel version $version...');
     var ch = Channel(channel);
     ch.download(version);
-    print('install of $channel channel complete');
+    print('Install of $channel channel complete');
   }
 }

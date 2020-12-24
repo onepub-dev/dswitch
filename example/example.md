@@ -13,7 +13,7 @@ dswitch stable install
   Fetching: 100 %
   Expanding release...
   Expansion complete.
-  install of stable channel complete
+  Install of stable channel complete
 
 ```
 
@@ -79,7 +79,7 @@ dswitch stable install 2.8.1
   Fetching: 100 %
   Expanding release...
   Expansion complete.
-  install of stable channel complete
+  Install of stable channel complete
 ```
 
 # install a specific version from a menu of available versions
@@ -110,7 +110,7 @@ dswitch dev install --select
   Fetching: 100 %
   Expanding release...
   Expansion complete.
-  install of dev channel complete
+  Install of dev channel complete
 ```
 
 # pin a channel to a specific version

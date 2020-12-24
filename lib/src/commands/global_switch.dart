@@ -46,7 +46,7 @@ Switches to the passed channel.
 
       print('');
 
-      print(red('You need to restart your terminal session.'));
+      print(red('You may need to restart your terminal session.'));
     }
   }
 }
