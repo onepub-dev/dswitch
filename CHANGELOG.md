@@ -1,3 +1,9 @@
+# 0.9.2
+Fixed the bug where dswich would take something like 10 seconds to such down after any operation that fetch http data.
+
+# 0.9.1
+Improved first run messages.
+
 # 0.9.0
 fixed bug on first run if .dswitch directory didn' exist.
 fixed stack overflow on windows.
