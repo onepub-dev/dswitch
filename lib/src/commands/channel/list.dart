@@ -30,10 +30,12 @@ class ListCommand extends Command<void> {
   static void listForChannel(String channel, {bool showArchives}) {
     var ch = Channel(channel);
 
+    print('');
+    print(green('Channel $channel'));
     if (showArchives) {
       var releases = Release.fetchReleases(channel);
-      print(
-          'The following versions for the $channel channel are available to download:');
+
+      print('Available to download:');
 
       if (releases.isEmpty) {
         print(orange('None found.'));
@@ -44,8 +46,7 @@ class ListCommand extends Command<void> {
       }
     } else {
       var versions = ch.cachedVersions();
-      print(
-          'The following versions for the $channel channel are cached locally:');
+      print('Cached Locally:');
       if (versions.isEmpty) {
         print(orange('None found.'));
       } else {
