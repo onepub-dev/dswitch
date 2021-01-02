@@ -33,6 +33,12 @@ void doit(List<String> args) async {
 }
 
 void checkConfig() {
+  if (Platform.isWindows && Shell.current.isPrivilegedUser) {
+    printerr(
+        red('You must run as an Administrator or enable Development Mode'));
+    exit(1);
+  }
+
   /// are we on the path
   if (!Env().isOnPATH(activeSymlinkPath)) {
     printerr(red('You need to add dswitch to your path.'));
