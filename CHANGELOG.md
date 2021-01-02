@@ -1,3 +1,6 @@
+# 0.9.5
+Added post release hook to automatically create a binary release.
+
 # 0.9.4
 Added support for arm and x32 architectures.
 
