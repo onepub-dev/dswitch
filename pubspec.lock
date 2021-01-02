@@ -408,7 +408,7 @@ packages:
     source: hosted
     version: "1.0.5"
   system_info:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: system_info
       url: "https://pub.dartlang.org"

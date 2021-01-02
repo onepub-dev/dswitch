@@ -1,3 +1,12 @@
+# 0.9.4
+Added support for arm and x32 architectures.
+
+
+# 0.9.3
+A number of fixes for Windows  to resolve failing unit tests.
+Fix for isPrivilgedUser under windows cmd.exe
+
+
 # 0.9.2
 Fixed the bug where dswich would take something like 10 seconds to such down after any operation that fetch http data.
 
