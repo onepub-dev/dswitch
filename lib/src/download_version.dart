@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
+import 'package:system_info/system_info.dart';
 
 import 'channel.dart';
 
@@ -33,7 +34,7 @@ class DownloadVersion {
         channel: channel,
         platform: 'macos',
         version: version,
-        architecture: 'x64');
+        architecture: resolveArchitecture());
     expandSdk();
   }
 
@@ -42,7 +43,7 @@ class DownloadVersion {
       channel: channel,
       platform: 'windows',
       version: version,
-      architecture: 'x64',
+      architecture: resolveArchitecture(),
     );
     expandSdk();
   }
@@ -52,7 +53,7 @@ class DownloadVersion {
         channel: channel,
         platform: 'linux',
         version: version,
-        architecture: 'x64');
+        architecture: resolveArchitecture());
 
     expandSdk();
   }
@@ -132,4 +133,37 @@ class DownloadVersion {
 
   String sdkDownloadPath(String channel) =>
       join(Channel.channelPath(channel), '.downloads', '$version.zip');
+}
+
+/// Converts the kernel architecture into one of the architecture names use by:
+/// https://dart.dev/tools/sdk/archive
+String resolveArchitecture() {
+  if (Platform.isMacOS) {
+    return 'x64';
+  } else if (Platform.isWindows) {
+    if (SysInfo.kernelBitness == 32) {
+      return 'ia32';
+    } else {
+      return 'x64';
+    }
+  } else // linux
+  {
+    var architecture = SysInfo.kernelArchitecture;
+
+    if (architecture == ProcessorArchitecture.AARCH64.name) {
+      return 'ARMv8';
+    } else if (architecture == ProcessorArchitecture.ARM.name) {
+      return 'ARMv7';
+    } else if (architecture == ProcessorArchitecture.IA64.name) {
+      return 'X64';
+    } else if (architecture == ProcessorArchitecture.MIPS.name) {
+      throw OSError('Mips is not a supported architecture.');
+    } else if (architecture == ProcessorArchitecture.X86.name) {
+      return 'ia32';
+    } else if (architecture == ProcessorArchitecture.X86_64.name) {
+      return 'x64';
+    } else {
+      return 'x64';
+    }
+  }
 }

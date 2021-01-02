@@ -33,7 +33,11 @@ void doit(List<String> args) async {
 }
 
 void checkConfig() {
-  if (Platform.isWindows && Shell.current.isPrivilegedUser) {
+  if (Platform.isWindows && !Shell.current.isPrivilegedUser
+
+      /// TODO: implement
+//  && !WindowsShell.inDevelopmentMode()
+      ) {
     printerr(
         red('You must run as an Administrator or enable Development Mode'));
     exit(1);
