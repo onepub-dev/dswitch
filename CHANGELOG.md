@@ -1,3 +1,6 @@
+# 1.0.0
+Fixed a bug in the pin and unpin commands. If the channel being pinned/unpined is the active channel then we need to also recreate the active link.
+
 # 0.9.7
 Added hook to automate creation of git hub release
 Fixed incorrect error message.
