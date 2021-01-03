@@ -41,7 +41,7 @@ Selects the given version for the $channel channel and makes it the active versi
 
     if (!ch.isVersionCached(version)) {
       printerr(red(
-          "The selected version isn't installed. Use: dswitch install $channel $version"));
+          "The selected version isn't installed. Use: dswitch  $channel install $version"));
       exit(0);
     }
 
