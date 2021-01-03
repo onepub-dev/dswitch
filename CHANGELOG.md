@@ -1,3 +1,10 @@
+# 0.9.7
+Added hook to automate creation of git hub release
+Fixed incorrect error message.
+
+# 0.9.6
+Fixed permissions on the post release hook.
+
 # 0.9.5
 Added post release hook to automatically create a binary release.
 
