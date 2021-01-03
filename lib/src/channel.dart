@@ -1,5 +1,6 @@
 import 'package:dswitch/src/constants.dart';
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
@@ -37,19 +38,8 @@ class Channel {
     }
   }
 
-  void _createChannelSymlink() {
-    if (exists(_channelSymlink)) {
-      deleteSymlink(_channelSymlink);
-    }
-
-    symlink(pathToCurrentVersion, _channelSymlink);
-  }
-
   void switchTo({bool forceDownload}) {
-    if (exists(activeSymlinkPath)) {
-      deleteSymlink(activeSymlinkPath);
-    }
-    symlink(pathToCurrentVersion, activeSymlinkPath);
+    _createActiveSymLink();
 
     /// they may never run install so we need to create this.
     _createChannelSymlink();
@@ -58,13 +48,38 @@ class Channel {
   void pin(String version) {
     currentVersion = version;
     pinned = true;
+
+    /// If we are the active channel then we need to update the active link.
+    if (isActive) {
+      _createActiveSymLink();
+    }
     _createChannelSymlink();
   }
 
   void unpin() {
     currentVersion = latestVersion;
     pinned = false;
+
+    /// If we are the active channel then we need to update the active link.
+    if (isActive) {
+      _createActiveSymLink();
+    }
     _createChannelSymlink();
+  }
+
+  void _createChannelSymlink() {
+    if (exists(_channelSymlink)) {
+      deleteSymlink(_channelSymlink);
+    }
+
+    symlink(pathToCurrentVersion, _channelSymlink);
+  }
+
+  void _createActiveSymLink() {
+    if (exists(activeSymlinkPath)) {
+      deleteSymlink(activeSymlinkPath);
+    }
+    symlink(pathToCurrentVersion, activeSymlinkPath);
   }
 
   bool get isPinned => pinned == true;
