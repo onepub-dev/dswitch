@@ -1,3 +1,5 @@
+# 1.1.0
+Change the minimum dart version to 2.6.0 so we can switch back to older versions of dart.
 # 1.0.0
 Fixed a bug in the pin and unpin commands. If the channel being pinned/unpined is the active channel then we need to also recreate the active link.
 
