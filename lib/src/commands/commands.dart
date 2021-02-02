@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
+import '../version/version.g.dart';
 
 import '../constants.dart';
 import 'channel/channel.dart';
@@ -10,8 +11,8 @@ import 'global_status.dart';
 import 'global_switch.dart';
 
 CommandRunner buildCommandRunner() {
-  var runner = CommandRunner<void>(
-      'dswitch', green('DSwitch manages Dart versions and channels'));
+  var runner = CommandRunner<void>('dswitch',
+      green('DSwitch $packageVersion manages Dart versions and channels'));
 
   runner.argParser.addFlag('verbose',
       abbr: 'v',
