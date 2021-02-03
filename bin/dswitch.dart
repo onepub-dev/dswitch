@@ -1,5 +1,4 @@
 #! /usr/bin/env dcli
-
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
