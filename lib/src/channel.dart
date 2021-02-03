@@ -136,6 +136,7 @@ class Channel {
     }
   }
 
+  /// Downloads the list of versions available for this channel.
   String fetchLatestVersion() {
     final releases = Release.fetchReleases(name);
     return releases[0].version.toString();
@@ -203,7 +204,7 @@ class Channel {
     } else {
       var version = fetchLatestVersion();
 
-      if (version == latestVersion) {
+      if (version == currentVersion) {
         print(
             'You are already on the latest version ($version) for the $name channel');
       } else {
