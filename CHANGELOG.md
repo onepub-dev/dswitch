@@ -1,3 +1,7 @@
+# 1.1.2
+upgraded to latest version of dcli.
+released 1.1.1
+
 # 1.1.1
 upgrade was checking the latest downloaded version not the currentVersion. You may have downloaded the latest version but not switched to it. We now check against the currentVersion and make certain we always switch to the latests.
 Now prints dswitch version no. on start.
