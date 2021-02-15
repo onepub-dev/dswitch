@@ -7,7 +7,7 @@ environment:
 dependencies: 
   archive: ^2.0.13
   args: ^1.0.0
-  dcli: ^0.39.0
+  dcli: ^0.41.0
   path: ^1.0.0
   pub_semver: ^1.4.4
   settings_yaml: ^2.1.3
