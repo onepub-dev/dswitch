@@ -1,3 +1,14 @@
+# 2.0.0
+Breaking change to the cli interface.
+
+Changed the switch command to use. This bring is inline with fvm and feels less verbose then dswitch switch.
+
+Instead of:
+dswitch switch beta
+
+use:
+
+dswitch use beta
 # 1.1.2
 upgraded to latest version of dcli.
 released 1.1.1
