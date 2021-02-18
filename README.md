@@ -11,7 +11,7 @@ DSwitch can switch between dart channels as well as versions within those channe
 Switching between dart channels is as easy as:
 
 ```
-dswitch switch beta
+dswitch use beta
 ```
 
 Full documenation is on [gitbooks](https://bsutton.gitbook.io/dswitch/).

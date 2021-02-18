@@ -4,8 +4,8 @@ import 'package:dcli/dcli.dart';
 import '../channel.dart';
 import 'commands.dart';
 
-class GlobalSwitchCommand extends Command<void> {
-  GlobalSwitchCommand();
+class GlobalUseCommand extends Command<void> {
+  GlobalUseCommand();
 
   @override
   String get description => '''
@@ -15,7 +15,7 @@ Switches to the passed channel.
    ''';
 
   @override
-  String get name => 'switch';
+  String get name => 'use';
 
   @override
   void run() {

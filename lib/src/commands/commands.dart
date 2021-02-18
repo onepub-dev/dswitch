@@ -8,7 +8,7 @@ import '../constants.dart';
 import 'channel/channel.dart';
 import 'global_list.dart';
 import 'global_status.dart';
-import 'global_switch.dart';
+import 'global_use.dart';
 
 CommandRunner buildCommandRunner() {
   var runner = CommandRunner<void>('dswitch',
@@ -26,7 +26,7 @@ CommandRunner buildCommandRunner() {
 
   runner.addCommand(GlobalListCommand());
   runner.addCommand(GlobalStatusCommand());
-  runner.addCommand(GlobalSwitchCommand());
+  runner.addCommand(GlobalUseCommand());
 
   return runner;
 }
@@ -40,7 +40,7 @@ void showUsage(ArgParser parser) {
 Examples:
 
 /// switch to the latest 'local' beta channel. 
-dswitch switch beta
+dswitch use beta
 
 /// upgrade the beta channel without switching to it.
 dswitch beta upgrade
