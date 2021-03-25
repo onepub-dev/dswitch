@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../channel.dart';
+import '../constants.dart';
 import 'commands.dart';
 
 class GlobalUseCommand extends Command<void> {
@@ -28,6 +31,10 @@ Switches to the passed channel.
     }
 
     channel = argResults.rest[0];
+    if (!channels.contains(channel)) {
+      printerr(red('Channel $channel does not exist. Available channels: ${channels}'));
+      exit(1);
+    }
     var ch = Channel(channel);
 
     if (ch.isActive) {
