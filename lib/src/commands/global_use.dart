@@ -32,7 +32,8 @@ Switches to the passed channel.
 
     channel = argResults.rest[0];
     if (!channels.contains(channel)) {
-      printerr(red('Channel $channel does not exist. Available channels: ${channels}'));
+      printerr(red(
+          'Channel $channel does not exist. Available channels: ${channels}'));
       exit(1);
     }
     var ch = Channel(channel);

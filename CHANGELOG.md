@@ -1,3 +1,6 @@
+# 2.0.1
+Add channel validation for the `use` cmd so that it provides a coherent warning if the users enters a non-existing channel.
+
 # 2.0.0
 Breaking change to the cli interface.
 
