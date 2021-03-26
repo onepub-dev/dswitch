@@ -13,7 +13,8 @@ import 'releases.dart';
 
 class Channel {
   String name;
-  SettingsYaml _settings;
+  late final SettingsYaml _settings =
+      SettingsYaml.load(pathToSettings: pathToSettings);
   Channel(this.name) {
     createPaths();
   }
@@ -26,7 +27,7 @@ class Channel {
   void install() {
     if (isDownloaded()) {
       print(orange(
-          'Channel is already installed and the current version is: ${currentVersion}'));
+          'Channel is already installed and the current version is: $currentVersion'));
     } else {
       var releases = Release.fetchReleases(name);
       var version = releases[0].version.toString();
@@ -38,7 +39,7 @@ class Channel {
     }
   }
 
-  void switchTo({bool forceDownload}) {
+  void switchTo() {
     _createActiveSymLink();
 
     /// they may never run install so we need to create this.
@@ -84,8 +85,7 @@ class Channel {
 
   bool get isPinned => pinned == true;
 
-  SettingsYaml get settings =>
-      _settings ??= SettingsYaml.load(pathToSettings: pathToSettings);
+  SettingsYaml get settings => _settings;
 
   void createPaths() {
     createPath(dswitchPath);
@@ -94,7 +94,7 @@ class Channel {
 
   void validateChannel(ArgParser parser, String channel) {
     if (!channels.contains(channel)) {
-      printerr(red('Invalid command. ${channel}'));
+      printerr(red('Invalid command. $channel'));
       showUsage(parser);
     }
   }
@@ -125,7 +125,7 @@ class Channel {
 
   static String channelSymlink(String channel) => join(dswitchPath, channel);
 
-  bool isDownloaded() => currentVersion != null;
+  bool isDownloaded() => isVersionCached(currentVersion);
 
   void download(String version) {
     var downloader = DownloadVersion(name, version, _pathToVersion(version));
@@ -145,7 +145,11 @@ class Channel {
   /// The current active version.
   /// This will normally be the same as the [latestVersion] unless
   /// this channel is pinned.
-  String get currentVersion => settings['currentVersion'] as String;
+  String get currentVersion {
+    var _version = settings['currentVersion'] as String?;
+    _version ??= latestVersion;
+    return _version;
+  }
 
   set currentVersion(String version) {
     settings['currentVersion'] = version;
@@ -153,7 +157,7 @@ class Channel {
   }
 
   /// the most recent version we have downloaded.
-  String get latestVersion => settings['latestVersion'] as String ?? '0.0.1';
+  String get latestVersion => settings['latestVersion'] as String? ?? '0.0.1';
 
   set latestVersion(String version) {
     settings['latestVersion'] = version;
@@ -161,7 +165,7 @@ class Channel {
   }
 
   /// If true then this channel is currently pinned.
-  bool get pinned => settings['pinned'] as bool;
+  bool get pinned => settings['pinned'] as bool? ?? false;
 
   set pinned(bool pinned) {
     settings['pinned'] = pinned;

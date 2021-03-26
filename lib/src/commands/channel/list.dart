@@ -22,12 +22,12 @@ class ListCommand extends Command<void> {
 
   @override
   void run() {
-    final showARchives = argResults.wasParsed('archive');
+    final showArchives = argResults!.wasParsed('archive');
 
-    listForChannel(channel, showArchives: showARchives);
+    listForChannel(channel, showArchives: showArchives);
   }
 
-  static void listForChannel(String channel, {bool showArchives}) {
+  static void listForChannel(String channel, {required bool showArchives}) {
     var ch = Channel(channel);
 
     print('');

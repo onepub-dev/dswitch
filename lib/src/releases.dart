@@ -4,10 +4,9 @@ import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class Release {
-  Version version;
-  DateTime released;
-  String revision;
-  bool validRelease;
+  Version? version;
+  DateTime? released;
+  late bool validRelease;
 
   Release(String jsonRelease) {
     validRelease = false;
@@ -27,13 +26,12 @@ class Release {
   }
 
   int compareTo(Release rhs) {
-    return version.compareTo(rhs.version);
+    return version!.compareTo(rhs.version!);
   }
 
   static List<Release> fetchReleases(String channel) {
     final releases = <Release>[];
     final saveToPath = FileSync.tempFile();
-    // TODO: the fetch command is causing the app to pause on shutdown
     fetch(url: buildURL(channel), saveToPath: saveToPath);
 
     var lines = read(saveToPath).toList();

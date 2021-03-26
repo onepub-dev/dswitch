@@ -38,7 +38,7 @@ class DownloadVersion {
     expandSdk();
   }
 
-  void fetchWindowsChannel({bool useArchive}) {
+  void fetchWindowsChannel() {
     downloadDart(
       channel: channel,
       platform: 'windows',
@@ -99,13 +99,16 @@ class DownloadVersion {
           ..createSync(recursive: true)
           ..writeAsBytesSync(data);
       } else {
-        Directory(join(targetPathTo, name))..create(recursive: true);
+        Directory(join(targetPathTo, name)).create(recursive: true);
       }
     }
   }
 
   void downloadDart(
-      {String channel, String platform, String version, String architecture}) {
+      {required String channel,
+      required String platform,
+      required String version,
+      required String architecture}) {
     var downloadPath = sdkDownloadPath(channel);
 
     if (!exists(dirname(downloadPath))) {

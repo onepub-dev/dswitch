@@ -24,16 +24,16 @@ Switches to the passed channel.
   void run() {
     String channel;
 
-    if (argResults.rest.isEmpty || argResults.rest.length != 1) {
+    if (argResults!.rest.isEmpty || argResults!.rest.length != 1) {
       printerr(red(
-          'You may only pass a single channel name. Found ${argResults.rest}'));
+          'You may only pass a single channel name. Found ${argResults!.rest}'));
       showUsage(argParser);
     }
 
-    channel = argResults.rest[0];
+    channel = argResults!.rest[0];
     if (!channels.contains(channel)) {
       printerr(red(
-          'Channel $channel does not exist. Available channels: ${channels}'));
+          'Channel $channel does not exist. Available channels: $channels'));
       exit(1);
     }
     var ch = Channel(channel);

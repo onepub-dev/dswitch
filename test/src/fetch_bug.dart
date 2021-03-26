@@ -25,7 +25,7 @@ void main() async {
     final contentLength = response.contentLength;
     print('exepeted: $contentLength');
 
-    StreamSubscription<List<int>> subscription;
+    late StreamSubscription<List<int>> subscription;
     subscription = response.listen(
       (newBytes) async {
         lengthReceived += newBytes.length;

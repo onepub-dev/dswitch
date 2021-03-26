@@ -29,10 +29,10 @@ void firstRunMessage() {
 ${green('Welcome to dswitch.')}
 
 dswitch creates four symlinks that you can use from your IDE:
-active: ${activeSymlinkPath}
-stable: ${stableSymlinkPath}
-beta: ${betaSymlinkPath}
-dev: ${devSymlinkPath}
+active: $activeSymlinkPath
+stable: $stableSymlinkPath
+beta: $betaSymlinkPath
+dev: $devSymlinkPath
 
 The active symlink must be added to your path.
 

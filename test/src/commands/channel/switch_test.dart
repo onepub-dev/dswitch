@@ -1,5 +1,6 @@
-import 'package:dswitch/src/channel.dart';
 @Timeout(Duration(minutes: 2))
+import 'package:dswitch/src/channel.dart';
+
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:test/test.dart';
 

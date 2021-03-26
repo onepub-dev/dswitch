@@ -9,10 +9,10 @@ void main(List<String> args) {
   var pathToSettings = join(
       project.pathToProjectRoot, 'tool', 'post_release_hook', 'settings.yaml');
   var settings = SettingsYaml.load(pathToSettings: pathToSettings);
-  var username = settings['username'] as String;
-  var apiToken = settings['apiToken'] as String;
-  var owner = settings['owner'] as String;
-  var repository = settings['repository'] as String;
+  var username = settings['username'] as String?;
+  var apiToken = settings['apiToken'] as String?;
+  var owner = settings['owner'] as String?;
+  var repository = settings['repository'] as String?;
 
   'github_release -u $username --apiToken $apiToken --owner $owner --repository $repository'
       .start(workingDirectory: Script.current.pathToProjectRoot);
