@@ -1,3 +1,6 @@
+# 3.0.0
+Migrated to nnbd.
+
 # 2.0.1
 Add channel validation for the `use` cmd so that it provides a coherent warning if the users enters a non-existing channel.
 
