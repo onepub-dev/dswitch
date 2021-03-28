@@ -124,7 +124,7 @@ class DownloadVersion {
         url:
             'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
         saveToPath: downloadPath,
-        fetchProgress: (p) {
+        onProgress: (p) {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
             Terminal().clearLine();

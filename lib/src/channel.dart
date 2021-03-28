@@ -179,9 +179,7 @@ class Channel {
   /// returns a list of the version that are cached locally.
   List<String> cachedVersions() {
     return find('*',
-            workingDirectory: pathToVersions,
-            types: [Find.directory],
-            recursive: false)
+            root: pathToVersions, types: [Find.directory], recursive: false)
         .toList();
   }
 

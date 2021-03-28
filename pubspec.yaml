@@ -7,7 +7,8 @@ environment:
 dependencies: 
   archive: ^2.0.0
   args: ^1.0.0
-  dcli: ^0.41.0
+  #last version of dcli that runs with 2.6.0 due to move to using runZonedGuarded in named lock
+  dcli: ^0.35.0
   meta: ^1.0.0
   path: ^1.0.0
   pub_semver: ^1.0.0
