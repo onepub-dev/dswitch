@@ -1,3 +1,6 @@
+# 3.2.0
+Reverted to dcli 0.35.0 as this is the last version that support dart 2.6.0
+
 # 3.1.0
 reverted nnbd migration. dswitch by nature needs to run under older version of dart (we support from 2.6) so we can not move to nnbd.
 Minor grammar fixes.
