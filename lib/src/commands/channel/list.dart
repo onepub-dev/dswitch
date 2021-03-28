@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
+import 'package:meta/meta.dart';
 
 import '../../channel.dart';
 import '../../releases.dart';
@@ -22,12 +23,12 @@ class ListCommand extends Command<void> {
 
   @override
   void run() {
-    final showArchives = argResults!.wasParsed('archive');
+    final showArchives = argResults.wasParsed('archive');
 
     listForChannel(channel, showArchives: showArchives);
   }
 
-  static void listForChannel(String channel, {required bool showArchives}) {
+  static void listForChannel(String channel, {@required bool showArchives}) {
     var ch = Channel(channel);
 
     print('');

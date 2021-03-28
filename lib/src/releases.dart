@@ -4,9 +4,9 @@ import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class Release {
-  Version? version;
-  DateTime? released;
-  late bool validRelease;
+  Version version;
+  DateTime released;
+  bool validRelease;
 
   Release(String jsonRelease) {
     validRelease = false;
@@ -26,7 +26,7 @@ class Release {
   }
 
   int compareTo(Release rhs) {
-    return version!.compareTo(rhs.version!);
+    return version.compareTo(rhs.version);
   }
 
   static List<Release> fetchReleases(String channel) {

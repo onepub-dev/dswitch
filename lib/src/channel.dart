@@ -13,8 +13,8 @@ import 'releases.dart';
 
 class Channel {
   String name;
-  late final SettingsYaml _settings =
-      SettingsYaml.load(pathToSettings: pathToSettings);
+  SettingsYaml _settings;
+
   Channel(this.name) {
     createPaths();
   }
@@ -39,7 +39,7 @@ class Channel {
     }
   }
 
-  void switchTo() {
+  void use() {
     _createActiveSymLink();
 
     /// they may never run install so we need to create this.
@@ -85,7 +85,8 @@ class Channel {
 
   bool get isPinned => pinned == true;
 
-  SettingsYaml get settings => _settings;
+  SettingsYaml get settings =>
+      _settings ??= SettingsYaml.load(pathToSettings: pathToSettings);
 
   void createPaths() {
     createPath(dswitchPath);
@@ -146,7 +147,7 @@ class Channel {
   /// This will normally be the same as the [latestVersion] unless
   /// this channel is pinned.
   String get currentVersion {
-    var _version = settings['currentVersion'] as String?;
+    var _version = settings['currentVersion'] as String;
     _version ??= latestVersion;
     return _version;
   }
@@ -157,7 +158,7 @@ class Channel {
   }
 
   /// the most recent version we have downloaded.
-  String get latestVersion => settings['latestVersion'] as String? ?? '0.0.1';
+  String get latestVersion => settings['latestVersion'] as String ?? '0.0.1';
 
   set latestVersion(String version) {
     settings['latestVersion'] = version;
@@ -165,7 +166,7 @@ class Channel {
   }
 
   /// If true then this channel is currently pinned.
-  bool get pinned => settings['pinned'] as bool? ?? false;
+  bool get pinned => settings['pinned'] as bool ?? false;
 
   set pinned(bool pinned) {
     settings['pinned'] = pinned;
@@ -222,7 +223,7 @@ class Channel {
         if (isActive) {
           /// if we are the active channel then calling swithTo
           /// will update the symlinks to the new version
-          switchTo();
+          use();
         } else {
           _createChannelSymlink();
         }

@@ -27,26 +27,38 @@ Selects the given version for the $channel channel and makes it the active versi
 
     var ch = Channel(channel);
 
-    if (argResults!.rest.isNotEmpty) {
-      if (argResults!.rest.length != 1) {
+    if (argResults.rest.isNotEmpty) {
+      if (argResults.rest.length != 1) {
         printerr(red(
-            'You may only pass a single version no. Found ${argResults!.rest}'));
+            'You may only pass a single version no. Found ${argResults.rest}'));
         showUsage(argParser);
       }
 
-      version = argResults!.rest[0];
+      version = argResults.rest[0];
     } else {
       version = ch.select();
     }
 
     if (!ch.isVersionCached(version)) {
-      printerr(red(
-          "The selected version isn't installed. Use: dswitch  $channel install $version"));
-      exit(0);
+      printerr(red("\nVersion $version isn't installed.\n"));
+      if (confirm('Install $version')) {
+        installVersion(version);
+      } else {
+        print(green(
+            'To install $version Use: dswitch $channel install $version\n'));
+        exit(0);
+      }
     }
 
     ch.pin(version);
     print(green('Channel $channel is now pinned to $version'));
+
+    if (!ch.isActive) {
+      if (confirm(orange(
+          "The $channel isn't currently active. Do you want to activate it?"))) {
+        ch.use();
+      }
+    }
   }
 
   void installVersion(String version) {

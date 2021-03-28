@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:system_info/system_info.dart';
 
@@ -105,10 +106,10 @@ class DownloadVersion {
   }
 
   void downloadDart(
-      {required String channel,
-      required String platform,
-      required String version,
-      required String architecture}) {
+      {@required String channel,
+      @required String platform,
+      @required String version,
+      @required String architecture}) {
     var downloadPath = sdkDownloadPath(channel);
 
     if (!exists(dirname(downloadPath))) {
