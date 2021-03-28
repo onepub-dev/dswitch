@@ -1,3 +1,7 @@
+# 3.1.0
+reverted nnbd migration. dswitch by nature needs to run under older version of dart (we support from 2.6) so we can not move to nnbd.
+Minor grammar fixes.
+
 # 3.0.0
 Migrated to nnbd.
 
