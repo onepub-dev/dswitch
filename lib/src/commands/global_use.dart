@@ -52,6 +52,12 @@ Switches to the passed channel.
       ch.use();
       print(green('Switched to $channel (${ch.currentVersion})'));
 
+      /// TODO: consider compiling dswitch
+
+      print(green('precompiling dswitch against the new dart version'));
+
+      'pub global activate dswitch'.run;
+
       print('');
 
       print(red('You may need to restart your terminal session.'));
