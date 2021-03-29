@@ -71,7 +71,7 @@ class Channel {
   }
 
   void _createChannelSymlink() {
-    if (exists(_channelSymlink)) {
+    if (exists(_channelSymlink, followLinks: false)) {
       deleteSymlink(_channelSymlink);
     }
 
@@ -79,7 +79,7 @@ class Channel {
   }
 
   void _createActiveSymLink() {
-    if (exists(activeSymlinkPath)) {
+    if (exists(activeSymlinkPath, followLinks: false)) {
       deleteSymlink(activeSymlinkPath);
     }
     symlink(pathToCurrentVersion, activeSymlinkPath);
