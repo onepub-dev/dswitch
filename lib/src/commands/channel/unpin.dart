@@ -22,9 +22,9 @@ Unpins the $channel channel.
     ch.unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));
 
-    if (ch.isActive) {
-      print('\nPre-compiling dswitch against active dart version.');
-      'pub global activate dswitch'.run;
-    }
+    // if (ch.isActive) {
+    //   print('\nPre-compiling dswitch against active dart version.');
+    //   'pub global activate dswitch'.run;
+    // }
   }
 }

@@ -60,10 +60,10 @@ Selects the given version for the $channel channel and makes it the active versi
       }
     }
 
-    if (ch.isActive) {
-      print('\nPre-compiling dswitch against active dart version.');
-      'pub global activate dswitch'.run;
-    }
+    // if (ch.isActive) {
+    //   print('\nPre-compiling dswitch against active dart version.');
+    //   'pub global activate dswitch'.run;
+    // }
   }
 
   void installVersion(String version) {

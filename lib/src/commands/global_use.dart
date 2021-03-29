@@ -54,9 +54,9 @@ Switches to the passed channel.
 
       /// TODO: consider compiling dswitch
 
-      print('\nPre-compiling dswitch against active dart version.');
+      // print('\nPre-compiling dswitch against active dart version.');
 
-      'pub global activate dswitch'.run;
+      // 'pub global activate dswitch'.run;
 
       print('');
 
