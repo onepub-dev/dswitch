@@ -1,3 +1,6 @@
+# 3.2.6
+removed the pub global activate calls as these  problems these were designed to resolve were just an artifact of my test environment.
+
 # 3.2.5
 formatting.
 
