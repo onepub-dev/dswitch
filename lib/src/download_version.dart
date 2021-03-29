@@ -127,7 +127,7 @@ class DownloadVersion {
         onProgress: (p) {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
-            Terminal().clearLine();
+            clearLine();
             echo('Fetching: $progress %');
             last = progress;
           }
@@ -138,6 +138,13 @@ class DownloadVersion {
   String sdkDownloadPath(String channel) =>
       join(Channel.channelPath(channel), '.downloads', '$version.zip');
 }
+
+void clearLine() {
+  write('\r');
+  write('${Ansi.esc}2K');
+}
+
+void write(String text) => stdout.write(text);
 
 /// Converts the kernel architecture into one of the architecture names use by:
 /// https://dart.dev/tools/sdk/archive

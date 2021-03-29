@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dswitch/src/constants.dart';
 import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
@@ -228,5 +230,21 @@ class Channel {
         print('upgrade of $name channel to $version complete');
       }
     }
+  }
+
+  /// copied from dcli 0.50 as the 0.35 version we have to use has
+  /// a bug.
+  String resolveSymLink(String pathToLink) {
+    final normalised = canonicalize(pathToLink);
+
+    String resolved;
+    if (isDirectory(normalised)) {
+      resolved = Directory(normalised).resolveSymbolicLinksSync();
+    } else {
+      resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
+    }
+
+    Settings().verbose('resolveSymLink $pathToLink resolved: $resolved');
+    return resolved;
   }
 }

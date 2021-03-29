@@ -9,7 +9,7 @@ void main() {
     await runner.run(['beta', 'pin', '2.8.1']);
 
     /// now switch to beta and check we got the right version.
-    await runner.run(['beta', 'switch']);
+    await runner.run(['use', 'beta']);
 
     expect(Channel('beta').currentVersion, equals('2.8.1'));
   });

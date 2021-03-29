@@ -6,11 +6,13 @@ void main() {
   test('unpin beta <version>', () async {
     var runner = buildCommandRunner();
 
+
+
     await runner.run(['beta', 'unpin']);
 
     /// now switch to beta and check we got the right version.
-    await runner.run(['beta', 'switch']);
+    await runner.run(['use', 'beta']);
 
-    expect(Channel('beta').currentVersion, equals('2.8.0-20.11.beta'));
+    expect(Channel('beta').currentVersion, equals('2.13.0-116.1.beta'));
   });
 }

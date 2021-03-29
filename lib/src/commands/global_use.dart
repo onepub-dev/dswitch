@@ -39,7 +39,7 @@ Switches to the passed channel.
     var ch = Channel(channel);
 
     if (ch.isActive) {
-      print('You are already on the $channel channele.');
+      print('You are already on the $channel channel.');
     } else {
       if (!ch.isDownloaded()) {
         final version = ch.fetchLatestVersion();
