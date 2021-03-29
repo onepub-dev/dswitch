@@ -1,3 +1,6 @@
+# 3.2.5
+formatting.
+
 # 3.2.4
 Cleaned up the pre-compile logic so it is activated at the command level so it only happens once.
 
