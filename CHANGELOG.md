@@ -1,3 +1,7 @@
+# 3.2.2
+Fixed a bug when checking if a symlink exists.
+Added command to pre-compile dswitch after switching so that it is functional against the new version of dart.
+
 # 3.2.1
 Added configue for running all unit tests.
 Fixed bugs caused by having to revert to dcli 0.35
