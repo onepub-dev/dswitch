@@ -1,3 +1,7 @@
+# 3.2.1
+Added configue for running all unit tests.
+Fixed bugs caused by having to revert to dcli 0.35
+
 # 3.2.0
 Reverted to dcli 0.35.0 as this is the last version that support dart 2.6.0
 

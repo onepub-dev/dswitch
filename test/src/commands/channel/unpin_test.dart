@@ -6,8 +6,6 @@ void main() {
   test('unpin beta <version>', () async {
     var runner = buildCommandRunner();
 
-
-
     await runner.run(['beta', 'unpin']);
 
     /// now switch to beta and check we got the right version.
