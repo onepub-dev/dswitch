@@ -57,10 +57,6 @@ class Channel {
       _createActiveSymLink();
     }
     _createChannelSymlink();
-
-    if (isActive) {
-      'pub global activate dswitch'.run;
-    }
   }
 
   void unpin() {
@@ -72,10 +68,6 @@ class Channel {
       _createActiveSymLink();
     }
     _createChannelSymlink();
-
-    if (isActive) {
-      'pub global activate dswitch'.run;
-    }
   }
 
   void _createChannelSymlink() {
