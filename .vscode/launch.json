@@ -9,6 +9,15 @@
             "request": "launch",
             "type": "dart",
             "console": "terminal"
-        }
+        },
+        {
+            "name": "All Test",
+            "type": "dart",
+            "program": "test/",
+            "request": "launch",
+            "args": [
+            ],
+            "console": "terminal"
+        },
     ]
 }
