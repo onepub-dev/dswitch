@@ -1,3 +1,6 @@
+# 3.2.7
+grabed a copy of the fetch function from the latest version of dcli. As we have to support pre-nnbd version of dart we can't use the latest dcli. Older version of dcli contained a bug in the fetch command where in it wasn't shutting down the httpclient with the result that a dswitch command that preformed a fetch would take some 20seconds to shutdown. This patch fixes that issue.
+
 # 3.2.6
 removed the pub global activate calls as these  problems these were designed to resolve were just an artifact of my test environment.
 
