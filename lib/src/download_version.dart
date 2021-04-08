@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide fetch;
+import 'package:dswitch/src/util/fetch.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart';
 import 'package:system_info/system_info.dart';
@@ -124,7 +125,7 @@ class DownloadVersion {
         url:
             'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
         saveToPath: downloadPath,
-        onProgress: (p) {
+        fetchProgress: (p) {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
             clearLine();

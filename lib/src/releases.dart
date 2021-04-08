@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' hide fetch;
+import 'package:dswitch/src/util/fetch.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 class Release {
