@@ -14,7 +14,6 @@ dependencies:
   pub_semver: ^1.0.0
   settings_yaml: ^2.0.0
   system_info: ^0.1.0
-  
 dev_dependencies: 
   test: ^1.15.0
 executables: 
