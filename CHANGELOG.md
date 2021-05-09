@@ -1,4 +1,4 @@
-# 3.3
+# 3.3.0
 Added subcommand to delete a version of the sdk from a channel.
 Added logic to delete the sdk zip file after we have expanded it.
 Fixed a bug in the select options when the no. of menu items was less than the limit of 20.
