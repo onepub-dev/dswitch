@@ -80,6 +80,7 @@ class DownloadVersion {
     } else {
       dunzip(pathToZip, targetPathTo);
     }
+    delete(pathToZip);
     print('Expansion complete.');
   }
 

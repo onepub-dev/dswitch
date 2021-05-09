@@ -32,6 +32,7 @@ CommandRunner buildCommandRunner() {
 }
 
 void showUsage(ArgParser parser) {
+  print('');
   print('Rapidly switches between dart channels.');
   print(orange(
       'Remember to restart your login session after you run dswitch for the first time'));

@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 
+import 'delete.dart';
 import 'install.dart';
 import 'list.dart';
 import 'pin.dart';
@@ -27,6 +28,7 @@ class ChannelCommand extends Command<void> {
     addSubcommand(StatusCommand(channel));
     addSubcommand(UnpinCommand(channel));
     addSubcommand(UpgradeCommand(channel));
+    addSubcommand(DeleteCommand(channel));
   }
 }
 
