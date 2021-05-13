@@ -14,3 +14,6 @@ doc/api/
 tool/post_release_hook/settings.yaml
 bin/dswitch
 .project
+**/*.vm.json
+.gitignore
+.failed_tracker
