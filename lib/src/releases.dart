@@ -30,7 +30,7 @@ class Release {
   }
 
   int compareTo(Release rhs) {
-    return version.compareTo(rhs.version!);
+    return version.compareTo(rhs.version);
   }
 
   static List<Release> fetchReleases(String channel) {
