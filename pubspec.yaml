@@ -1,13 +1,13 @@
 name: dswitch
-version: 4.0.0
+version: 4.0.3
 description: DSwitch is a cli tool that allows you to rapidly switch between channels and versions of Dart. You can also pin a channel to a specific version.
 repository: https://github.com/bsutton/dswitch
 environment: 
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.13.0 <3.0.0'
 dependencies: 
   archive: ^3.1.2
   args: ^2.1.1
-  dcli: ^1.5.1
+  dcli: ^1.5.2
   meta: ^1.0.0
   path: ^1.0.0
   pedantic: ^1.0.0
@@ -16,6 +16,9 @@ dependencies:
   system_info: ^1.0.0
 dev_dependencies: 
   test: ^1.15.0
+dependency_overrides: 
+  dcli: 
+    path: ../dcli
 executables: 
   dswitch: 
   dswitch_install: 

@@ -1,21 +1,30 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:dswitch/dswitch.dart';
 
 void main() {
-  final pathTo = which('dswitch');
+  // build the path to the copy of bin/dswitch.dart in the pub cache.
+  final pathToDSwitch = join(
+    DartProject.fromCache('dswitch', packageVersion).pathToProjectRoot,
+  );
 
-  if (pathTo.notfound) {
+  if (!exists(pathToDSwitch)) {
     printerr(
-        'Could not find dswitch on your path. Please check your PATH and try again');
+        "Could not find dswitch in pub cache. Please run 'dart pub global activate dswitch' and try again.");
     exit(1);
   }
 
-  final script = DartScript.fromFile(pathTo.path!);
-  print('Compiling dswitch so it will run independant of your dart version.');
-  script.compile();
+  withTempDir((compileDir) {
+    copyTree(pathToDSwitch, compileDir);
 
-  /// replace the pub-cache script with a compiled version.
-  copy(script.pathToExe, PubCache().pathToBin, overwrite: true);
+    final script = DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'));
+    print('Compiling dswitch so it will run independant of your dart version.');
+    DartSdk().runPubGet(compileDir, progress: Progress.devNull());
+    script.compile(workingDirectory: compileDir);
+
+    /// replace the pub-cache script with a compiled version.
+    copy(script.pathToExe, PubCache().pathToBin, overwrite: true);
+  });
   print(orange('DSwitch is ready to run'));
 }

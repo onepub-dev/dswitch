@@ -109,10 +109,10 @@ packages:
   dcli:
     dependency: "direct main"
     description:
-      name: dcli
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.1"
+      path: "../dcli"
+      relative: true
+    source: path
+    version: "1.5.2"
   equatable:
     dependency: transitive
     description:
@@ -273,7 +273,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.1"
   pool:
     dependency: transitive
     description:

@@ -1,3 +1,10 @@
+# 4.0.3
+Fixed failed release.
+
+
+# 4.0.2
+Fixes to the install option as compiles were failing.
+
 # 4.0.0
 - We now require that dswitch is compiled.
 This gets around the issue of not being compatible with different versions of dart.
