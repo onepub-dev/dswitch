@@ -1,3 +1,12 @@
+# 3.3.1
+- We now require that dswitch is compiled.
+This gets around the issue of not being compatible with different versions of dart.
+It has also allowed us to upgrade dswitch to nnbd and the latest dart version.
+
+- Added dswitch_install as an exe which compiles dswitch.
+- nndb migration.
+- Added check that windows users are in development mode 
+
 # 3.3.0
 Added subcommand to delete a version of the sdk from a channel.
 Added logic to delete the sdk zip file after we have expanded it.
