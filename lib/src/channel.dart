@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:dswitch/src/constants.dart';
 import 'package:dcli/dcli.dart';
+import 'package:dswitch/src/constants.dart';
+import 'package:dcli/dcli.dart' hide menu;
 import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
@@ -26,7 +27,7 @@ class Channel {
       exists(activeSymlinkPath) &&
       (resolveSymLink(activeSymlinkPath).startsWith(pathToVersions));
 
-  void install() {
+  void installLatestVersion() {
     if (isDownloaded()) {
       print(orange(
           'Channel is already installed and the current version is: $currentVersion'));
@@ -37,7 +38,7 @@ class Channel {
       download(version);
       currentVersion = version;
       _createChannelSymlink();
-      print('Install of $name channel complete');
+      print('Install of $name channel complete.');
     }
   }
 
@@ -185,10 +186,14 @@ class Channel {
         .toList();
   }
 
+  void delete(String version) {
+    deleteDir(_pathToVersion(version), recursive: true);
+  }
+
   /// Shows the user a menu with the 20 most recent version for the channel.
   ///
   /// Returns the version the user selected.
-  String select() {
+  String selectToInstall() {
     var releases = Release.fetchReleases(name);
 
     var release = menu<Release>(
@@ -197,7 +202,22 @@ class Channel {
         limit: 20,
         format: (release) => release.version.toString());
 
+    if (isVersionCached(release.version.toString())) {
+      printerr(red('The selected version is already installed.'));
+      exit(-1);
+    }
+
     return release.version.toString();
+  }
+
+  String selectFromInstalled() {
+    var version = menu<String>(
+      prompt: 'Select Version:',
+      options: cachedVersions(),
+      format: (version) => basename(version),
+      limit: 20,
+    );
+    return version;
   }
 
   bool isVersionCached(String version) {

@@ -1,3 +1,7 @@
+# 3.3.0
+Added subcommand to delete a version of the sdk from a channel.
+Added logic to delete the sdk zip file after we have expanded it.
+Fixed a bug in the select options when the no. of menu items was less than the limit of 20.
 
 # 3.2.7
 grabed a copy of the fetch function from the latest version of dcli. As we have to support pre-nnbd version of dart we can't use the latest dcli. Older version of dcli contained a bug in the fetch command where in it wasn't shutting down the httpclient with the result that a dswitch command that preformed a fetch would take some 20seconds to shutdown. This patch fixes that issue.

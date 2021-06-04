@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:dcli/dcli.dart';
@@ -25,38 +27,42 @@ If you pass the --select switch then a menu is displayed with the version availa
   void run() {
     if (argResults!.wasParsed('select')) {
       select();
-    }
-
-    if (argResults!.rest.isNotEmpty) {
-      if (argResults!.rest.length != 1) {
-        printerr(red(
-            'You may only pass a single version no. Found ${argResults!.rest}'));
-        showUsage(argParser);
-      }
-
-      var version = argResults!.rest[0];
-      installVersion(version);
     } else {
-      installChannel(channel);
+      if (argResults!.rest.isNotEmpty) {
+        if (argResults!.rest.length != 1) {
+          printerr(red(
+              'You may only pass a single version no. Found ${argResults!.rest}'));
+          showUsage(argParser);
+        }
+
+        var version = argResults!.rest[0];
+        installVersion(version);
+      } else {
+        installLatestVersion(channel);
+      }
     }
   }
 
-  void installChannel(String channel) {
+  void installLatestVersion(String channel) {
     var ch = Channel(channel);
-    ch.install();
+    ch.installLatestVersion();
   }
 
   void select() {
     var ch = Channel(channel);
 
-    ch.download(ch.select());
-    print('Install of $channel channel complete');
+    ch.download(ch.selectToInstall());
+    print('Install of $channel channel complete.');
   }
 
   void installVersion(String version) {
     print('Installing $channel version $version...');
     var ch = Channel(channel);
+    if (ch.isVersionCached(version)) {
+      printerr(orange('The selected version is already installed.'));
+      exit(0);
+    }
     ch.download(version);
-    print('Install of $channel channel complete');
+    print('Install of $channel channel complete. ');
   }
 }
