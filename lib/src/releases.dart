@@ -48,7 +48,7 @@ class Release {
         var release = Release(jsonRelease as String);
         if (release.validRelease) releases.add(release);
       }
-    });
+    }, create: false);
 
     /// sort most recent first.
     releases.sort((lhs, rhs) => rhs.compareTo(lhs));
