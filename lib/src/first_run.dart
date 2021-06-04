@@ -18,12 +18,8 @@ void firstRun() {
 
   final script = DartScript.self;
   if (!script.isCompiled) {
-    print('Compiling dswitch so it will run independant of your dart version.');
-    script.compile();
-
-    /// replace the pub-cache script with a compiled version.
-    copy(script.pathToExe, PubCache().pathToBin, overwrite: true);
-    print(orange('Restart dswitch to run from the compiled version'));
+    print(red('Please run dswitch_install and then try again.'));
+    exit(1);
   }
 
   var settings = SettingsYaml.load(
