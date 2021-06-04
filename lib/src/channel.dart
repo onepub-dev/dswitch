@@ -15,7 +15,7 @@ import 'releases.dart';
 
 class Channel {
   String name;
-  SettingsYaml _settings;
+  SettingsYaml? _settings;
 
   Channel(this.name) {
     createPaths();
@@ -149,7 +149,7 @@ class Channel {
   /// This will normally be the same as the [latestVersion] unless
   /// this channel is pinned.
   String get currentVersion {
-    var _version = settings['currentVersion'] as String;
+    var _version = settings['currentVersion'] as String?;
     _version ??= latestVersion;
     return _version;
   }
@@ -160,7 +160,7 @@ class Channel {
   }
 
   /// the most recent version we have downloaded.
-  String get latestVersion => settings['latestVersion'] as String ?? '0.0.1';
+  String get latestVersion => settings['latestVersion'] as String? ?? '0.0.1';
 
   set latestVersion(String version) {
     settings['latestVersion'] = version;
@@ -168,7 +168,7 @@ class Channel {
   }
 
   /// If true then this channel is currently pinned.
-  bool get pinned => settings['pinned'] as bool ?? false;
+  bool get pinned => settings['pinned'] as bool? ?? false;
 
   set pinned(bool pinned) {
     settings['pinned'] = pinned;
@@ -181,7 +181,7 @@ class Channel {
   /// returns a list of the version that are cached locally.
   List<String> cachedVersions() {
     return find('*',
-            root: pathToVersions, types: [Find.directory], recursive: false)
+            workingDirectory: pathToVersions, types: [Find.directory], recursive: false)
         .toList();
   }
 

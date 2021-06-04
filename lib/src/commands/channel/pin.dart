@@ -27,14 +27,14 @@ Selects the given version for the $channel channel and makes it the active versi
 
     var ch = Channel(channel);
 
-    if (argResults.rest.isNotEmpty) {
-      if (argResults.rest.length != 1) {
+    if (argResults!.rest.isNotEmpty) {
+      if (argResults!.rest.length != 1) {
         printerr(red(
-            'You may only pass a single version no. Found ${argResults.rest}'));
+            'You may only pass a single version no. Found ${argResults!.rest}'));
         showUsage(argParser);
       }
 
-      version = argResults.rest[0];
+      version = argResults!.rest[0];
     } else {
       version = ch.select();
     }

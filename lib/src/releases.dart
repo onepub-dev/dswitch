@@ -1,13 +1,14 @@
 import 'dart:convert';
 
-import 'package:dcli/dcli.dart' hide fetch;
-import 'package:dswitch/src/util/fetch.dart';
+import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
 
+Version unknown = Version(0, 0, 0);
+
 class Release {
-  Version version;
-  DateTime released;
-  bool validRelease;
+  late final Version version;
+  DateTime? released;
+  late bool validRelease;
 
   Release(String jsonRelease) {
     validRelease = false;
@@ -21,30 +22,33 @@ class Release {
         validRelease = true;
       }
     } on FormatException catch (e) {
+      version = unknown;
+
       /// early dart versions do not confirm to sematic versioning so we just ignore them.
       Settings().verbose(e.message);
     }
   }
 
   int compareTo(Release rhs) {
-    return version.compareTo(rhs.version);
+    return version.compareTo(rhs.version!);
   }
 
   static List<Release> fetchReleases(String channel) {
     final releases = <Release>[];
-    final saveToPath = FileSync.tempFile();
-    fetch(url: buildURL(channel), saveToPath: saveToPath);
+    withTempFile((saveToPath) {
+      fetch(url: buildURL(channel), saveToPath: saveToPath);
 
-    var lines = read(saveToPath).toList();
+      var lines = read(saveToPath).toList();
 
-    var json = jsonDecode(lines.join('\n')) as Map<String, dynamic>;
+      var json = jsonDecode(lines.join('\n')) as Map<String, dynamic>;
 
-    var jsonReleases = json['prefixes'] as List<dynamic>;
+      var jsonReleases = json['prefixes'] as List<dynamic>;
 
-    for (var jsonRelease in jsonReleases) {
-      var release = Release(jsonRelease as String);
-      if (release.validRelease) releases.add(release);
-    }
+      for (var jsonRelease in jsonReleases) {
+        var release = Release(jsonRelease as String);
+        if (release.validRelease) releases.add(release);
+      }
+    });
 
     /// sort most recent first.
     releases.sort((lhs, rhs) => rhs.compareTo(lhs));

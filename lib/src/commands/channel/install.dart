@@ -23,18 +23,18 @@ If you pass the --select switch then a menu is displayed with the version availa
 
   @override
   void run() {
-    if (argResults.wasParsed('select')) {
+    if (argResults!.wasParsed('select')) {
       select();
     }
 
-    if (argResults.rest.isNotEmpty) {
-      if (argResults.rest.length != 1) {
+    if (argResults!.rest.isNotEmpty) {
+      if (argResults!.rest.length != 1) {
         printerr(red(
-            'You may only pass a single version no. Found ${argResults.rest}'));
+            'You may only pass a single version no. Found ${argResults!.rest}'));
         showUsage(argParser);
       }
 
-      var version = argResults.rest[0];
+      var version = argResults!.rest[0];
       installVersion(version);
     } else {
       installChannel(channel);
