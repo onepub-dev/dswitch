@@ -1,4 +1,4 @@
-# 3.3.1
+# 4.0.0
 - We now require that dswitch is compiled.
 This gets around the issue of not being compatible with different versions of dart.
 It has also allowed us to upgrade dswitch to nnbd and the latest dart version.
