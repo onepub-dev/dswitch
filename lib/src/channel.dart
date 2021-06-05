@@ -23,9 +23,19 @@ class Channel {
   }
 
   /// Returns true if this is the active channel
-  bool get isActive =>
-      exists(activeSymlinkPath) &&
-      (resolveSymLink(activeSymlinkPath).startsWith(pathToVersions));
+  bool get isActive {
+    try {
+      return exists(activeSymlinkPath) &&
+          (resolveSymLink(activeSymlinkPath).startsWith(pathToVersions));
+    } on FileSystemException catch (e) {
+      // the link target doesn't exist.
+      if (e.osError != null && e.osError!.errorCode == 3) {
+        return false;
+      } else {
+        rethrow;
+      }
+    }
+  }
 
   void installLatestVersion() {
     if (isDownloaded()) {
@@ -252,21 +262,5 @@ class Channel {
         print('upgrade of $name channel to $version complete');
       }
     }
-  }
-
-  /// copied from dcli 0.50 as the 0.35 version we have to use has
-  /// a bug.
-  String resolveSymLink(String pathToLink) {
-    final normalised = canonicalize(pathToLink);
-
-    String resolved;
-    if (isDirectory(normalised)) {
-      resolved = Directory(normalised).resolveSymbolicLinksSync();
-    } else {
-      resolved = canonicalize(File(normalised).resolveSymbolicLinksSync());
-    }
-
-    Settings().verbose('resolveSymLink $pathToLink resolved: $resolved');
-    return resolved;
   }
 }
