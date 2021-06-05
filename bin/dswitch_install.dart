@@ -15,6 +15,8 @@ void main() {
     exit(1);
   }
 
+  var targetDir = PubCache().pathToBin;
+
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 
@@ -24,7 +26,7 @@ void main() {
     script.compile(workingDirectory: compileDir);
 
     /// replace the pub-cache script with a compiled version.
-    copy(script.pathToExe, PubCache().pathToBin, overwrite: true);
+    copy(script.pathToExe, targetDir, overwrite: true);
   });
   print(orange('DSwitch is ready to run'));
 }
