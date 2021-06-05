@@ -2,6 +2,7 @@ import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 
 class UnpinCommand extends Command<void> {
   String channel;
@@ -18,6 +19,7 @@ Unpins the $channel channel.
 
   @override
   void run() {
+    checkIsCompiled();
     var ch = Channel(channel);
     ch.unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));

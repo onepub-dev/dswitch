@@ -5,6 +5,7 @@ import 'package:dswitch/src/commands/commands.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 
 class InstallCommand extends Command<void> {
   String channel;
@@ -25,9 +26,10 @@ If you pass the --select switch then a menu is displayed with the version availa
 
   @override
   void run() {
+    checkIsCompiled();
     if (argResults!.wasParsed('select')) {
       select();
-    } else {
+    } else {  
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
           printerr(red(

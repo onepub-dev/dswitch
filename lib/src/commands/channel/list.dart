@@ -3,6 +3,7 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 import '../../releases.dart';
 
 class ListCommand extends Command<void> {

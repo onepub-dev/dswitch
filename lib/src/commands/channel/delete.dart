@@ -5,6 +5,7 @@ import 'package:dswitch/src/commands/commands.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 import '../commands.dart';
 
 class DeleteCommand extends Command<void> {
@@ -26,6 +27,7 @@ If you pass the --select switch then a menu is displayed with the version availa
 
   @override
   void run() {
+    checkIsCompiled();
     if (argResults!.wasParsed('select')) {
       if (argResults!.rest.isNotEmpty) {
         printerr(red('You may not pass any args with the --select switch.'));

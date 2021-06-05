@@ -5,6 +5,7 @@ import 'package:dcli/dcli.dart';
 
 import '../channel.dart';
 import '../constants.dart';
+import '../first_run.dart';
 import 'commands.dart';
 
 class GlobalUseCommand extends Command<void> {
@@ -22,6 +23,7 @@ Switches to the passed channel.
 
   @override
   void run() {
+    checkIsCompiled();
     String channel;
 
     if (argResults!.rest.isEmpty || argResults!.rest.length != 1) {
