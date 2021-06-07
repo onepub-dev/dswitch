@@ -47,8 +47,7 @@ void checkConfig() {
     if (Platform.isWindows) {
       final canonical = canonicalize(activeSymlinkPath);
       if (regGetUserPath().map(canonicalize).contains(canonical)) {
-        print(
-            red('''
+        print(red('''
 
 You need to restart your terminal so it can see the DSwitch PATH changes.
   '''));

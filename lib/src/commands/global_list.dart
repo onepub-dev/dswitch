@@ -20,11 +20,9 @@ class GlobalListCommand extends Command<void> {
 
   @override
   void run() {
-
     final showArchives = argResults!.wasParsed('archive');
     for (var channel in channels) {
       ListCommand.listForChannel(channel, showArchives: showArchives);
     }
   }
 }
-

@@ -1,3 +1,13 @@
+# 4.0.4
+
+- Revised the install so that it installs into an existing OS path as overwriting the version in pub-cache was causing future pub gets to fail. 
+  The error was: Failed to decode data using encoding 'utf-8', path = '~/.pub-cache/bin/dswitch'
+- Added new commands to enable/disable dswitch so user can revert to the os installed dart.
+- Moved the check for a compiled dscript to individual commands, so we can allow some useful commands to still run.
+- Handled an exception when a symlink target doesn't exist.
+- Added windows test to see if path had been updated in registry to tell the user to restart rather than telling them to add the path when it was allready in the reg.
+- upgraded to dcli 1.5.3
+
 # 4.0.3
 Fixed failed release.
 

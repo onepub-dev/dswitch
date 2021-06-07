@@ -29,7 +29,7 @@ If you pass the --select switch then a menu is displayed with the version availa
     checkIsCompiled();
     if (argResults!.wasParsed('select')) {
       select();
-    } else {  
+    } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
           printerr(red(
