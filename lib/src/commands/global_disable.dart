@@ -1,0 +1,33 @@
+import 'package:args/command_runner.dart';
+import 'package:dcli/dcli.dart';
+
+import '../constants.dart';
+
+class GlobalDisableCommand extends Command<void> {
+  GlobalDisableCommand();
+
+  @override
+  String get description => '''
+Disables DSwitch, reverting to the OS installed version of Dart.
+The DSwitch symlinks are deleted.
+   ''';
+
+  @override
+  String get name => 'disable';
+
+  @override
+  void run() {
+    deleteSymlink(activeSymlinkPath);
+    deleteSymlink(stableSymlinkPath);
+    deleteSymlink(betaSymlinkPath);
+    deleteSymlink(devSymlinkPath);
+
+    print("DSwitch has been disabled. Use 'dswitch enable' to re-enable it.");
+  }
+
+  void deleteSymlink(String symlink) {
+    if (exists(symlink)) {
+      delete(symlink);
+    }
+  }
+}

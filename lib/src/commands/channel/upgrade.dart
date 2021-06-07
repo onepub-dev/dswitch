@@ -1,6 +1,7 @@
 import 'package:args/command_runner.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 
 class UpgradeCommand extends Command<void> {
   String channel;
@@ -18,6 +19,7 @@ Upgrades the $channel channel to the latest version.
 
   @override
   void run() {
+    checkIsCompiled();
     var ch = Channel(channel);
 
     ch.upgrade();

@@ -6,6 +6,8 @@ import '../version/version.g.dart';
 
 import '../constants.dart';
 import 'channel/channel.dart';
+import 'global_disable.dart';
+import 'global_enable.dart';
 import 'global_list.dart';
 import 'global_status.dart';
 import 'global_use.dart';
@@ -27,6 +29,8 @@ CommandRunner buildCommandRunner() {
   runner.addCommand(GlobalListCommand());
   runner.addCommand(GlobalStatusCommand());
   runner.addCommand(GlobalUseCommand());
+  runner.addCommand(GlobalEnableCommand());
+  runner.addCommand(GlobalDisableCommand());
 
   return runner;
 }

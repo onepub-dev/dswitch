@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
+import 'package:dcli/windows.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/first_run.dart';
@@ -42,9 +43,23 @@ void checkConfig() {
 
   /// are we on the path
   if (!Env().isOnPATH(activeSymlinkPath)) {
-    printerr(red('You need to add dswitch to your path.'));
+    var missing = true;
+    if (Platform.isWindows) {
+      final canonical = canonicalize(activeSymlinkPath);
+      if (regGetUserPath().map(canonicalize).contains(canonical)) {
+        print(
+            red('''
 
-    printPlatformPathMessage();
+You need to restart your terminal so it can see the DSwitch PATH changes.
+  '''));
+        missing = false;
+      }
+    }
+    if (missing) {
+      printerr(red('You need to add dswitch to your path.'));
+
+      printPlatformPathMessage();
+    }
   } else {
     // check for other instances of dart on the path.
     var dartPaths = which('dart').paths;

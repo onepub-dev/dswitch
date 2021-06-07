@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../first_run.dart';
 import '../commands.dart';
 
 class PinCommand extends Command<void> {
@@ -23,6 +24,7 @@ Selects the given version for the $channel channel and makes it the active versi
 
   @override
   void run() {
+    checkIsCompiled();
     String version;
 
     var ch = Channel(channel);
