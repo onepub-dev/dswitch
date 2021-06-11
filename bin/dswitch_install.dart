@@ -49,8 +49,6 @@ void runStage1() {
     exit(1);
   }
 
-  var targetDir = PubCache().pathToBin;
-
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 
