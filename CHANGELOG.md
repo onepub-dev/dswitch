@@ -1,3 +1,6 @@
+# 4.0.6
+Corrected the dswitch use example.
+
 # 4.0.5
 updated homepage.
 
