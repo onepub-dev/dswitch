@@ -39,18 +39,26 @@ void runStage1() {
   //     join(rootPath, 'home', Shell.current.loggedInUser, '.pub_cache');
 
   // build the path to the copy of bin/dswitch.dart in the pub cache.
-  final pathToDSwitch = join(
-    DartProject.fromCache('dswitch', packageVersion).pathToProjectRoot,
-  );
+  late final String pathToDSwitch;
 
-  if (!exists(pathToDSwitch)) {
+  if (DartScript.self.isPubGlobalActivated) {
+    pathToDSwitch = join(
+      DartProject.fromCache('dswitch', packageVersion).pathToProjectRoot,
+    );
+  } else {
+    /// Used when we are testing from local source
+    pathToDSwitch = '.';
+  }
+
+  print(truepath(pathToDSwitch));
+
+  if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
     printerr(
         "Could not find dswitch_install in pub cache. Please run 'dart pub global activate dswitch' and try again.");
     exit(1);
   }
 
-  var targetDir = PubCache().pathToBin;
-
+  Settings().setVerbose(enabled: true);
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 
@@ -58,7 +66,7 @@ void runStage1() {
         DartScript.fromFile(join(compileDir, 'bin', 'dswitch_install.dart'));
     print('');
     print(blue('Compiling dswitch_install'));
-    DartSdk().runPubGet(compileDir, progress: Progress.devNull());
+    DartSdk().runPubGet(compileDir, progress: Progress.printStdErr());
     installScript.compile(workingDirectory: compileDir);
 
     print('');
