@@ -2,7 +2,6 @@ import 'package:args/command_runner.dart';
 import 'package:dswitch/src/commands/channel/list.dart';
 
 import '../constants.dart';
-import '../first_run.dart';
 
 class GlobalListCommand extends Command<void> {
   GlobalListCommand() {
