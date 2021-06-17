@@ -18,9 +18,6 @@ dependencies:
   system_info: ^1.0.0
 dev_dependencies: 
   test: ^1.15.0
-dependency_overrides: 
-  dcli: 
-    path: ../dcli
 executables: 
   dswitch: 
   dswitch_install: 
