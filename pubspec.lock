@@ -112,7 +112,7 @@ packages:
       path: "../dcli"
       relative: true
     source: path
-    version: "1.5.3"
+    version: "1.6.0"
   equatable:
     dependency: transitive
     description:
