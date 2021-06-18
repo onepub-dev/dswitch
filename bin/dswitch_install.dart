@@ -63,7 +63,7 @@ void runStage1() {
     installScript.compile(workingDirectory: compileDir);
 
     print('');
-    print(blue('Compiling dswitch.'));
+    print(blue('Compiling dswitch'));
     final dswitchScript =
         DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'));
     dswitchScript.compile(workingDirectory: compileDir);

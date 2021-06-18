@@ -1,3 +1,9 @@
+# 4.1.0
+- Fixes for running on Windows.
+  The install process now correctly compiles and installs the dswitch exes on windows.
+- Uses dcli 1.6.0 which fixes detection of admin writes when running under powershell.
+- Added doctor command to help with diagnosing problems.
+
 # 4.0.7
 
 # 4.0.6
