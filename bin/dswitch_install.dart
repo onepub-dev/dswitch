@@ -52,7 +52,6 @@ void runStage1() {
     exit(1);
   }
 
-  Settings().setVerbose(enabled: true);
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 

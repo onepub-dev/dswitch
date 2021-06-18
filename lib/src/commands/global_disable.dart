@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:dcli/dcli.dart';
+import 'package:dcli/dcli.dart' as dcli;
 
 import '../constants.dart';
 
@@ -26,8 +26,8 @@ The DSwitch symlinks are deleted.
   }
 
   void deleteSymlink(String symlink) {
-    if (exists(symlink)) {
-      delete(symlink);
+    if (dcli.exists(symlink)) {
+      dcli.deleteSymlink(symlink);
     }
   }
 }

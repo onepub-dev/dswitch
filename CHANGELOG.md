@@ -1,3 +1,11 @@
+# 4.0.7
+
+# 4.0.6
+Corrected the dswitch use example.
+
+# 4.0.5
+updated homepage.
+
 # 4.0.4
 
 - Revised the install so that it installs into an existing OS path as overwriting the version in pub-cache was causing future pub gets to fail. 

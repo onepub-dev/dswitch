@@ -20,7 +20,7 @@ dswitch stable install
 # switch between channels
 
 ```
-dswitch switch beta
+dswitch use beta
   Downloading latest version (2.12.0-133.2.beta) for beta
   Fetching: 100 %
   Expanding release...
