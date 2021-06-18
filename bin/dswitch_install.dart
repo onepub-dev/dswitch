@@ -32,12 +32,6 @@ void runStage1() {
     }
   }
 
-  // 'bash'.run;
-  // Shell.current.releasePrivileges();
-
-  // env[PubCache.envVarPubCache] =
-  //     join(rootPath, 'home', Shell.current.loggedInUser, '.pub_cache');
-
   // build the path to the copy of bin/dswitch.dart in the pub cache.
   late final String pathToDSwitch;
 
