@@ -23,7 +23,7 @@ Switches to the passed channel.
 
   @override
   void run() {
-    checkIsCompiled();
+    checkIsFullyInstalled();
     String channel;
 
     if (argResults!.rest.isEmpty || argResults!.rest.length != 1) {

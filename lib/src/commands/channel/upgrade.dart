@@ -19,7 +19,7 @@ Upgrades the $channel channel to the latest version.
 
   @override
   void run() {
-    checkIsCompiled();
+    checkIsFullyInstalled();
     var ch = Channel(channel);
 
     ch.upgrade();

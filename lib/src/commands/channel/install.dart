@@ -26,7 +26,7 @@ If you pass the --select switch then a menu is displayed with the version availa
 
   @override
   void run() {
-    checkIsCompiled();
+    checkIsFullyInstalled();
     if (argResults!.wasParsed('select')) {
       select();
     } else {

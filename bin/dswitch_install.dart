@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
+import 'package:dswitch/src/settings.dart';
 
 void main(List<String> args) {
   final parser = ArgParser();
@@ -85,13 +86,7 @@ void runStage1() {
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
 void runStage2(String pathToDSwitch) {
-  String target;
-  if (Platform.isWindows) {
-    target = join(
-        env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
-  } else {
-    target = '/usr/bin';
-  }
+  var target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
     printerr(
@@ -101,5 +96,20 @@ void runStage2(String pathToDSwitch) {
 
   print(blue('Installing dswitch into $target.'));
   copy(pathToDSwitch, target, overwrite: true);
+  // save the version no. that we just installed so
+  // that dswtich can check its running the current
+  // version each time it starts.
+  updateVersionNo();
   print('');
+}
+
+String get pathToInstallDir {
+  String target;
+  if (Platform.isWindows) {
+    target = join(
+        env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
+  } else {
+    target = '/usr/bin';
+  }
+  return target;
 }

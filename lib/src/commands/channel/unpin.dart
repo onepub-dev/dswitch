@@ -19,7 +19,7 @@ Unpins the $channel channel.
 
   @override
   void run() {
-    checkIsCompiled();
+    checkIsFullyInstalled();
     var ch = Channel(channel);
     ch.unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));

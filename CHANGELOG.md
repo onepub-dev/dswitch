@@ -1,3 +1,6 @@
+# 4.2.1
+- An attempt at fixing the logic that detects when dswitch_install needs to be run after a pub global activate is run to obtain a newer version.
+
 # 4.1.0
 - Fixes for running on Windows.
   The install process now correctly compiles and installs the dswitch exes on windows.
