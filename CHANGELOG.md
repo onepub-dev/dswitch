@@ -1,3 +1,6 @@
+# 4.2.2
+- Added startup logic to ensure that the correct version of dswitch is running after a new pub global activate. Previoulsy the existing compiled version would continue to run. We now check the version no. matches  Updated the logic that finds a version to deal with dcli change to findPrimaryVersion which now returns null rather than throwing StateError if dswitch isn't in pub cache. This is mainly for dev environment.
+
 # 4.2.1
 - An attempt at fixing the logic that detects when dswitch_install needs to be run after a pub global activate is run to obtain a newer version.
 
