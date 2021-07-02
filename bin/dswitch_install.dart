@@ -44,6 +44,7 @@ void runStage1() {
   } else {
     /// Used when we are testing from local source
     pathToDSwitch = '.';
+    print('dswitch located in: ${DartScript.self.pathToScript}');
   }
 
   if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
