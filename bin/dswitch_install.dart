@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/settings.dart';
+import 'package:pubspec/pubspec.dart' as ps;
 
 void main(List<String> args) {
   final parser = ArgParser();
@@ -45,8 +46,6 @@ void runStage1() {
     pathToDSwitch = '.';
   }
 
-  print(truepath(pathToDSwitch));
-
   if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
     printerr(
         "Could not find dswitch_install in pub cache. Please run 'dart pub global activate dswitch' and try again.");
@@ -56,10 +55,11 @@ void runStage1() {
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 
+    hackPubspecForDev(pathToDSwitch, compileDir);
     final installScript =
         DartScript.fromFile(join(compileDir, 'bin', 'dswitch_install.dart'));
     print('');
-    print(blue('Compiling dswitch_install'));
+    print(blue('Compiling dswitch_install from ${truepath(pathToDSwitch)}'));
     DartSdk().runPubGet(compileDir, progress: Progress.printStdErr());
     installScript.compile(workingDirectory: compileDir);
 
@@ -82,6 +82,31 @@ void runStage1() {
     start('${installScript.pathToExe} --stage2=${dswitchScript.pathToExe}',
         privileged: true);
   }, keep: true);
+}
+
+/// during development we often have a dependency_override
+/// with  a relative path
+/// to dcli. This hack changes the relative path to an absolute path
+/// so the copied pubspec.yaml will still function.
+void hackPubspecForDev(String pathToDSwitch, String compileDir) {
+  var pathToPubspec = truepath(compileDir, 'pubspec.yaml');
+  var pubspec = PubSpec.fromFile(pathToPubspec);
+
+  if (pubspec.dependencyOverrides.containsKey('dcli')) {
+    var overrides = pubspec.dependencyOverrides;
+
+    var dcli = overrides['dcli'];
+    if (dcli!.reference is ps.PathReference) {
+      var pathRef = dcli.reference as ps.PathReference;
+      pathRef = ps.PathReference(truepath(pathToDSwitch, pathRef.path));
+
+      final replacement = <String, Dependency>{};
+      replacement.addAll(overrides);
+      replacement['dcli'] = Dependency('dcli', pathRef);
+      pubspec.dependencyOverrides = replacement;
+      pubspec.saveToFile(pathToPubspec);
+    }
+  }
 }
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
