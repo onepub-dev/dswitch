@@ -14,8 +14,14 @@ void main(List<String> args) {
     ..addFlag('verbose',
         abbr: 'v', defaultsTo: false, help: 'Output verbose logging.');
 
-  var parsed = parser.parse(args);
-
+  ArgResults parsed;
+  try {
+    parsed = parser.parse(args);
+  } on FormatException catch (e) {
+    printerr(red(e.message));
+    showUsage(parser);
+    exit(0);
+  }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   firstRun();
