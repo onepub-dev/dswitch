@@ -1,3 +1,6 @@
+# 4.2.4
+Improved the error message when an invalid switch is passed. No longer dumps a stack trace.
+
 # 4.2.3
 - upgraded dcli version for improved logging
 
