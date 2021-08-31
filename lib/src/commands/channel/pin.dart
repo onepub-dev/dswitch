@@ -24,7 +24,7 @@ Selects the given version for the $channel channel and makes it the active versi
 
   @override
   void run() {
-    checkIsCompiled();
+    checkIsFullyInstalled();
     String version;
 
     var ch = Channel(channel);

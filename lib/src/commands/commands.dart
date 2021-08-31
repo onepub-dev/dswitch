@@ -7,6 +7,7 @@ import '../version/version.g.dart';
 import '../constants.dart';
 import 'channel/channel.dart';
 import 'global_disable.dart';
+import 'global_doctor.dart';
 import 'global_enable.dart';
 import 'global_list.dart';
 import 'global_status.dart';
@@ -31,6 +32,7 @@ CommandRunner buildCommandRunner() {
   runner.addCommand(GlobalUseCommand());
   runner.addCommand(GlobalEnableCommand());
   runner.addCommand(GlobalDisableCommand());
+  runner.addCommand(GlobalDoctorCommand());
 
   return runner;
 }

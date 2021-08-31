@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
+import 'package:dswitch/src/settings.dart';
+import 'package:pubspec/pubspec.dart' as ps;
 
 void main(List<String> args) {
   final parser = ArgParser();
@@ -32,18 +34,20 @@ void runStage1() {
     }
   }
 
-  // 'bash'.run;
-  // Shell.current.releasePrivileges();
-
-  // env[PubCache.envVarPubCache] =
-  //     join(rootPath, 'home', Shell.current.loggedInUser, '.pub_cache');
-
   // build the path to the copy of bin/dswitch.dart in the pub cache.
-  final pathToDSwitch = join(
-    DartProject.fromCache('dswitch', packageVersion).pathToProjectRoot,
-  );
+  late final String pathToDSwitch;
 
-  if (!exists(pathToDSwitch)) {
+  if (DartScript.self.isPubGlobalActivated) {
+    pathToDSwitch = join(
+      DartProject.fromCache('dswitch', packageVersion).pathToProjectRoot,
+    );
+  } else {
+    /// Used when we are testing from local source
+    pathToDSwitch = '.';
+    print('dswitch located in: ${DartScript.self.pathToScript}');
+  }
+
+  if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
     printerr(
         "Could not find dswitch_install in pub cache. Please run 'dart pub global activate dswitch' and try again.");
     exit(1);
@@ -52,15 +56,16 @@ void runStage1() {
   withTempDir((compileDir) {
     copyTree(pathToDSwitch, compileDir);
 
+    hackPubspecForDev(pathToDSwitch, compileDir);
     final installScript =
         DartScript.fromFile(join(compileDir, 'bin', 'dswitch_install.dart'));
     print('');
-    print(blue('Compiling dswitch_install'));
-    DartSdk().runPubGet(compileDir, progress: Progress.devNull());
+    print(blue('Compiling dswitch_install from ${truepath(pathToDSwitch)}'));
+    DartSdk().runPubGet(compileDir, progress: Progress.printStdErr());
     installScript.compile(workingDirectory: compileDir);
 
     print('');
-    print(blue('Compiling dswitch.'));
+    print(blue('Compiling dswitch'));
     final dswitchScript =
         DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'));
     dswitchScript.compile(workingDirectory: compileDir);
@@ -80,15 +85,34 @@ void runStage1() {
   }, keep: true);
 }
 
+/// during development we often have a dependency_override
+/// with  a relative path
+/// to dcli. This hack changes the relative path to an absolute path
+/// so the copied pubspec.yaml will still function.
+void hackPubspecForDev(String pathToDSwitch, String compileDir) {
+  var pathToPubspec = truepath(compileDir, 'pubspec.yaml');
+  var pubspec = PubSpec.fromFile(pathToPubspec);
+
+  if (pubspec.dependencyOverrides.containsKey('dcli')) {
+    var overrides = pubspec.dependencyOverrides;
+
+    var dcli = overrides['dcli'];
+    if (dcli!.reference is ps.PathReference) {
+      var pathRef = dcli.reference as ps.PathReference;
+      pathRef = ps.PathReference(truepath(pathToDSwitch, pathRef.path));
+
+      final replacement = <String, Dependency>{};
+      replacement.addAll(overrides);
+      replacement['dcli'] = Dependency('dcli', pathRef);
+      pubspec.dependencyOverrides = replacement;
+      pubspec.saveToFile(pathToPubspec);
+    }
+  }
+}
+
 /// In stage 2 we are running from a compiled exe as a privilged user.
 void runStage2(String pathToDSwitch) {
-  String target;
-  if (Platform.isWindows) {
-    target = join(
-        env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
-  } else {
-    target = '/usr/bin';
-  }
+  var target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
     printerr(
@@ -98,5 +122,20 @@ void runStage2(String pathToDSwitch) {
 
   print(blue('Installing dswitch into $target.'));
   copy(pathToDSwitch, target, overwrite: true);
+  // save the version no. that we just installed so
+  // that dswtich can check its running the current
+  // version each time it starts.
+  updateVersionNo();
   print('');
+}
+
+String get pathToInstallDir {
+  String target;
+  if (Platform.isWindows) {
+    target = join(
+        env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
+  } else {
+    target = '/usr/bin';
+  }
+  return target;
 }

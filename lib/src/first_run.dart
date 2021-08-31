@@ -2,29 +2,24 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
-import 'package:path/path.dart';
-import 'package:settings_yaml/settings_yaml.dart';
+import 'package:dswitch/src/settings.dart';
 
 import 'constants.dart';
 
-var pathToSettings = join(HOME, '.dswitch', 'settings.yaml');
 void firstRun() {
-  if (!exists(dirname(pathToSettings))) {
-    createDir(dirname(pathToSettings), recursive: true);
-  }
-
-  if (!exists(pathToSettings)) {
+  if (!settingsExist) {
+    createSettings();
     firstRunMessage();
   }
-
-  var settings = SettingsYaml.load(
-    pathToSettings: pathToSettings,
-  );
-
-  settings.save();
 }
 
-void checkIsCompiled() {
+void checkIsFullyInstalled() {
+  if (!isCurrentVersionInstalled) {
+    print(red(
+        'A new version of dswitch has been activated. Pleasd run dswitch_install and then try again.'));
+    exit(1);
+  }
+
   final script = DartScript.self;
   if (!script.isCompiled) {
     print(red('Please run dswitch_install and then try again.'));

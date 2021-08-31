@@ -10,10 +10,19 @@ import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/first_run.dart';
 
 void main(List<String> args) {
-  // if (Platform.isWindows && !Shell.current.isPrivilegedUser) {
-  //   print(run('You must run dswitch as an Administrator'));
-  //   exit(1);
-  // }
+  var parser = ArgParser()
+    ..addFlag('verbose',
+        abbr: 'v', defaultsTo: false, help: 'Output verbose logging.');
+
+  ArgResults parsed;
+  try {
+    parsed = parser.parse(args);
+  } on FormatException catch (e) {
+    printerr(red(e.message));
+    showUsage(parser);
+    exit(0);
+  }
+  Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   firstRun();
   doit(args);

@@ -19,5 +19,12 @@
             ],
             "console": "terminal"
         },
+        {
+            "name": "dswitch_install",
+            "program": "bin/dswitch_install.dart",
+            "request": "launch",
+            "type": "dart",
+            "console": "terminal"
+        },
     ]
 }

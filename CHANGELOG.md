@@ -1,3 +1,21 @@
+# 4.2.4
+Improved the error message when an invalid switch is passed. No longer dumps a stack trace.
+
+# 4.2.3
+- upgraded dcli version for improved logging
+
+# 4.2.2
+- Added startup logic to ensure that the correct version of dswitch is running after a new pub global activate. Previoulsy the existing compiled version would continue to run. We now check the version no. matches  Updated the logic that finds a version to deal with dcli change to findPrimaryVersion which now returns null rather than throwing StateError if dswitch isn't in pub cache. This is mainly for dev environment.
+
+# 4.2.1
+- An attempt at fixing the logic that detects when dswitch_install needs to be run after a pub global activate is run to obtain a newer version.
+
+# 4.1.0
+- Fixes for running on Windows.
+  The install process now correctly compiles and installs the dswitch exes on windows.
+- Uses dcli 1.6.0 which fixes detection of admin writes when running under powershell.
+- Added doctor command to help with diagnosing problems.
+
 # 4.0.7
 
 # 4.0.6
