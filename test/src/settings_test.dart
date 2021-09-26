@@ -1,6 +1,7 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/settings.dart';
+import 'package:dswitch/src/version/version.g.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:test/test.dart';
 
@@ -65,9 +66,6 @@ void main() {
     expect(settingsExist, isFalse);
     expect(isCurrentVersionInstalled, isFalse);
 
-    createSettings();
-    expect(isCurrentVersionInstalled, isTrue);
-
     var settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
@@ -76,24 +74,27 @@ void main() {
     settings.save();
 
     expect(settingsExist, isTrue);
+
     expect(isCurrentVersionInstalled, isFalse);
     updateVersionNo();
-    expect(isCurrentVersionInstalled, isTrue);
 
-    // withTempDir((mockCache) {
-    //   PubCache.reset();
-    //   env[PubCache.envVarPubCache] = mockCache;
-    //   final pubCache = PubCache();
-    //   createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
-    //       recursive: true);
-    //   createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
-    //   createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
+    withTempDir((mockCache) {
+      PubCache.reset();
+      env[PubCache.envVarPubCache] = mockCache;
+      final pubCache = PubCache();
+      createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
+          recursive: true);
+      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
+      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
+      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-    //   expect(isCurrentVersionInstalled, isFalse);
+      createDir(
+          join(pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
+      expect(isCurrentVersionInstalled, isFalse);
 
-    //   createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+      createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
 
-    //   expect(isCurrentVersionInstalled, isTrue);
-    // });
+      expect(isCurrentVersionInstalled, isTrue);
+    });
   });
 }

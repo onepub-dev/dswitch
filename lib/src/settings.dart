@@ -19,11 +19,11 @@ bool get isCurrentVersionInstalled {
 
   final installedVersion = (settings['version'] ?? '') as String;
 
-  return packageVersion == installedVersion;
+  // return packageVersion == installedVersion;
 
-  // final primary = PubCache().findPrimaryVersion(DartProject.self.pubSpec.name!);
+  final primary = PubCache().findPrimaryVersion(DartProject.self.pubSpec.name!);
 
-  // return primary == null ? false : settings['version'] == primary.toString();
+  return primary == null ? false : installedVersion == primary.toString();
 }
 
 void createSettings() {

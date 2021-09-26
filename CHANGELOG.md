@@ -1,3 +1,9 @@
+# 4.2.7
+# and one more go. DCli had a bug in getPrimaryVersion as it was treating pre-release versions as releases.
+# 4.2.6
+* Another go at fixing the version detection when determing if an install is required.
+ This bug was a result of a bug in dcli not processing pre-release version nos correctly which has now been fixe.
+
 # 4.2.5
 * fixed the logic that detcts that the active version has been installed under windows. Previously it continously reported that dswitch_install needed to be run.
 * Improved errors when invalid argument passed on cli.
