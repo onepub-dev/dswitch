@@ -17,7 +17,7 @@ bool get isCurrentVersionInstalled {
     pathToSettings: pathToSettings,
   );
 
-  final installedVersion = settings['version'] as String;
+  final installedVersion = (settings['version'] ?? '') as String;
 
   return packageVersion == installedVersion;
 

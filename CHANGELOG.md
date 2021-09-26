@@ -1,3 +1,8 @@
+# 4.2.5
+* fixed the logic that detcts that the active version has been installed under windows. Previously it continously reported that dswitch_install needed to be run.
+* Improved errors when invalid argument passed on cli.
+* Fixed a bug in dswitch disable when it tried to delete the linked directory rather than the symlink.
+
 # 4.2.4
 Improved the error message when an invalid switch is passed. No longer dumps a stack trace.
 
