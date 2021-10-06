@@ -1,3 +1,7 @@
+# 4.2.8
+- upgraded to dcli 1.9.3
+- Fixed bug where we tried to access local pubspec.yaml when installed.
+
 # 4.2.7
 # and one more go. DCli had a bug in getPrimaryVersion as it was treating pre-release versions as releases.
 # 4.2.6
