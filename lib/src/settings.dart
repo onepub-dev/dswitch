@@ -17,7 +17,7 @@ bool get isCurrentVersionInstalled {
     pathToSettings: pathToSettings,
   );
 
-  final primary = PubCache().findPrimaryVersion(DartProject.self.pubSpec.name!);
+  final primary = PubCache().findPrimaryVersion('dswitch');
 
   return primary == null ? false : settings['version'] == primary.toString();
 }
