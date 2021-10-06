@@ -20,11 +20,11 @@ void checkIsFullyInstalled() {
     exit(1);
   }
 
-  final script = DartScript.self;
-  if (!script.isCompiled) {
-    print(red('Please run dswitch_install and then try again.'));
-    exit(1);
-  }
+  // final script = DartScript.self;
+  // if (!script.isCompiled) {
+  //   print(red('Please run dswitch_install and then try again.'));
+  //   exit(1);
+  // }
 }
 
 void firstRunMessage() {

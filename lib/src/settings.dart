@@ -17,9 +17,13 @@ bool get isCurrentVersionInstalled {
     pathToSettings: pathToSettings,
   );
 
+  /// we need to find the latest version from pub cache
+  /// as we are likely to be running in an old compiled version
+  /// of the script.
   final primary = PubCache().findPrimaryVersion('dswitch');
+  final installedVersion = (settings['version'] ?? '') as String;
 
-  return primary == null ? false : settings['version'] == primary.toString();
+  return primary == null ? false : installedVersion == primary.toString();
 }
 
 void createSettings() {

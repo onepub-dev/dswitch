@@ -38,7 +38,7 @@ CommandRunner buildCommandRunner() {
 }
 
 void showUsage(ArgParser parser) {
-  print('');
+  print(green('Usage:'));
   print('Rapidly switches between dart channels.');
   print(orange(
       'Remember to restart your login session after you run dswitch for the first time'));
@@ -63,9 +63,6 @@ dswitch beta unpin
 
 /// list the set of versions available for the beta channel.
 dswitch beta list
-
-
-
 ''');
   print(parser.usage);
 

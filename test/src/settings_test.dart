@@ -1,7 +1,7 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart';
-import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/settings.dart';
+import 'package:dswitch/src/version/version.g.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:test/test.dart';
 
@@ -61,7 +61,11 @@ void main() {
   });
 
   test('update version', () {
-    createSettings();
+    if (exists(pathToSettings)) delete(pathToSettings);
+
+    expect(settingsExist, isFalse);
+    expect(isCurrentVersionInstalled, isFalse);
+
     var settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
@@ -69,9 +73,10 @@ void main() {
     settings['version'] = '0.0.1';
     settings.save();
 
-    updateVersionNo();
-
     expect(settingsExist, isTrue);
+
+    expect(isCurrentVersionInstalled, isFalse);
+    updateVersionNo();
 
     withTempDir((mockCache) {
       PubCache.reset();
@@ -81,7 +86,10 @@ void main() {
           recursive: true);
       createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
       createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
+      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
+      createDir(
+          join(pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
       expect(isCurrentVersionInstalled, isFalse);
 
       createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));

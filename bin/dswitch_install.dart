@@ -1,18 +1,31 @@
+#! /usr/bin/env dcli
+
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
+import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
 void main(List<String> args) {
   final parser = ArgParser();
   parser.addFlag('verbose',
-      abbr: 'v', defaultsTo: false, help: 'Dump verbose logging information');
+      abbr: 'v',
+      defaultsTo: false,
+      negatable: false,
+      help: 'Dump verbose logging information');
 
-  parser.addOption('stage2', abbr: '2', help: 'Stage 2');
+  parser.addOption('stage2', abbr: '2', help: 'Stage 2', hide: true);
 
-  final parsed = parser.parse(args);
+  final ArgResults parsed;
+  try {
+    parsed = parser.parse(args);
+  } on FormatException catch (e) {
+    printerr(red('Invalid command line option: ${e.message}'));
+    showUsage(parser);
+    exit(1);
+  }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   if (!parsed.wasParsed('stage2')) {

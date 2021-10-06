@@ -15,7 +15,7 @@ class ChannelCommand extends Command<void> {
   String get description => 'Manages the $channel channel.';
 
   @override
-  String get name => '$channel';
+  String get name => channel;
 
   @override
   void run() {}
