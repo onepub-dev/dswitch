@@ -9,7 +9,7 @@ environment:
 dependencies: 
   archive: ^3.1.2
   args: ^2.1.1
-  dcli: ^1.7.0
+  dcli: ^1.9.3
   meta: ^1.0.0
   path: ^1.0.0
   pedantic: ^1.0.0
@@ -23,3 +23,8 @@ dev_dependencies:
 executables: 
   dswitch: 
   dswitch_install: 
+
+
+dependency_overrides:
+  # dcli: 
+  #   path: ../dcli

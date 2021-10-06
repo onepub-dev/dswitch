@@ -16,7 +16,7 @@ void firstRun() {
 void checkIsFullyInstalled() {
   if (!isCurrentVersionInstalled) {
     print(red(
-        'A new version of dswitch has been activated. Pleasd run dswitch_install and then try again.'));
+        'A new version of dswitch has been activated. Please run dswitch_install and then try again.'));
     exit(1);
   }
 
