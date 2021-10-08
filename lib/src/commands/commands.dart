@@ -38,6 +38,7 @@ CommandRunner buildCommandRunner() {
 }
 
 void showUsage(ArgParser parser) {
+  print(blue('dswitch version: $packageVersion'));
   print(green('Usage:'));
   print('Rapidly switches between dart channels.');
   print(orange(
