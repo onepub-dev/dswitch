@@ -1,3 +1,8 @@
+# 4.2.11
+- Fixed bug under linux where the version no. was being written to /root/settings.yaml rather than HOME/settings.yaml. The result was the the linux version always thought an upgrade was required.
+- Log the contents of the settings file after it is written in attempt to find why its not being udpated on linux.
+- Added additional logging when updating settings file.
+
 # 4.2.10
 - released purely created to test the upgrade process.
 
