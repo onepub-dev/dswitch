@@ -23,6 +23,8 @@ bool get isCurrentVersionInstalled {
   final primary = PubCache().findPrimaryVersion('dswitch');
   final installedVersion = (settings['version'] ?? '') as String;
 
+  verbose(() =>
+      'Settings version: $installedVersion, PackageVersion: $packageVersion PrimaryVersion: $primary');
   return primary == null ? false : installedVersion == primary.toString();
 }
 
