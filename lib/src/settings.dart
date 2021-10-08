@@ -12,6 +12,8 @@ void updateVersionNo() {
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
   settings.save();
+  verbose(() =>
+      'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
 }
 
 bool get isCurrentVersionInstalled {
