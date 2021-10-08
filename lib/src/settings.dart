@@ -2,12 +2,17 @@ import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
-var pathToSettings = join(HOME, '.dswitch', 'settings.yaml');
+final relPathToSettings = join('.dswitch', 'settings.yaml');
+final pathToSettings = join(HOME, relPathToSettings);
 
-void updateVersionNo() {
-  var settings = SettingsYaml.load(
-    pathToSettings: pathToSettings,
-  );
+/// This method is called from stage2 of the install.
+/// When run on linux stage2 is run under sudo so the
+/// HOME directory is /root.
+/// So we can update the user's settings.yaml in their
+/// home directory we must pass the home dir in.
+void updateVersionNo(String pathToHome) {
+  final pathToSettings = join(pathToHome, relPathToSettings);
+  var settings = SettingsYaml.load(pathToSettings: pathToSettings);
   settings['version'] = packageVersion;
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');

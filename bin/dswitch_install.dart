@@ -16,7 +16,8 @@ void main(List<String> args) {
       negatable: false,
       help: 'Dump verbose logging information');
 
-  parser.addOption('stage2', abbr: '2', help: 'Stage 2', hide: true);
+  parser.addOption('stage2', help: 'Stage 2', hide: true);
+  parser.addOption('home', help: 'Users home directory.', hide: true);
 
   final ArgResults parsed;
   try {
@@ -32,7 +33,8 @@ void main(List<String> args) {
     runStage1();
   } else {
     var pathToDSwitch = parsed['stage2'] as String;
-    runStage2(pathToDSwitch);
+    var pathToHome = parsed['home'] as String;
+    runStage2(pathToDSwitch, pathToHome: pathToHome);
     exit(0);
   }
 
@@ -96,7 +98,7 @@ void runStage1() {
     var verboseSwitch = '';
     if (Settings().isVerbose) verboseSwitch = '-v';
     start(
-        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} $verboseSwitch',
+        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} $verboseSwitch --home="$HOME"',
         privileged: true);
   }, keep: true);
 }
@@ -127,7 +129,7 @@ void hackPubspecForDev(String pathToDSwitch, String compileDir) {
 }
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
-void runStage2(String pathToDSwitch) {
+void runStage2(String pathToDSwitch, {required String pathToHome}) {
   var target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
@@ -141,7 +143,7 @@ void runStage2(String pathToDSwitch) {
   // save the version no. that we just installed so
   // that dswtich can check its running the current
   // version each time it starts.
-  updateVersionNo();
+  updateVersionNo(pathToHome);
   print('');
 }
 

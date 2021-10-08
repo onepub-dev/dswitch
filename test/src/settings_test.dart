@@ -76,7 +76,7 @@ void main() {
     expect(settingsExist, isTrue);
 
     expect(isCurrentVersionInstalled, isFalse);
-    updateVersionNo();
+    updateVersionNo(HOME);
 
     withTempDir((mockCache) {
       PubCache.reset();
