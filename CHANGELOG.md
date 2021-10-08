@@ -1,9 +1,12 @@
+# 4.2.9
+Increased logging of version details to help diagnose install problems.
+
 # 4.2.8
 - upgraded to dcli 1.9.3
 - Fixed bug where we tried to access local pubspec.yaml when installed.
 
 # 4.2.7
-# and one more go. DCli had a bug in getPrimaryVersion as it was treating pre-release versions as releases.
+ - and one more go. DCli had a bug in getPrimaryVersion as it was treating pre-release versions as releases.
 # 4.2.6
 * Another go at fixing the version detection when determing if an install is required.
  This bug was a result of a bug in dcli not processing pre-release version nos correctly which has now been fixe.
