@@ -93,7 +93,10 @@ void runStage1() {
           'Please provide your sudo password so we can install dswitch into your PATH'));
     }
     print('');
-    start('${installScript.pathToExe} --stage2=${dswitchScript.pathToExe}',
+    var verboseSwitch = '';
+    if (Settings().isVerbose) verboseSwitch = '-v';
+    start(
+        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} $verboseSwitch',
         privileged: true);
   }, keep: true);
 }

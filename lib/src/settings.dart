@@ -9,6 +9,8 @@ void updateVersionNo() {
     pathToSettings: pathToSettings,
   );
   settings['version'] = packageVersion;
+  verbose(() => 'updateVersionNo to $packageVersion');
+  verbose(() => 'Path to settings file $pathToSettings');
   settings.save();
 }
 
