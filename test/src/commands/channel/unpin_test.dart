@@ -12,7 +12,7 @@ void main() {
     await runner.run(['use', 'beta']);
 
     // ignore: todo
-    // TODO: work out how to stablis this test as the download
+    // TODO: work out how to stabilise this test as the download
     // version will always be different.
     expect(Channel('beta').currentVersion, equals('2.13.1'));
   });
