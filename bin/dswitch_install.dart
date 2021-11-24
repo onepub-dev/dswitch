@@ -4,7 +4,10 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
+import 'package:dswitch/src/channel.dart';
 import 'package:dswitch/src/commands/commands.dart';
+import 'package:dswitch/src/constants.dart';
+import 'package:dswitch/src/releases.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
@@ -31,10 +34,12 @@ void main(List<String> args) {
 
   if (!parsed.wasParsed('stage2')) {
     runStage1();
+    installDart();
   } else {
     var pathToDSwitch = parsed['stage2'] as String;
     var pathToHome = parsed['home'] as String;
     runStage2(pathToDSwitch, pathToHome: pathToHome);
+
     exit(0);
   }
 
@@ -146,6 +151,7 @@ void runStage2(String pathToDSwitch, {required String pathToHome}) {
   // save the version no. that we just installed so
   // that dswtich can check its running the current
   // version each time it starts.
+  Shell.current.releasePrivileges();
   updateVersionNo(pathToHome);
   print('');
 }
@@ -159,4 +165,23 @@ String get pathToInstallDir {
     target = '/usr/bin';
   }
   return target;
+}
+
+void installDart() {
+  Channel? active;
+
+  /// Check we have an installed and active version of art.
+  for (var channel in channels) {
+    var ch = Channel(channel);
+    if (ch.isActive) {
+      active = ch;
+    }
+  }
+
+  /// if we don't have an active version then install and make it active.
+  if (active == null) {
+    var stable = Channel('stable');
+    stable.installLatestVersion();
+    stable.use();
+  }
 }
