@@ -1,3 +1,8 @@
+# 4.3.1
+upgraded to dcli 1.13.3
+# 4.3.0
+upgraded to dcli 1.13.2
+
 # 4.2.11
 - Fixed bug under linux where the version no. was being written to /root/settings.yaml rather than HOME/settings.yaml. The result was the the linux version always thought an upgrade was required.
 - Log the contents of the settings file after it is written in attempt to find why its not being udpated on linux.
