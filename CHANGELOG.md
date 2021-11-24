@@ -1,3 +1,6 @@
+# 4.3.2
+Fixed a bug in the first run install logic that assumed the .dswitch directory exists.
+
 # 4.3.1
 upgraded to dcli 1.13.3
 # 4.3.0

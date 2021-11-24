@@ -49,6 +49,9 @@ void runStage1() {
     }
   }
 
+  if (!exists(dirname(pathToSettings))) {
+    createDir(dirname(pathToSettings));
+  }
   // build the path to the copy of bin/dswitch.dart in the pub cache.
   late final String pathToDSwitch;
 
