@@ -1,3 +1,7 @@
+# 4.3.3
+- We now install the latest stable build of dart as part of the install. 
+- Fixed a permissions issue with settings.yaml as it was being set to being owned by root.
+
 # 4.3.2
 Fixed a bug in the first run install logic that assumed the .dswitch directory exists.
 
