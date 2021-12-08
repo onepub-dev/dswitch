@@ -126,7 +126,7 @@ packages:
       name: dcli
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.13.3"
+    version: "1.13.6"
   dcli_core:
     dependency: transitive
     description:
