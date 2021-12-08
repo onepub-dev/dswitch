@@ -7,7 +7,6 @@ import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/channel.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
-import 'package:dswitch/src/releases.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
