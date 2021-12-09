@@ -53,7 +53,13 @@ If you pass the --select switch then a menu is displayed with the version availa
   void select() {
     var ch = Channel(channel);
 
-    ch.download(ch.selectToInstall());
+    var selected = ch.selectToInstall();
+
+    if (ch.isVersionCached(selected.version.toString())) {
+      print(blue('The selected version is already installed.'));
+    } else {
+      ch.download(selected.version.toString());
+    }
     print('Install of $channel channel complete.');
   }
 

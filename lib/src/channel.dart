@@ -205,7 +205,7 @@ class Channel {
   /// Shows the user a menu with the 20 most recent version for the channel.
   ///
   /// Returns the version the user selected.
-  String selectToInstall() {
+  Release selectToInstall() {
     var releases = Release.fetchReleases(name);
 
     var release = menu<Release>(
@@ -213,13 +213,7 @@ class Channel {
         options: releases,
         limit: 20,
         format: (release) => release.version.toString());
-
-    if (isVersionCached(release.version.toString())) {
-      printerr(red('The selected version is already installed.'));
-      exit(-1);
-    }
-
-    return release.version.toString();
+    return release;
   }
 
   String selectFromInstalled() {

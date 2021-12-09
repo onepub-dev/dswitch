@@ -38,7 +38,7 @@ Selects the given version for the $channel channel and makes it the active versi
 
       version = argResults!.rest[0];
     } else {
-      version = ch.selectToInstall();
+      version = ch.selectToInstall().version.toString();
     }
 
     if (!ch.isVersionCached(version)) {
