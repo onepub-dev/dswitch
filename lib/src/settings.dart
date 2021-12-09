@@ -1,6 +1,7 @@
 import 'package:dcli/dcli.dart';
-import 'package:dswitch/dswitch.dart';
 import 'package:settings_yaml/settings_yaml.dart';
+
+import '../dswitch.dart';
 
 final relPathToSettings = join('.dswitch', 'settings.yaml');
 final pathToSettings = join(HOME, relPathToSettings);
@@ -12,7 +13,7 @@ final pathToSettings = join(HOME, relPathToSettings);
 /// home directory we must pass the home dir in.
 void updateVersionNo(String pathToHome) {
   final pathToSettings = join(pathToHome, relPathToSettings);
-  var settings = SettingsYaml.load(pathToSettings: pathToSettings);
+  final settings = SettingsYaml.load(pathToSettings: pathToSettings);
   settings['version'] = packageVersion;
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
@@ -22,7 +23,7 @@ void updateVersionNo(String pathToHome) {
 }
 
 bool get isCurrentVersionInstalled {
-  var settings = SettingsYaml.load(
+  final settings = SettingsYaml.load(
     pathToSettings: pathToSettings,
   );
 
@@ -33,8 +34,9 @@ bool get isCurrentVersionInstalled {
   final installedVersion = (settings['version'] ?? '') as String;
 
   verbose(() =>
-      'Settings version: $installedVersion, PackageVersion: $packageVersion PrimaryVersion: $primary');
-  return primary == null ? false : installedVersion == primary.toString();
+      'Settings version: $installedVersion, PackageVersion: $packageVersion '
+      'PrimaryVersion: $primary');
+  return primary != null && installedVersion == primary.toString();
 }
 
 void createSettings() {
@@ -42,7 +44,7 @@ void createSettings() {
     createDir(dirname(pathToSettings), recursive: true);
   }
 
-  var settings = SettingsYaml.load(
+  final settings = SettingsYaml.load(
     pathToSettings: pathToSettings,
   );
 

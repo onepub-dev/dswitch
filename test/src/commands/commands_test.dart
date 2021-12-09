@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('commands ...', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run([]);
 

@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('switch To beta', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['use', 'beta']);
 

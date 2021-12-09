@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
-import 'package:dswitch/src/settings.dart';
 
 import 'constants.dart';
+import 'settings.dart';
 
 void firstRun() {
   if (!settingsExist) {
@@ -15,8 +15,8 @@ void firstRun() {
 
 void checkIsFullyInstalled() {
   if (!isCurrentVersionInstalled) {
-    print(red(
-        'A new version of dswitch has been activated. Please run dswitch_install and then try again.'));
+    print(red('A new version of dswitch has been activated. '
+        'Please run dswitch_install and then try again.'));
     exit(1);
   }
 
@@ -67,7 +67,7 @@ void macosxFirstRun() {}
 void linuxFirstRun() {}
 
 void windowsFirstRun() {
-  var pre = Shell.current.checkInstallPreconditions();
+  final pre = Shell.current.checkInstallPreconditions();
   if (pre != null) {
     printerr(red(pre));
     exit(1);

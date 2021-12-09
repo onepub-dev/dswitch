@@ -4,13 +4,13 @@ import 'package:test/test.dart';
 
 void main() {
   test('beta install', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['beta', 'install']);
   });
 
   test('beta install - select version', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['beta', 'install', '--select']);
 
@@ -18,7 +18,7 @@ void main() {
   }, skip: true);
 
   test('beta install -  version', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['beta', 'install', '2.8.1']);
   });

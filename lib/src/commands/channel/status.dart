@@ -4,8 +4,8 @@ import 'package:dcli/dcli.dart';
 import '../../channel.dart';
 
 class StatusCommand extends Command<void> {
-  String channel;
   StatusCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''
@@ -23,7 +23,7 @@ Displays the status of the $channel channel.
   }
 
   static void printStatus(String channel) {
-    var ch = Channel(channel);
+    final ch = Channel(channel);
 
     print(green('Status for channel $channel:'));
     print('Current Version: ${ch.currentVersion}');

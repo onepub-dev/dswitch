@@ -9,17 +9,6 @@ import 'unpin.dart';
 import 'upgrade.dart';
 
 class ChannelCommand extends Command<void> {
-  String channel;
-
-  @override
-  String get description => 'Manages the $channel channel.';
-
-  @override
-  String get name => channel;
-
-  @override
-  void run() {}
-
   ChannelCommand(this.channel) {
     // addSubcommand(DefaultCommand(channel));
     addSubcommand(InstallCommand(channel));
@@ -30,11 +19,21 @@ class ChannelCommand extends Command<void> {
     addSubcommand(UpgradeCommand(channel));
     addSubcommand(DeleteCommand(channel));
   }
+  String channel;
+
+  @override
+  String get description => 'Manages the $channel channel.';
+
+  @override
+  String get name => channel;
+
+  @override
+  void run() {}
 }
 
 class DefaultCommand extends Command<void> {
-  String channel;
   DefaultCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''

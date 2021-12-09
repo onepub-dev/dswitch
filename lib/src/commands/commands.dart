@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
-import '../version/version.g.dart';
 
 import '../constants.dart';
+import '../version/version.g.dart';
 import 'channel/channel.dart';
 import 'global_disable.dart';
 import 'global_doctor.dart';
@@ -14,7 +14,7 @@ import 'global_status.dart';
 import 'global_use.dart';
 
 CommandRunner buildCommandRunner() {
-  var runner = CommandRunner<void>('dswitch',
+  final runner = CommandRunner<void>('dswitch',
       green('DSwitch $packageVersion manages Dart versions and channels'));
 
   runner.argParser.addFlag('verbose',
@@ -23,16 +23,17 @@ CommandRunner buildCommandRunner() {
       negatable: false,
       callback: (verbose) => Settings().setVerbose(enabled: verbose));
 
-  for (var channel in channels) {
+  for (final channel in channels) {
     runner.addCommand(ChannelCommand(channel));
   }
 
-  runner.addCommand(GlobalListCommand());
-  runner.addCommand(GlobalStatusCommand());
-  runner.addCommand(GlobalUseCommand());
-  runner.addCommand(GlobalEnableCommand());
-  runner.addCommand(GlobalDisableCommand());
-  runner.addCommand(GlobalDoctorCommand());
+  runner
+    ..addCommand(GlobalListCommand())
+    ..addCommand(GlobalStatusCommand())
+    ..addCommand(GlobalUseCommand())
+    ..addCommand(GlobalEnableCommand())
+    ..addCommand(GlobalDisableCommand())
+    ..addCommand(GlobalDoctorCommand());
 
   return runner;
 }
@@ -42,7 +43,8 @@ void showUsage(ArgParser parser) {
   print(green('Usage:'));
   print('Rapidly switches between dart channels.');
   print(orange(
-      'Remember to restart your login session after you run dswitch for the first time'));
+      'Remember to restart your login session after you run dswitch for '
+      'the first time'));
   print('');
   print('''
 Examples:

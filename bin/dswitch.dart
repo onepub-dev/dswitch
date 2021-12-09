@@ -10,9 +10,8 @@ import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/first_run.dart';
 
 void main(List<String> args) {
-  var parser = ArgParser()
-    ..addFlag('verbose',
-        abbr: 'v', defaultsTo: false, help: 'Output verbose logging.');
+  final parser = ArgParser()
+    ..addFlag('verbose', abbr: 'v', help: 'Output verbose logging.');
 
   ArgResults parsed;
   try {
@@ -28,8 +27,8 @@ void main(List<String> args) {
   doit(args);
 }
 
-void doit(List<String> args) async {
-  var runner = buildCommandRunner();
+Future<void> doit(List<String> args) async {
+  final runner = buildCommandRunner();
 
   checkConfig();
 
@@ -70,13 +69,13 @@ You need to restart your terminal so it can see the DSwitch PATH changes.
     }
   } else {
     // check for other instances of dart on the path.
-    var dartPaths = which('dart').paths;
+    final dartPaths = which('dart').paths;
     if (dartPaths.length > 1) {
       if (!dartPaths[0].startsWith(activeSymlinkPath)) {
         printerr(
             red('dswitch found another version of Dart that is being used.'));
-        print(
-            'Please check that the dswitch path is before any other dart paths');
+        print('Please check that the dswitch path is '
+            'before any other dart paths');
         print('Prepend the following path to your PATH environment variable.');
         print(activeSymlinkPath);
         print('');

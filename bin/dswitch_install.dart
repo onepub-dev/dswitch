@@ -11,15 +11,11 @@ import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
 void main(List<String> args) {
-  final parser = ArgParser();
-  parser.addFlag('verbose',
-      abbr: 'v',
-      defaultsTo: false,
-      negatable: false,
-      help: 'Dump verbose logging information');
-
-  parser.addOption('stage2', help: 'Stage 2', hide: true);
-  parser.addOption('home', help: 'Users home directory.', hide: true);
+  final parser = ArgParser()
+    ..addFlag('verbose',
+        abbr: 'v', negatable: false, help: 'Dump verbose logging information')
+    ..addOption('stage2', help: 'Stage 2', hide: true)
+    ..addOption('home', help: 'Users home directory.', hide: true);
 
   final ArgResults parsed;
   try {
@@ -35,8 +31,8 @@ void main(List<String> args) {
     runStage1();
     installDart();
   } else {
-    var pathToDSwitch = parsed['stage2'] as String;
-    var pathToHome = parsed['home'] as String;
+    final pathToDSwitch = parsed['stage2'] as String;
+    final pathToHome = parsed['home'] as String;
     runStage2(pathToDSwitch, pathToHome: pathToHome);
 
     exit(0);
@@ -70,8 +66,8 @@ void runStage1() {
   }
 
   if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
-    printerr(
-        "Could not find dswitch_install in pub cache. Please run 'dart pub global activate dswitch' and try again.");
+    printerr('Could not find dswitch_install in pub cache. Please run '
+        "'dart pub global activate dswitch' and try again.");
     exit(1);
   }
 
@@ -89,8 +85,8 @@ void runStage1() {
     print('');
     print(blue('Compiling dswitch'));
     final dswitchScript =
-        DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'));
-    dswitchScript.compile(workingDirectory: compileDir);
+        DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'))
+          ..compile(workingDirectory: compileDir);
 
     // /// duplicate the script as we may not be able to copy ourselves
     // final duplicate =
@@ -98,14 +94,17 @@ void runStage1() {
     // copy(script.pathToExe, duplicate, overwrite: true);
 
     if (!Platform.isWindows) {
-      print(green(
-          'Please provide your sudo password so we can install dswitch into your PATH'));
+      print(green('Please provide your sudo password so we can install '
+          'dswitch into your PATH'));
     }
     print('');
     var verboseSwitch = '';
-    if (Settings().isVerbose) verboseSwitch = '-v';
+    if (Settings().isVerbose) {
+      verboseSwitch = '-v';
+    }
     start(
-        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} $verboseSwitch --home="$HOME"',
+        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} '
+        '$verboseSwitch --home="$HOME"',
         privileged: true);
   }, keep: true);
 }
@@ -115,33 +114,33 @@ void runStage1() {
 /// to dcli. This hack changes the relative path to an absolute path
 /// so the copied pubspec.yaml will still function.
 void hackPubspecForDev(String pathToDSwitch, String compileDir) {
-  var pathToPubspec = truepath(compileDir, 'pubspec.yaml');
-  var pubspec = PubSpec.fromFile(pathToPubspec);
+  final pathToPubspec = truepath(compileDir, 'pubspec.yaml');
+  final pubspec = PubSpec.fromFile(pathToPubspec);
 
   if (pubspec.dependencyOverrides.containsKey('dcli')) {
-    var overrides = pubspec.dependencyOverrides;
+    final overrides = pubspec.dependencyOverrides;
 
-    var dcli = overrides['dcli'];
+    final dcli = overrides['dcli'];
     if (dcli!.reference is ps.PathReference) {
       var pathRef = dcli.reference as ps.PathReference;
       pathRef = ps.PathReference(truepath(pathToDSwitch, pathRef.path));
 
-      final replacement = <String, Dependency>{};
-      replacement.addAll(overrides);
+      final replacement = <String, Dependency>{}..addAll(overrides);
       replacement['dcli'] = Dependency('dcli', pathRef);
-      pubspec.dependencyOverrides = replacement;
-      pubspec.saveToFile(pathToPubspec);
+      pubspec
+        ..dependencyOverrides = replacement
+        ..saveToFile(pathToPubspec);
     }
   }
 }
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
 void runStage2(String pathToDSwitch, {required String pathToHome}) {
-  var target = pathToInstallDir;
+  final target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
-    printerr(
-        "Could not find dswitch in pub cache. Please run 'dart pub global activate dswitch' and try again.");
+    printerr('Could not find dswitch in pub cache. Please run '
+        "'dart pub global activate dswitch' and try again.");
     exit(1);
   }
 
@@ -170,8 +169,8 @@ void installDart() {
   Channel? active;
 
   /// Check we have an installed and active version of art.
-  for (var channel in channels) {
-    var ch = Channel(channel);
+  for (final channel in channels) {
+    final ch = Channel(channel);
     if (ch.isActive) {
       active = ch;
     }
@@ -179,8 +178,8 @@ void installDart() {
 
   /// if we don't have an active version then install and make it active.
   if (active == null) {
-    var stable = Channel('stable');
-    stable.installLatestVersion();
-    stable.use();
+    Channel('stable')
+      ..installLatestVersion()
+      ..use();
   }
 }

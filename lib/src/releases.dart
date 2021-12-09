@@ -6,15 +6,11 @@ import 'package:pub_semver/pub_semver.dart';
 Version unknown = Version(0, 0, 0);
 
 class Release {
-  late final Version version;
-  DateTime? released;
-  late bool validRelease;
-
   Release(String jsonRelease) {
     validRelease = false;
     // later conside fetching the release details from:
     // https://storage.googleapis.com/dart-archive/channels/dev/release/latest/VERSION
-    var parts = split(jsonRelease);
+    final parts = split(jsonRelease);
     try {
       /// ignore older version no.s
       if (jsonRelease.contains('.')) {
@@ -24,39 +20,43 @@ class Release {
     } on FormatException catch (e) {
       version = unknown;
 
-      /// early dart versions do not confirm to sematic versioning so we just ignore them.
+      /// early dart versions do not confirm to sematic versioning so we
+      /// just ignore them.
       Settings().verbose(e.message);
     }
   }
 
-  int compareTo(Release rhs) {
-    return version.compareTo(rhs.version);
-  }
+  late final Version version;
+  DateTime? released;
+  late bool validRelease;
+  int compareTo(Release rhs) => version.compareTo(rhs.version);
 
   static List<Release> fetchReleases(String channel) {
     final releases = <Release>[];
     withTempFile((saveToPath) {
       fetch(url: buildURL(channel), saveToPath: saveToPath);
 
-      var lines = read(saveToPath).toList();
+      final lines = read(saveToPath).toList();
 
-      var json = jsonDecode(lines.join('\n')) as Map<String, dynamic>;
+      final json = jsonDecode(lines.join('\n')) as Map<String, dynamic>;
 
-      var jsonReleases = json['prefixes'] as List<dynamic>;
+      final jsonReleases = json['prefixes'] as List<dynamic>;
 
-      for (var jsonRelease in jsonReleases) {
-        var release = Release(jsonRelease as String);
-        if (release.validRelease) releases.add(release);
+      for (final jsonRelease in jsonReleases) {
+        final release = Release(jsonRelease as String);
+        if (release.validRelease) {
+          releases.add(release);
+        }
       }
     }, create: false);
 
     /// sort most recent first.
-    releases.sort((lhs, rhs) => rhs.compareTo(lhs));
-    releases.add(Release('1.0.0'));
+    releases
+      ..sort((lhs, rhs) => rhs.compareTo(lhs))
+      ..add(Release('1.0.0'));
     return releases;
   }
 
-  static String buildURL(String channel) {
-    return 'https://www.googleapis.com/storage/v1/b/dart-archive/o?delimiter=%2F&prefix=channels%2F$channel%2Frelease%2F&alt=json';
-  }
+  static String buildURL(String channel) =>
+      'https://www.googleapis.com/storage/v1/b/dart-archive/o?delimiter=%2F&prefix=channels%2F$channel%2Frelease%2F&alt=json';
 }

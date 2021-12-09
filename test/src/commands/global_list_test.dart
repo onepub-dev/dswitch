@@ -3,13 +3,13 @@ import 'package:test/test.dart';
 
 void main() {
   test('global list ...', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['list']);
   });
 
   test('global list - show archives', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['list', '--archive']);
   });

@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
-import 'package:dswitch/src/commands/channel/list.dart';
 
 import '../constants.dart';
+import 'channel/list.dart';
 
 class GlobalListCommand extends Command<void> {
   GlobalListCommand() {
@@ -20,7 +20,7 @@ class GlobalListCommand extends Command<void> {
   @override
   void run() {
     final showArchives = argResults!.wasParsed('archive');
-    for (var channel in channels) {
+    for (final channel in channels) {
       ListCommand.listForChannel(channel, showArchives: showArchives);
     }
   }

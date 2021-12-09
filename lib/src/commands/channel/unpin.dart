@@ -5,8 +5,8 @@ import '../../channel.dart';
 import '../../first_run.dart';
 
 class UnpinCommand extends Command<void> {
-  String channel;
   UnpinCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''
@@ -20,8 +20,7 @@ Unpins the $channel channel.
   @override
   void run() {
     checkIsFullyInstalled();
-    var ch = Channel(channel);
-    ch.unpin();
+    final ch = Channel(channel)..unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));
 
     // if (ch.isActive) {

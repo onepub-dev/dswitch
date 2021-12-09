@@ -7,7 +7,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('no directory', () {
-    if (exists(dirname(pathToSettings))) deleteDir(dirname(pathToSettings));
+    if (exists(dirname(pathToSettings))) {
+      deleteDir(dirname(pathToSettings));
+    }
     // no directory
     expect(settingsExist, isFalse);
     expect(isCurrentVersionInstalled, isFalse);
@@ -24,7 +26,7 @@ void main() {
     createSettings();
 
     // No version
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
     settings['version'] = null;
@@ -36,7 +38,7 @@ void main() {
   test('old version', () {
     createSettings();
 
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
@@ -49,7 +51,7 @@ void main() {
 
   test('current version', () {
     createSettings();
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
@@ -61,12 +63,14 @@ void main() {
   });
 
   test('update version', () {
-    if (exists(pathToSettings)) delete(pathToSettings);
+    if (exists(pathToSettings)) {
+      delete(pathToSettings);
+    }
 
     expect(settingsExist, isFalse);
     expect(isCurrentVersionInstalled, isFalse);
 
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 

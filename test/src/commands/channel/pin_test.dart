@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('pin beta <version>', () async {
-    var runner = buildCommandRunner();
+    final runner = buildCommandRunner();
 
     await runner.run(['beta', 'pin', '2.8.1']);
 

@@ -1,21 +1,19 @@
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:dcli/dcli.dart' hide fetch;
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart';
 import 'package:system_info/system_info.dart';
 
 import 'channel.dart';
 
 class DownloadVersion {
+  DownloadVersion(this.channel, this.version, this.saveToPath);
+
   /// The path to the 'latest' version for a channel.
   static const String latest = 'latest';
   String channel;
   String version;
   String saveToPath;
-
-  DownloadVersion(this.channel, this.version, this.saveToPath);
 
   void download() {
     if (Platform.isLinux) {
@@ -70,7 +68,7 @@ class DownloadVersion {
   void unzip(String pathToZip, String targetPathTo) {
     print('Expanding release...');
     if (exists(targetPathTo)) {
-      deleteDir(targetPathTo, recursive: true);
+      deleteDir(targetPathTo);
       createDir(targetPathTo, recursive: true);
     }
     if (which('unzip').found) {
@@ -111,7 +109,7 @@ class DownloadVersion {
       required String platform,
       required String version,
       required String architecture}) {
-    var downloadPath = sdkDownloadPath(channel);
+    final downloadPath = sdkDownloadPath(channel);
 
     if (!exists(dirname(downloadPath))) {
       createDir(dirname(downloadPath), recursive: true);
@@ -126,7 +124,7 @@ class DownloadVersion {
             'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
         saveToPath: downloadPath,
         fetchProgress: (p) {
-          var progress = (p.progress * 100).ceil();
+          final progress = (p.progress * 100).ceil();
           if (progress != last) {
             clearLine();
             echo('Fetching: $progress %');
@@ -160,7 +158,7 @@ String resolveArchitecture() {
     }
   } else // linux
   {
-    var architecture = SysInfo.kernelArchitecture;
+    final architecture = SysInfo.kernelArchitecture;
 
     if (architecture == ProcessorArchitecture.AARCH64.name) {
       return 'ARMv8';
@@ -169,7 +167,7 @@ String resolveArchitecture() {
     } else if (architecture == ProcessorArchitecture.IA64.name) {
       return 'X64';
     } else if (architecture == ProcessorArchitecture.MIPS.name) {
-      throw OSError('Mips is not a supported architecture.');
+      throw const OSError('Mips is not a supported architecture.');
     } else if (architecture == ProcessorArchitecture.X86.name) {
       return 'ia32';
     } else if (architecture == ProcessorArchitecture.X86_64.name) {

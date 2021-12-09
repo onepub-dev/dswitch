@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:dswitch/src/channel.dart';
+import '../channel.dart';
 
 import '../constants.dart';
 
@@ -16,9 +16,7 @@ Enables DSwitch, the Stable channel will be activated.
 
   @override
   void run() {
-    for (final name in channels) {
-      enableChannel(name);
-    }
+    channels.forEach(enableChannel);
 
     Channel('stable').use();
     print('DSwitch has been enabled. The Stable channel is now active');

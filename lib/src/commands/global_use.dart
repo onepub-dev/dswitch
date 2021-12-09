@@ -27,8 +27,8 @@ Switches to the passed channel.
     String channel;
 
     if (argResults!.rest.isEmpty || argResults!.rest.length != 1) {
-      printerr(red(
-          'You may only pass a single channel name. Found ${argResults!.rest}'));
+      printerr(red('You may only pass a single channel name. '
+          'Found ${argResults!.rest}'));
       showUsage(argParser);
     }
 
@@ -38,7 +38,7 @@ Switches to the passed channel.
           'Channel $channel does not exist. Available channels: $channels'));
       exit(1);
     }
-    var ch = Channel(channel);
+    final ch = Channel(channel);
 
     if (ch.isActive) {
       print('You are already on the $channel channel.');
@@ -47,8 +47,9 @@ Switches to the passed channel.
         final version = ch.fetchLatestVersion();
         print(orange('Downloading latest version ($version) for $channel'));
 
-        ch.download(version);
-        ch.currentVersion = version;
+        ch
+          ..download(version)
+          ..currentVersion = version;
       }
 
       ch.use();

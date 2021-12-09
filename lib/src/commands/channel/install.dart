@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:dswitch/src/commands/commands.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
 import '../../first_run.dart';
+import '../commands.dart';
 
 class InstallCommand extends Command<void> {
-  String channel;
   InstallCommand(this.channel) {
     argParser.addFlag('select',
         abbr: 's',
         help: 'Displays a list of available releases that you can select from');
   }
+  String channel;
 
   @override
   String get description => '''
@@ -32,12 +32,12 @@ If you pass the --select switch then a menu is displayed with the version availa
     } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
-          printerr(red(
-              'You may only pass a single version no. Found ${argResults!.rest}'));
+          printerr(red('You may only pass a single version no. '
+              'Found ${argResults!.rest}'));
           showUsage(argParser);
         }
 
-        var version = argResults!.rest[0];
+        final version = argResults!.rest[0];
         installVersion(version);
       } else {
         installLatestVersion(channel);
@@ -46,14 +46,13 @@ If you pass the --select switch then a menu is displayed with the version availa
   }
 
   void installLatestVersion(String channel) {
-    var ch = Channel(channel);
-    ch.installLatestVersion();
+    Channel(channel).installLatestVersion();
   }
 
   void select() {
-    var ch = Channel(channel);
+    final ch = Channel(channel);
 
-    var selected = ch.selectToInstall();
+    final selected = ch.selectToInstall();
 
     if (ch.isVersionCached(selected.version.toString())) {
       print(blue('The selected version is already installed.'));
@@ -65,7 +64,7 @@ If you pass the --select switch then a menu is displayed with the version availa
 
   void installVersion(String version) {
     print('Installing $channel version $version...');
-    var ch = Channel(channel);
+    final ch = Channel(channel);
     if (ch.isVersionCached(version)) {
       printerr(orange('The selected version is already installed.'));
       exit(0);
