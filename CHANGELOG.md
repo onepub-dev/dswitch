@@ -1,3 +1,7 @@
+# 4.3.4
+- Fix: the pin command when called without a version would exit if the version was already installed without pinning the version.
+- updated dcli version
+
 # 4.3.3
 - We now install the latest stable build of dart as part of the install. 
 - Fixed a permissions issue with settings.yaml as it was being set to being owned by root.
