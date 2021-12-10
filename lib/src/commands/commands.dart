@@ -42,9 +42,9 @@ void showUsage(ArgParser parser) {
   print(blue('dswitch version: $packageVersion'));
   print(green('Usage:'));
   print('Rapidly switches between dart channels.');
-  print(orange(
-      'Remember to restart your login session after you run dswitch for '
-      'the first time'));
+  print(
+      orange('Remember to restart your login session after you run dswitch for '
+          'the first time'));
   print('');
   print('''
 Examples:

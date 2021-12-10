@@ -1,3 +1,7 @@
+# 4.3.5
+- applied lint_hard.
+- updated dcli version
+
 # 4.3.4
 - Fix: the pin command when called without a version would exit if the version was already installed without pinning the version.
 - updated dcli version
