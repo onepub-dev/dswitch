@@ -16,3 +16,4 @@ bin/dswitch
 .project
 **/*.vm.json
 .failed_tracker
+bin/dswitch_install
