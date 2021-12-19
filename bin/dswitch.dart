@@ -10,25 +10,28 @@ import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/first_run.dart';
 
 void main(List<String> args) {
-  final parser = ArgParser()
-    ..addFlag('verbose', abbr: 'v', help: 'Output verbose logging.');
-
-  ArgResults parsed;
-  try {
-    parsed = parser.parse(args);
-  } on FormatException catch (e) {
-    printerr(red(e.message));
-    showUsage(parser);
-    exit(0);
-  }
-  Settings().setVerbose(enabled: parsed['verbose'] as bool);
-
   firstRun();
   doit(args);
 }
 
 Future<void> doit(List<String> args) async {
   final runner = buildCommandRunner();
+
+  ArgResults parsed;
+  try {
+    parsed = runner.parse(args);
+  } on FormatException catch (e) {
+    printerr(red(e.message));
+    showUsage(runner.argParser);
+    exit(1);
+  }
+  Settings().setVerbose(enabled: parsed['verbose'] as bool);
+
+  if (parsed['verbose'] as bool) {
+    print('verbose');
+    showUsage(runner.argParser);
+    exit(0);
+  }
 
   checkConfig();
 
@@ -38,6 +41,7 @@ Future<void> doit(List<String> args) async {
     printerr(red(e.message));
 
     print(e.usage);
+    exit(1);
   }
 }
 

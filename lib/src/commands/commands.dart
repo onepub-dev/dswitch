@@ -45,7 +45,6 @@ void showUsage(ArgParser parser) {
   print(
       orange('Remember to restart your login session after you run dswitch for '
           'the first time'));
-  print('');
   print('''
 Examples:
 
