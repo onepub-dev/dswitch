@@ -61,7 +61,7 @@ void runStage1() {
     );
   } else {
     /// Used when we are testing from local source
-    pathToDSwitch = '.';
+    pathToDSwitch = dirname(dirname(DartScript.self.pathToScript));
     print('dswitch located in: ${DartScript.self.pathToScript}');
   }
 
