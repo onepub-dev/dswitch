@@ -1,3 +1,8 @@
+# 4.3.6
+- updated the readme link to docs.
+- removed redundant verbose option.
+- Improved search path when running install in a test environment.
+
 # 4.3.5
 - applied lint_hard.
 - updated dcli version
