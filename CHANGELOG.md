@@ -1,3 +1,6 @@
+# 4.3.7
+- pinned the dcli and dcli_core versions as we need dswitch pinned to 2.12.
+
 # 4.3.6
 - updated the readme link to docs.
 - removed redundant verbose option.
