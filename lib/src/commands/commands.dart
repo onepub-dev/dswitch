@@ -13,7 +13,7 @@ import 'global_list.dart';
 import 'global_status.dart';
 import 'global_use.dart';
 
-CommandRunner buildCommandRunner() {
+CommandRunner<void> buildCommandRunner() {
   final runner = CommandRunner<void>('dswitch',
       green('DSwitch $packageVersion manages Dart versions and channels'));
 
