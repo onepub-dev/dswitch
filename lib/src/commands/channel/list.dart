@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 import '../../channel.dart';
 import '../../releases.dart';
@@ -39,6 +40,7 @@ class ListCommand extends Command<void> {
       if (releases.isEmpty) {
         print(orange('None found.'));
       } else {
+        releases.sort((a, b) => -a.compareTo(b));
         for (final release in releases) {
           print(basename(release.version.toString()));
         }
@@ -49,6 +51,8 @@ class ListCommand extends Command<void> {
       if (versions.isEmpty) {
         print(orange('None found.'));
       } else {
+        versions.sort((a, b) =>
+            -Version.parse(basename(a)).compareTo(Version.parse(basename(b))));
         for (final version in versions) {
           print(basename(version));
         }
