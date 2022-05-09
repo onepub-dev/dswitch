@@ -1,3 +1,8 @@
+# 4.3.9
+- upgraded to scope 2.2.1
+- Added a better message if the version selected to download doesn't exist.
+- Added sorting of the versions to the list command.
+
 # 4.3.7
 - pinned the dcli and dcli_core versions as we need dswitch pinned to 2.12.
 
