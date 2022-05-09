@@ -119,18 +119,30 @@ class DownloadVersion {
       delete(downloadPath);
     }
     var last = 0;
-    fetch(
-        url:
-            'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
-        saveToPath: downloadPath,
-        fetchProgress: (p) {
-          final progress = (p.progress * 100).ceil();
-          if (progress != last) {
-            clearLine();
-            echo('Fetching: $progress %');
-            last = progress;
-          }
-        });
+
+    try {
+      fetch(
+          url:
+              'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
+          saveToPath: downloadPath,
+          fetchProgress: (p) {
+            final progress = (p.progress * 100).ceil();
+            if (progress != last) {
+              clearLine();
+              echo('Fetching: $progress %');
+              last = progress;
+            }
+          });
+    } on FetchException catch (e) {
+      if (e.errorCode == 404) {
+        printerr(red('''
+
+The Version $version does not exist.
+Run 'dswitch $channel list -a' to see a list of versions.
+'''));
+        exit(1);
+      }
+    }
     print('');
   }
 

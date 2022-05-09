@@ -1,5 +1,6 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart';
+import 'package:di_zone2/di_zone2.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
 import 'package:settings_yaml/settings_yaml.dart';
@@ -83,22 +84,29 @@ void main() {
     updateVersionNo(HOME);
 
     withTempDir((mockCache) {
-      PubCache.reset();
       env[PubCache.envVarPubCache] = mockCache;
-      final pubCache = PubCache();
-      createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
-          recursive: true);
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-      createDir(
-          join(pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
-      expect(isCurrentVersionInstalled, isFalse);
+      withEnvironment(() {
+        /// create a pub-cache using the test scope's HOME
+        Scope()
+          ..value(PubCache.scopeKey, PubCache.forScope())
+          ..run(() {
+            final pubCache = PubCache();
+            createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
+                recursive: true);
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-      createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+            createDir(join(
+                pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
+            expect(isCurrentVersionInstalled, isFalse);
 
-      expect(isCurrentVersionInstalled, isTrue);
+            createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+
+            expect(isCurrentVersionInstalled, isTrue);
+          });
+      }, environment: {'PUB_CACHE': mockCache});
     });
   });
 }
