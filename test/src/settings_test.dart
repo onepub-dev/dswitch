@@ -1,8 +1,8 @@
 @Timeout(Duration(minutes: 10))
 import 'package:dcli/dcli.dart';
-import 'package:di_zone2/di_zone2.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
+import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:test/test.dart';
 
