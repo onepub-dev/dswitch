@@ -1,3 +1,6 @@
+# 4.3.10
+- updated the doc paths to point at  onepub.dev .
+
 # 4.3.9
 - upgraded to scope 2.2.1
 - Added a better message if the version selected to download doesn't exist.
