@@ -14,4 +14,4 @@ Switching between Dart channels is as easy as:
 dswitch use beta
 ```
 
-Full documenation is on [gitbooks](https://dswitch.noojee.dev/).
+Full documenation is on [gitbooks](https://dswitch.onepub.dev/).
