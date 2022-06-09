@@ -1,4 +1,12 @@
 @Timeout(Duration(minutes: 10))
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
