@@ -20,7 +20,7 @@ dependencies:
   system_info: ^1.0.0
   win32: 2.0.5
 dev_dependencies: 
-  lint_hard: ^1.0.1
+  lint_hard: ^2.0.0
   mocktail: ^0.2.0
   test: ^1.15.0
 executables: 

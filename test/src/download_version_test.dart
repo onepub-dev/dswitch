@@ -6,8 +6,7 @@ import 'package:test/test.dart';
 void main() {
   test('download version ...', () async {
     withTempFile((file) {
-      final downloader = DownloadVersion('stable', '2.8.0', file);
-      downloader.downloadDart(
+      DownloadVersion('stable', '2.8.0', file).downloadDart(
           channel: 'stable',
           architecture: 'x64a',
           platform: 'windows',
