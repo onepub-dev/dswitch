@@ -4,5 +4,4 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
 export 'src/version/version.g.dart';

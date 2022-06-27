@@ -1,3 +1,7 @@
+# 4.3.11
+- upgraded lint_hard version.
+- addec copyright notices.
+
 # 4.3.10
 - updated the doc paths to point at  onepub.dev .
 

@@ -5,8 +5,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-
-
 import 'package:dswitch/src/channel.dart';
 
 import 'package:dswitch/src/commands/commands.dart';
