@@ -1,7 +1,7 @@
 name: dswitch
 version: 4.2.11
-homepage: https://www.noojee.dev
-documentation: https://dswitch.noojee.dev
+homepage: https://onepub.dev/package/dswitch
+documentation: https://dswitch.onepub.dev
 description: DSwitch is a cli tool that allows you to rapidly switch between channels and versions of Dart. You can also pin a channel to a specific version.
 repository: https://github.com/noojee/dswitch
 environment: 

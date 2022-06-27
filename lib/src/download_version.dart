@@ -129,7 +129,7 @@ class DownloadVersion {
           var progress = (p.progress * 100).ceil();
           if (progress != last) {
             clearLine();
-            echo('Fetching: $progress %');
+            print('Fetching: $progress %');
             last = progress;
           }
         });
