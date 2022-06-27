@@ -1,19 +1,28 @@
 #! /usr/bin/env dcli
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 
 import 'package:dcli/dcli.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 void main(List<String> args) {
-  var project = DartProject.self;
+  final project = DartProject.self;
 
-  var pathToSettings = join(
+  final pathToSettings = join(
       project.pathToProjectRoot, 'tool', 'post_release_hook', 'settings.yaml');
-  var settings = SettingsYaml.load(pathToSettings: pathToSettings);
-  var username = settings['username'] as String?;
-  var apiToken = settings['apiToken'] as String?;
-  var owner = settings['owner'] as String?;
-  var repository = settings['repository'] as String?;
+  final settings = SettingsYaml.load(pathToSettings: pathToSettings);
+  final username = settings['username'] as String?;
+  final apiToken = settings['apiToken'] as String?;
+  final owner = settings['owner'] as String?;
+  final repository = settings['repository'] as String?;
 
-  'github_release -u $username --apiToken $apiToken --owner $owner --repository $repository'
+  'github_release -u $username --apiToken $apiToken --owner $owner'
+          ' --repository $repository'
       .start(workingDirectory: DartScript.self.pathToProjectRoot);
 }

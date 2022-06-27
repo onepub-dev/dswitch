@@ -1,3 +1,39 @@
+# 4.3.10
+- updated the doc paths to point at  onepub.dev .
+
+# 4.3.9
+- upgraded to scope 2.2.1
+- Added a better message if the version selected to download doesn't exist.
+- Added sorting of the versions to the list command.
+
+# 4.3.7
+- pinned the dcli and dcli_core versions as we need dswitch pinned to 2.12.
+
+# 4.3.6
+- updated the readme link to docs.
+- removed redundant verbose option.
+- Improved search path when running install in a test environment.
+
+# 4.3.5
+- applied lint_hard.
+- updated dcli version
+
+# 4.3.4
+- Fix: the pin command when called without a version would exit if the version was already installed without pinning the version.
+- updated dcli version
+
+# 4.3.3
+- We now install the latest stable build of dart as part of the install. 
+- Fixed a permissions issue with settings.yaml as it was being set to being owned by root.
+
+# 4.3.2
+Fixed a bug in the first run install logic that assumed the .dswitch directory exists.
+
+# 4.3.1
+upgraded to dcli 1.13.3
+# 4.3.0
+upgraded to dcli 1.13.2
+
 # 4.2.11
 - Fixed bug under linux where the version no. was being written to /root/settings.yaml rather than HOME/settings.yaml. The result was the the linux version always thought an upgrade was required.
 - Log the contents of the settings file after it is written in attempt to find why its not being udpated on linux.

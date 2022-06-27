@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
@@ -5,8 +12,8 @@ import '../../channel.dart';
 import '../../first_run.dart';
 
 class UnpinCommand extends Command<void> {
-  String channel;
   UnpinCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''
@@ -20,8 +27,7 @@ Unpins the $channel channel.
   @override
   void run() {
     checkIsFullyInstalled();
-    var ch = Channel(channel);
-    ch.unpin();
+    final ch = Channel(channel)..unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));
 
     // if (ch.isActive) {

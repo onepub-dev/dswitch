@@ -1,13 +1,24 @@
 @Timeout(Duration(minutes: 10))
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
+import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('no directory', () {
-    if (exists(dirname(pathToSettings))) deleteDir(dirname(pathToSettings));
+    if (exists(dirname(pathToSettings))) {
+      deleteDir(dirname(pathToSettings));
+    }
     // no directory
     expect(settingsExist, isFalse);
     expect(isCurrentVersionInstalled, isFalse);
@@ -24,7 +35,7 @@ void main() {
     createSettings();
 
     // No version
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
     settings['version'] = null;
@@ -36,7 +47,7 @@ void main() {
   test('old version', () {
     createSettings();
 
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
@@ -49,7 +60,7 @@ void main() {
 
   test('current version', () {
     createSettings();
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
@@ -61,12 +72,14 @@ void main() {
   });
 
   test('update version', () {
-    if (exists(pathToSettings)) delete(pathToSettings);
+    if (exists(pathToSettings)) {
+      delete(pathToSettings);
+    }
 
     expect(settingsExist, isFalse);
     expect(isCurrentVersionInstalled, isFalse);
 
-    var settings = SettingsYaml.load(
+    final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
@@ -79,22 +92,29 @@ void main() {
     updateVersionNo(HOME);
 
     withTempDir((mockCache) {
-      PubCache.reset();
       env[PubCache.envVarPubCache] = mockCache;
-      final pubCache = PubCache();
-      createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
-          recursive: true);
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
-      createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-      createDir(
-          join(pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
-      expect(isCurrentVersionInstalled, isFalse);
+      withEnvironment(() {
+        /// create a pub-cache using the test scope's HOME
+        Scope()
+          ..value(PubCache.scopeKey, PubCache.forScope())
+          ..run(() {
+            final pubCache = PubCache();
+            createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
+                recursive: true);
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-      createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+            createDir(join(
+                pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
+            expect(isCurrentVersionInstalled, isFalse);
 
-      expect(isCurrentVersionInstalled, isTrue);
+            createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+
+            expect(isCurrentVersionInstalled, isTrue);
+          });
+      }, environment: {'PUB_CACHE': mockCache});
     });
   });
 }

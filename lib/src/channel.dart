@@ -1,13 +1,18 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:dswitch/src/constants.dart';
-import 'package:dcli/dcli.dart' hide menu;
-import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import 'commands/commands.dart';
+import 'constants.dart';
 import 'download_version.dart';
 import 'releases.dart';
 
@@ -15,12 +20,12 @@ import 'releases.dart';
 ///
 
 class Channel {
-  String name;
-  SettingsYaml? _settings;
-
   Channel(this.name) {
     createPaths();
   }
+
+  String name;
+  SettingsYaml? _settings;
 
   /// Returns true if this is the active channel
   bool get isActive {
@@ -39,11 +44,11 @@ class Channel {
 
   void installLatestVersion() {
     if (isDownloaded()) {
-      print(orange(
-          'Channel is already installed and the current version is: $currentVersion'));
+      print(orange('Channel is already installed and the current version is: '
+          '$currentVersion'));
     } else {
-      var releases = Release.fetchReleases(name);
-      var version = releases[0].version.toString();
+      final releases = Release.fetchReleases(name);
+      final version = releases[0].version.toString();
       print('Installing $name ($version) ...');
       download(version);
       currentVersion = version;
@@ -142,8 +147,7 @@ class Channel {
   bool isDownloaded() => isVersionCached(currentVersion);
 
   void download(String version) {
-    var downloader = DownloadVersion(name, version, _pathToVersion(version));
-    downloader.download();
+    DownloadVersion(name, version, _pathToVersion(version)).download();
 
     if (Version.parse(version) > Version.parse(latestVersion)) {
       latestVersion = version;
@@ -161,8 +165,7 @@ class Channel {
   /// this channel is pinned.
   String get currentVersion {
     var _version = settings['currentVersion'] as String?;
-    _version ??= latestVersion;
-    return _version;
+    return _version ??= latestVersion;
   }
 
   set currentVersion(String version) {
@@ -190,62 +193,53 @@ class Channel {
       join(dswitchPath, 'channels', channel);
 
   /// returns a list of the version that are cached locally.
-  List<String> cachedVersions() {
-    return find('*',
-            workingDirectory: pathToVersions,
-            types: [Find.directory],
-            recursive: false)
-        .toList();
-  }
+  List<String> cachedVersions() => find('*',
+          workingDirectory: pathToVersions,
+          types: [Find.directory],
+          recursive: false)
+      .toList();
 
   void delete(String version) {
-    deleteDir(_pathToVersion(version), recursive: true);
+    deleteDir(_pathToVersion(version));
   }
 
   /// Shows the user a menu with the 20 most recent version for the channel.
   ///
   /// Returns the version the user selected.
-  String selectToInstall() {
-    var releases = Release.fetchReleases(name);
+  Release selectToInstall() {
+    final releases = Release.fetchReleases(name);
 
-    var release = menu<Release>(
+    final release = menu<Release>(
         prompt: 'Select Version to install:',
         options: releases,
         limit: 20,
         format: (release) => release.version.toString());
-
-    if (isVersionCached(release.version.toString())) {
-      printerr(red('The selected version is already installed.'));
-      exit(-1);
-    }
-
-    return release.version.toString();
+    return release;
   }
 
   String selectFromInstalled() {
-    var version = menu<String>(
+    final version = menu<String>(
       prompt: 'Select Version:',
       options: cachedVersions(),
-      format: (version) => basename(version),
+      format: basename,
       limit: 20,
     );
     return version;
   }
 
-  bool isVersionCached(String version) {
-    return cachedVersions().any((element) => basename(element) == version);
-  }
+  bool isVersionCached(String version) =>
+      cachedVersions().any((element) => basename(element) == version);
 
   void upgrade() {
     if (isPinned) {
       printerr(
           red('The $name is pinned. Unpin the channel first and try again'));
     } else {
-      var version = fetchLatestVersion();
+      final version = fetchLatestVersion();
 
       if (version == currentVersion) {
-        print(
-            'You are already on the latest version ($version) for the $name channel');
+        print('You are already on the latest version ($version) for the '
+            '$name channel');
       } else {
         print('Downloading $version...');
         download(version);

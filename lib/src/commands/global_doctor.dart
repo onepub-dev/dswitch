@@ -1,8 +1,15 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
-import 'package:dswitch/dswitch.dart';
+import '../../dswitch.dart';
 
 import '../channel.dart';
 import '../constants.dart';
@@ -26,16 +33,16 @@ Prints details on how DSwitch is configured.
 
     print('DSwitch Path: ${Platform.executable}');
 
-    for (var channel in channels) {
-      var ch = Channel(channel);
+    for (final channel in channels) {
+      final ch = Channel(channel);
       if (ch.isActive) {
         print(green('The active channel is $channel on ${ch.currentVersion}'));
         print('');
       }
     }
 
-    for (var channel in channels) {
-      var ch = Channel(channel);
+    for (final channel in channels) {
+      final ch = Channel(channel);
       if (ch.isDownloaded()) {
         StatusCommand.printStatus(channel);
         print('');

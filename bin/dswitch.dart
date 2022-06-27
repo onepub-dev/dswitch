@@ -1,4 +1,12 @@
 #! /usr/bin/env dcli
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
+
 
 import 'dart:io';
 
@@ -10,26 +18,28 @@ import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/first_run.dart';
 
 void main(List<String> args) {
-  var parser = ArgParser()
-    ..addFlag('verbose',
-        abbr: 'v', defaultsTo: false, help: 'Output verbose logging.');
-
-  ArgResults parsed;
-  try {
-    parsed = parser.parse(args);
-  } on FormatException catch (e) {
-    printerr(red(e.message));
-    showUsage(parser);
-    exit(0);
-  }
-  Settings().setVerbose(enabled: parsed['verbose'] as bool);
-
   firstRun();
   doit(args);
 }
 
-void doit(List<String> args) async {
-  var runner = buildCommandRunner();
+Future<void> doit(List<String> args) async {
+  final runner = buildCommandRunner();
+
+  ArgResults parsed;
+  try {
+    parsed = runner.parse(args);
+  } on FormatException catch (e) {
+    printerr(red(e.message));
+    showUsage(runner.argParser);
+    exit(1);
+  }
+  Settings().setVerbose(enabled: parsed['verbose'] as bool);
+
+  if (parsed['verbose'] as bool) {
+    print('verbose');
+    showUsage(runner.argParser);
+    exit(0);
+  }
 
   checkConfig();
 
@@ -39,6 +49,7 @@ void doit(List<String> args) async {
     printerr(red(e.message));
 
     print(e.usage);
+    exit(1);
   }
 }
 
@@ -70,13 +81,13 @@ You need to restart your terminal so it can see the DSwitch PATH changes.
     }
   } else {
     // check for other instances of dart on the path.
-    var dartPaths = which('dart').paths;
+    final dartPaths = which('dart').paths;
     if (dartPaths.length > 1) {
       if (!dartPaths[0].startsWith(activeSymlinkPath)) {
         printerr(
             red('dswitch found another version of Dart that is being used.'));
-        print(
-            'Please check that the dswitch path is before any other dart paths');
+        print('Please check that the dswitch path is '
+            'before any other dart paths');
         print('Prepend the following path to your PATH environment variable.');
         print(activeSymlinkPath);
         print('');

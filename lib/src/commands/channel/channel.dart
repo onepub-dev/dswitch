@@ -1,3 +1,10 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'package:args/command_runner.dart';
 
 import 'delete.dart';
@@ -9,17 +16,6 @@ import 'unpin.dart';
 import 'upgrade.dart';
 
 class ChannelCommand extends Command<void> {
-  String channel;
-
-  @override
-  String get description => 'Manages the $channel channel.';
-
-  @override
-  String get name => channel;
-
-  @override
-  void run() {}
-
   ChannelCommand(this.channel) {
     // addSubcommand(DefaultCommand(channel));
     addSubcommand(InstallCommand(channel));
@@ -30,11 +26,21 @@ class ChannelCommand extends Command<void> {
     addSubcommand(UpgradeCommand(channel));
     addSubcommand(DeleteCommand(channel));
   }
+  String channel;
+
+  @override
+  String get description => 'Manages the $channel channel.';
+
+  @override
+  String get name => channel;
+
+  @override
+  void run() {}
 }
 
 class DefaultCommand extends Command<void> {
-  String channel;
   DefaultCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''

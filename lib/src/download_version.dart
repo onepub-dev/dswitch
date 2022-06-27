@@ -1,21 +1,26 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:dcli/dcli.dart' hide fetch;
 import 'package:dcli/dcli.dart';
-import 'package:path/path.dart';
 import 'package:system_info/system_info.dart';
 
 import 'channel.dart';
 
 class DownloadVersion {
+  DownloadVersion(this.channel, this.version, this.saveToPath);
+
   /// The path to the 'latest' version for a channel.
   static const String latest = 'latest';
   String channel;
   String version;
   String saveToPath;
-
-  DownloadVersion(this.channel, this.version, this.saveToPath);
 
   void download() {
     if (Platform.isLinux) {
@@ -70,7 +75,7 @@ class DownloadVersion {
   void unzip(String pathToZip, String targetPathTo) {
     print('Expanding release...');
     if (exists(targetPathTo)) {
-      deleteDir(targetPathTo, recursive: true);
+      deleteDir(targetPathTo);
       createDir(targetPathTo, recursive: true);
     }
     if (which('unzip').found) {
@@ -111,7 +116,7 @@ class DownloadVersion {
       required String platform,
       required String version,
       required String architecture}) {
-    var downloadPath = sdkDownloadPath(channel);
+    final downloadPath = sdkDownloadPath(channel);
 
     if (!exists(dirname(downloadPath))) {
       createDir(dirname(downloadPath), recursive: true);
@@ -121,18 +126,30 @@ class DownloadVersion {
       delete(downloadPath);
     }
     var last = 0;
-    fetch(
-        url:
-            'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
-        saveToPath: downloadPath,
-        fetchProgress: (p) {
-          var progress = (p.progress * 100).ceil();
-          if (progress != last) {
-            clearLine();
-            print('Fetching: $progress %');
-            last = progress;
-          }
-        });
+
+    try {
+      fetch(
+          url:
+              'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
+          saveToPath: downloadPath,
+          fetchProgress: (p) {
+            final progress = (p.progress * 100).ceil();
+            if (progress != last) {
+              clearLine();
+              echo('Fetching: $progress %');
+              last = progress;
+            }
+          });
+    } on FetchException catch (e) {
+      if (e.errorCode == 404) {
+        printerr(red('''
+
+The Version $version does not exist.
+Run 'dswitch $channel list -a' to see a list of versions.
+'''));
+        exit(1);
+      }
+    }
     print('');
   }
 
@@ -160,7 +177,7 @@ String resolveArchitecture() {
     }
   } else // linux
   {
-    var architecture = SysInfo.kernelArchitecture;
+    final architecture = SysInfo.kernelArchitecture;
 
     if (architecture == ProcessorArchitecture.AARCH64.name) {
       return 'ARMv8';
@@ -169,7 +186,7 @@ String resolveArchitecture() {
     } else if (architecture == ProcessorArchitecture.IA64.name) {
       return 'X64';
     } else if (architecture == ProcessorArchitecture.MIPS.name) {
-      throw OSError('Mips is not a supported architecture.');
+      throw const OSError('Mips is not a supported architecture.');
     } else if (architecture == ProcessorArchitecture.X86.name) {
       return 'ia32';
     } else if (architecture == ProcessorArchitecture.X86_64.name) {

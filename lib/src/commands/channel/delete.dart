@@ -1,7 +1,13 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:dswitch/src/commands/commands.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
@@ -9,12 +15,12 @@ import '../../first_run.dart';
 import '../commands.dart';
 
 class DeleteCommand extends Command<void> {
-  String channel;
   DeleteCommand(this.channel) {
     argParser.addFlag('select',
         abbr: 's',
         help: 'Displays a list of available releases that you can select from');
   }
+  String channel;
 
   @override
   String get description => '''
@@ -37,12 +43,12 @@ If you pass the --select switch then a menu is displayed with the version availa
     } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
-          printerr(red(
-              'You may only pass a single version no. Found ${argResults!.rest}'));
+          printerr(red('You may only pass a single version no. '
+              'Found ${argResults!.rest}'));
           showUsage(argParser);
         }
 
-        var version = argResults!.rest[0];
+        final version = argResults!.rest[0];
         deleteVersion(version);
       } else {
         printerr(red('You must pass a version no. or the --select flag'));
@@ -52,7 +58,7 @@ If you pass the --select switch then a menu is displayed with the version availa
   }
 
   void deleteVersion(String version) {
-    var ch = Channel(channel);
+    final ch = Channel(channel);
 
     if (ch.currentVersion == version) {
       printerr(red('You may not delete the active version.'));
@@ -60,8 +66,8 @@ If you pass the --select switch then a menu is displayed with the version availa
     }
 
     if (!ch.isVersionCached(version)) {
-      printerr(red(
-          'Version $version has not been downloaded and so cannot be deleted.'));
+      printerr(red('Version $version has not been downloaded and so cannot be '
+          'deleted.'));
       exit(-1);
     }
     ch.delete(version);
@@ -69,9 +75,9 @@ If you pass the --select switch then a menu is displayed with the version availa
   }
 
   void select() {
-    var ch = Channel(channel);
+    final ch = Channel(channel);
 
-    var version = ch.selectFromInstalled();
+    final version = ch.selectFromInstalled();
     deleteVersion(basename(version));
   }
 }

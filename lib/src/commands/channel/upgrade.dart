@@ -1,11 +1,18 @@
+/* Copyright (C) S. Brett Sutton - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
+ */
+
+
 import 'package:args/command_runner.dart';
 
 import '../../channel.dart';
 import '../../first_run.dart';
 
 class UpgradeCommand extends Command<void> {
-  String channel;
   UpgradeCommand(this.channel);
+  String channel;
 
   @override
   String get description => '''
@@ -20,8 +27,6 @@ Upgrades the $channel channel to the latest version.
   @override
   void run() {
     checkIsFullyInstalled();
-    var ch = Channel(channel);
-
-    ch.upgrade();
+    Channel(channel).upgrade();
   }
 }
