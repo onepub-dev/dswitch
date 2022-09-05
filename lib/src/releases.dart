@@ -37,6 +37,8 @@ class Release {
   late bool validRelease;
   int compareTo(Release rhs) => version.compareTo(rhs.version);
 
+  /// downloads and returns a list of available releases for
+  /// the given [channel].
   static List<Release> fetchReleases(String channel) {
     final releases = <Release>[];
     withTempFile((saveToPath) {
