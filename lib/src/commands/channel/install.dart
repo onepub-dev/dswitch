@@ -4,14 +4,12 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../exceptions/exit.dart';
 import '../../first_run.dart';
-import '../commands.dart';
 
 class InstallCommand extends Command<void> {
   InstallCommand(this.channel) {
@@ -38,9 +36,12 @@ If you pass the --select switch then a menu is displayed with the version availa
     } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
-          printerr(red('You may only pass a single version no. '
-              'Found ${argResults!.rest}'));
-          showUsage(argParser);
+          throw ExitException(
+              1,
+              'You may only pass a single version no. '
+              'Found ${argResults!.rest}',
+              showUsage: true,
+              argParser: argParser);
         }
 
         final version = argResults!.rest[0];
@@ -72,8 +73,8 @@ If you pass the --select switch then a menu is displayed with the version availa
     print('Installing $channel version $version...');
     final ch = Channel(channel);
     if (ch.isVersionCached(version)) {
-      printerr(orange('The selected version is already installed.'));
-      exit(0);
+      throw ExitException(1, 'The selected version is already installed.',
+          showUsage: false);
     }
     ch.download(version);
     print('Install of $channel channel complete. ');

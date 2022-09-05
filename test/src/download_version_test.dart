@@ -6,11 +6,11 @@ import 'package:test/test.dart';
 void main() {
   test('download version ...', () async {
     withTempFile((file) {
-      DownloadVersion('stable', '2.8.0', file).downloadDart(
+      DownloadVersion('stable', '2.8.1', file).downloadDart(
           channel: 'stable',
-          architecture: 'x64a',
+          architecture: 'x64',
           platform: 'windows',
-          version: '2.8.0');
+          version: '2.8.1');
     }, create: false);
   });
 }

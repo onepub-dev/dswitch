@@ -4,14 +4,12 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../exceptions/exit.dart';
 import '../../first_run.dart';
-import '../commands.dart';
 
 class PinCommand extends Command<void> {
   PinCommand(this.channel);
@@ -37,9 +35,11 @@ Selects the given version for the $channel channel and makes it the active versi
 
     if (argResults!.rest.isNotEmpty) {
       if (argResults!.rest.length != 1) {
-        printerr(red('You may only pass a single version no. '
-            'Found ${argResults!.rest}'));
-        showUsage(argParser);
+        throw ExitException(
+            1,
+            'You may only pass a single version no. '
+            'Found ${argResults!.rest}',
+            showUsage: true, argParser: argParser);
       }
 
       version = argResults!.rest[0];
@@ -52,9 +52,9 @@ Selects the given version for the $channel channel and makes it the active versi
       if (confirm('Install $version')) {
         installVersion(version);
       } else {
-        print(green(
-            'To install $version Use: dswitch $channel install $version\n'));
-        exit(0);
+        throw ExitException(
+            0, 'To install $version Use: dswitch $channel install $version\n',
+            showUsage: false);
       }
     }
 

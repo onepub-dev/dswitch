@@ -10,6 +10,7 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
 
 import 'constants.dart';
+import 'exceptions/exit.dart';
 import 'settings.dart';
 
 void firstRun() {
@@ -21,16 +22,12 @@ void firstRun() {
 
 void checkIsFullyInstalled() {
   if (!isCurrentVersionInstalled) {
-    print(red('A new version of dswitch has been activated. '
-        'Please run dswitch_install and then try again.'));
-    exit(1);
+    throw ExitException(
+        1,
+        'A new version of dswitch has been activated. '
+        'Please run dswitch_install and then try again.',
+        showUsage: false);
   }
-
-  // final script = DartScript.self;
-  // if (!script.isCompiled) {
-  //   print(red('Please run dswitch_install and then try again.'));
-  //   exit(1);
-  // }
 }
 
 void firstRunMessage() {
@@ -75,8 +72,7 @@ void linuxFirstRun() {}
 void windowsFirstRun() {
   final pre = Shell.current.checkInstallPreconditions();
   if (pre != null) {
-    printerr(red(pre));
-    exit(1);
+    throw ExitException(1, pre, showUsage: false);
   }
 
   if (!regIsOnUserPath(activeSymlinkPath)) {

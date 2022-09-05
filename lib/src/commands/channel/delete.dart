@@ -4,14 +4,12 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../channel.dart';
+import '../../exceptions/exit.dart';
 import '../../first_run.dart';
-import '../commands.dart';
 
 class DeleteCommand extends Command<void> {
   DeleteCommand(this.channel) {
@@ -35,23 +33,28 @@ If you pass the --select switch then a menu is displayed with the version availa
     checkIsFullyInstalled();
     if (argResults!.wasParsed('select')) {
       if (argResults!.rest.isNotEmpty) {
-        printerr(red('You may not pass any args with the --select switch.'));
-        showUsage(argParser);
+        throw ExitException(
+            1, 'You may not pass any args with the --select switch.',
+            showUsage: true, argParser: argParser);
       }
       select();
     } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
-          printerr(red('You may only pass a single version no. '
-              'Found ${argResults!.rest}'));
-          showUsage(argParser);
+          throw ExitException(
+              1,
+              'You may only pass a single version no. '
+              'Found ${argResults!.rest}',
+              showUsage: true,
+              argParser: argParser);
         }
 
         final version = argResults!.rest[0];
         deleteVersion(version);
       } else {
-        printerr(red('You must pass a version no. or the --select flag'));
-        showUsage(argParser);
+        throw ExitException(
+            1, 'You must pass a version no. or the --select flag',
+            showUsage: true, argParser: argParser);
       }
     }
   }
@@ -60,14 +63,16 @@ If you pass the --select switch then a menu is displayed with the version availa
     final ch = Channel(channel);
 
     if (ch.currentVersion == version) {
-      printerr(red('You may not delete the active version.'));
-      exit(-1);
+      throw ExitException(2, 'You may not delete the active version.',
+          showUsage: false);
     }
 
     if (!ch.isVersionCached(version)) {
-      printerr(red('Version $version has not been downloaded and so cannot be '
-          'deleted.'));
-      exit(-1);
+      throw ExitException(
+          2,
+          'Version $version has not been downloaded and so cannot be '
+          'deleted.',
+          showUsage: false);
     }
     ch.delete(version);
     print('Version $version has been deleted.');

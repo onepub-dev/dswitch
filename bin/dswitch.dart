@@ -12,30 +12,48 @@ import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
+import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/first_run.dart';
 
-void main(List<String> args) {
+late final CommandRunner<void> runner;
+void main(List<String> args) async {
   firstRun();
-  doit(args);
+  runner = buildCommandRunner();
+  try {
+    await doit(args);
+  } on ExitException catch (e) {
+    final String message;
+    if (e.code == 0) {
+      message = green(e.message);
+    } else {
+      message = red(e.message);
+    }
+    printerr(message);
+    if (e.showUsage) {
+      showUsage(e.argParser ?? runner.argParser);
+    }
+  }
 }
 
 Future<void> doit(List<String> args) async {
-  final runner = buildCommandRunner();
-
   ArgResults parsed;
   try {
     parsed = runner.parse(args);
+  } on UsageException catch (e) {
+    final message = '''
+${e.message}
+
+${e.usage}''';
+    throw ExitException(1, message, showUsage: false);
   } on FormatException catch (e) {
-    printerr(red(e.message));
-    showUsage(runner.argParser);
-    exit(1);
+    throw ExitException(1, e.message, showUsage: true);
   }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   if (parsed['verbose'] as bool) {
     print('verbose');
     showUsage(runner.argParser);
-    exit(0);
+    return;
   }
 
   checkConfig();
@@ -44,9 +62,7 @@ Future<void> doit(List<String> args) async {
     await runner.run(args);
   } on UsageException catch (e) {
     printerr(red(e.message));
-
     print(e.usage);
-    exit(1);
   }
 }
 
@@ -54,8 +70,9 @@ void checkConfig() {
   if (Platform.isWindows &&
       !(Shell.current.isPrivilegedUser ||
           (Shell.current as WindowsMixin).inDeveloperMode())) {
-    printerr(red('You must run as an Administrator or enable Developer Mode'));
-    exit(1);
+    throw ExitException(
+        1, 'You must run as an Administrator or enable Developer Mode',
+        showUsage: false);
   }
 
   /// are we on the path

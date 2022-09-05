@@ -4,15 +4,13 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
 import '../channel.dart';
 import '../constants.dart';
+import '../exceptions/exit.dart';
 import '../first_run.dart';
-import 'commands.dart';
 
 class GlobalUseCommand extends Command<void> {
   GlobalUseCommand();
@@ -33,16 +31,19 @@ Switches to the passed channel.
     String channel;
 
     if (argResults!.rest.isEmpty || argResults!.rest.length != 1) {
-      printerr(red('You may only pass a single channel name. '
-          'Found ${argResults!.rest}'));
-      showUsage(argParser);
+      throw ExitException(
+          1,
+          'You may only pass a single channel name. '
+          'Found ${argResults!.rest}',
+          showUsage: true,
+          argParser: argParser);
     }
 
     channel = argResults!.rest[0];
     if (!channels.contains(channel)) {
-      printerr(red(
-          'Channel $channel does not exist. Available channels: $channels'));
-      exit(1);
+      throw ExitException(
+          1, 'Channel $channel does not exist. Available channels: $channels',
+          showUsage: false);
     }
     final ch = Channel(channel);
 

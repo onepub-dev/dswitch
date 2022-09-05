@@ -10,9 +10,9 @@ import 'package:dcli/dcli.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
-import 'commands/commands.dart';
 import 'constants.dart';
 import 'download_version.dart';
+import 'exceptions/exit.dart';
 import 'releases.dart';
 
 /// Used to manage a channel
@@ -112,8 +112,8 @@ class Channel {
 
   void validateChannel(ArgParser parser, String channel) {
     if (!channels.contains(channel)) {
-      printerr(red('Invalid command. $channel'));
-      showUsage(parser);
+      throw ExitException(1, 'Invalid command. $channel',
+          showUsage: true, argParser: parser);
     }
   }
 

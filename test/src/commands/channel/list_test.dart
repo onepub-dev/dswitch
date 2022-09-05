@@ -14,6 +14,12 @@ void main() {
     await runner.run(['beta', 'list']);
   });
 
+  test('stable list', () async {
+    final runner = buildCommandRunner();
+
+    await runner.run(['stable', 'list']);
+  });
+
   test('beta list --archive ', () async {
     final runner = buildCommandRunner();
 

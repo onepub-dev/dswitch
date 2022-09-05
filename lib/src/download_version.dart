@@ -11,6 +11,7 @@ import 'package:dcli/dcli.dart';
 import 'package:system_info/system_info.dart';
 
 import 'channel.dart';
+import 'exceptions/exit.dart';
 
 class DownloadVersion {
   DownloadVersion(this.channel, this.version, this.saveToPath);
@@ -105,7 +106,7 @@ class DownloadVersion {
           ..createSync(recursive: true)
           ..writeAsBytesSync(data);
       } else {
-        Directory(join(targetPathTo, name)).create(recursive: true);
+        createDir(join(targetPathTo, name), recursive: true);
       }
     }
   }
@@ -141,12 +142,14 @@ class DownloadVersion {
           });
     } on FetchException catch (e) {
       if (e.errorCode == 404) {
-        printerr(red('''
+        throw ExitException(
+            1,
+            '''
 
 The Version $version does not exist.
 Run 'dswitch $channel list -a' to see a list of versions.
-'''));
-        exit(1);
+''',
+            showUsage: false);
       }
     }
     print('');

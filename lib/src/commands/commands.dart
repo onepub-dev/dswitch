@@ -4,8 +4,6 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
-
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 
@@ -73,6 +71,4 @@ dswitch beta unpin
 dswitch beta list
 ''');
   print(parser.usage);
-
-  exit(1);
 }

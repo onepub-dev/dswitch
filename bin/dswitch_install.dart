@@ -10,8 +10,8 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/channel.dart';
-import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
+import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
@@ -26,9 +26,8 @@ void main(List<String> args) {
   try {
     parsed = parser.parse(args);
   } on FormatException catch (e) {
-    printerr(red('Invalid command line option: ${e.message}'));
-    showUsage(parser);
-    exit(1);
+    throw ExitException(1, red('Invalid command line option: ${e.message}'),
+        showUsage: true, argParser: parser);
   }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
@@ -40,7 +39,7 @@ void main(List<String> args) {
     final pathToHome = parsed['home'] as String;
     runStage2(pathToDSwitch, pathToHome: pathToHome);
 
-    exit(0);
+    throw ExitException(0, 'Stage2 Completed successfully', showUsage: false);
   }
 
   print(orange('dswitch is ready to run'));
@@ -49,8 +48,9 @@ void main(List<String> args) {
 void runStage1() {
   if (!Shell.current.isPrivilegedUser) {
     if (Platform.isWindows) {
-      print(red('Please run dswitch_install with Administrative privileges.'));
-      exit(1);
+      throw ExitException(
+          1, 'Please run dswitch_install with Administrative privileges.',
+          showUsage: false);
     }
   }
 
@@ -71,9 +71,11 @@ void runStage1() {
   }
 
   if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
-    printerr('Could not find dswitch_install in pub cache. Please run '
-        "'dart pub global activate dswitch' and try again.");
-    exit(1);
+    throw ExitException(
+        1,
+        'Could not find dswitch_install in pub cache. Please run '
+        "'dart pub global activate dswitch' and try again.",
+        showUsage: false);
   }
 
   withTempDir((compileDir) {
@@ -144,9 +146,11 @@ void runStage2(String pathToDSwitch, {required String pathToHome}) {
   final target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
-    printerr('Could not find dswitch in pub cache. Please run '
-        "'dart pub global activate dswitch' and try again.");
-    exit(1);
+    throw ExitException(
+        1,
+        'Could not find dswitch in pub cache. Please run '
+        "'dart pub global activate dswitch' and try again.",
+        showUsage: false);
   }
 
   print(blue('Installing dswitch into $target.'));
