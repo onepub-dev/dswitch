@@ -7,6 +7,7 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
+import 'package:meta/meta.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
@@ -105,6 +106,12 @@ class Channel {
   SettingsYaml get settings =>
       _settings ??= SettingsYaml.load(pathToSettings: pathToSettings);
 
+  /// Used by unit tests to force a reload of the settings when
+  /// a spawned version of dswitch has updated it.
+  @visibleForTesting
+  void get reloadSettings =>
+      _settings = SettingsYaml.load(pathToSettings: pathToSettings);
+
   void createPaths() {
     createPath(dswitchPath);
     createPath(pathToVersions);
@@ -143,6 +150,8 @@ class Channel {
 
   static String channelSymlink(String channel) => join(dswitchPath, channel);
 
+  /// Checks if the current version for the channel has
+  /// been downloaded.
   bool isDownloaded() => isVersionCached(currentVersion);
 
   void download(String version) {
@@ -153,7 +162,8 @@ class Channel {
     }
   }
 
-  /// Downloads the list of versions available for this channel.
+  /// Downloads the list of versions available for this channel
+  /// and returns the must recent version.
   String fetchLatestVersion() {
     final releases = Release.fetchReleases(name);
     return releases[0].version.toString();
@@ -173,7 +183,20 @@ class Channel {
   }
 
   /// the most recent version we have downloaded.
-  String get latestVersion => settings['latestVersion'] as String? ?? '0.0.1';
+  String get latestVersion {
+    var latest = settings['latestVersion'] as String?;
+
+    /// If latest hasn't been set then force it to be set.
+    if (latest != null) {
+      return latest;
+    }
+    if (cachedVersions().isNotEmpty) {
+      latest = basename(cachedVersions().first);
+    }
+    latest ??= '0.0.1';
+    latestVersion = latest;
+    return latest;
+  }
 
   set latestVersion(String version) {
     settings['latestVersion'] = version;
@@ -196,7 +219,9 @@ class Channel {
           workingDirectory: pathToVersions,
           types: [Find.directory],
           recursive: false)
-      .toList();
+      .toList()
+    ..sort((a, b) =>
+        Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
 
   void delete(String version) {
     deleteDir(_pathToVersion(version));
@@ -216,6 +241,8 @@ class Channel {
     return release;
   }
 
+  /// Displays a menu of the currently cached version
+  /// and asks the user to select one to install.
   String selectFromInstalled() {
     final version = menu<String>(
       prompt: 'Select Version:',
