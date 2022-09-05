@@ -50,12 +50,6 @@ ${e.usage}''';
   }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
-  if (parsed['verbose'] as bool) {
-    print('verbose');
-    showUsage(runner.argParser);
-    return;
-  }
-
   checkConfig();
 
   try {
