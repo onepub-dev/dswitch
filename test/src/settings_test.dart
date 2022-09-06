@@ -8,6 +8,7 @@
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 import 'package:test/test.dart';
@@ -19,7 +20,7 @@ void main() {
     }
     // no directory
     expect(settingsExist, isFalse);
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
   }, skip: true);
   test('no file', () {
     createSettings();
@@ -27,7 +28,7 @@ void main() {
     // No file
     delete(pathToSettings);
     expect(settingsExist, isFalse);
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
   test('no version', () {
     createSettings();
@@ -39,7 +40,7 @@ void main() {
     settings['version'] = null;
     settings.save();
     expect(settingsExist, isTrue);
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
   test('old version', () {
@@ -53,7 +54,7 @@ void main() {
     settings.save();
 
     expect(settingsExist, isTrue);
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
   test('current version', () {
@@ -66,7 +67,7 @@ void main() {
     settings.save();
     expect(settingsExist, isTrue);
 
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
   test('update version', () {
@@ -75,7 +76,7 @@ void main() {
     }
 
     expect(settingsExist, isFalse);
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
 
     final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
@@ -86,7 +87,7 @@ void main() {
 
     expect(settingsExist, isTrue);
 
-    expect(isCurrentVersionInstalled, isFalse);
+    expect(isLatestPubCacheVersionInstalled(), isFalse);
     updateVersionNo(HOME);
 
     withTempDir((mockCache) {
@@ -98,19 +99,23 @@ void main() {
           ..value(PubCache.scopeKey, PubCache.forScope())
           ..run(() {
             final pubCache = PubCache();
-            createDir(join(pubCache.pathToDartLang, 'dswitch-3.3.0'),
+
+            final sourceVersion = Version.parse(packageVersion);
+
+            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'),
                 recursive: true);
-            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'));
             createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
             createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
 
-            createDir(join(
-                pubCache.pathToDartLang, 'dswitch-$packageVersion-beta.1'));
-            expect(isCurrentVersionInstalled, isFalse);
+            expect(isLatestPubCacheVersionInstalled(), isFalse);
 
             createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+            expect(isLatestPubCacheVersionInstalled(), isTrue);
 
-            expect(isCurrentVersionInstalled, isTrue);
+            createDir(join(
+                pubCache.pathToDartLang, 'dswitch-${sourceVersion.nextMinor}'));
+
+            expect(isLatestPubCacheVersionInstalled(), isFalse);
           });
       }, environment: {'PUB_CACHE': mockCache});
     });

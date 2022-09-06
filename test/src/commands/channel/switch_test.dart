@@ -16,9 +16,11 @@ void main() {
   test('switch To beta', () async {
     final runner = buildCommandRunner();
 
-    await runner.run(['use', 'stable']);
-
     final channel = Channel('beta');
+    final stable = Channel('stable');
+    final originalVersion = stable.currentVersion;
+
+    await runner.run(['use', 'stable']);
 
     final tuple = selectVersions(channel);
     final latest = tuple.latest;
@@ -53,8 +55,8 @@ void main() {
     expect(channel.currentVersion, equals(latest));
 
     await runner.run(['use', 'stable']);
-    final stable = Channel('stable')..reloadSettings;
+    stable.reloadSettings;
     expect(stable.isActive, isTrue);
-    expect(stable.currentVersion, equals(stable.latestVersion));
+    expect(stable.currentVersion, equals(originalVersion));
   });
 }

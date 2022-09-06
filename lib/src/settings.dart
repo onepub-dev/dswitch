@@ -29,7 +29,11 @@ void updateVersionNo(String pathToHome) {
       'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
 }
 
-bool get isCurrentVersionInstalled {
+///
+/// Returns true if the running version is the last version found in pub cache.
+/// You pass in [isActivatedFromSource] then the source version
+/// may be greater than the pub-cache version and this test will still pass.
+bool isLatestPubCacheVersionInstalled({bool isActivatedFromSource = false}) {
   final settings = SettingsYaml.load(
     pathToSettings: pathToSettings,
   );
@@ -48,8 +52,11 @@ bool get isCurrentVersionInstalled {
 
   // we allow an installed version greater than the pub-cache version
   // in case we are running a dev version from source.
-  return installedVersion.compareTo(lastestInPubCache) >= 0;
-  // return installedVersion == primary.toString();
+  if (isActivatedFromSource) {
+    return installedVersion.compareTo(lastestInPubCache) >= 0;
+  } else {
+    return installedVersion == lastestInPubCache;
+  }
 }
 
 void createSettings() {

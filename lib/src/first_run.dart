@@ -21,7 +21,9 @@ void firstRun() {
 }
 
 void checkIsFullyInstalled() {
-  if (!isCurrentVersionInstalled) {
+  if (!isLatestPubCacheVersionInstalled(
+      isActivatedFromSource:
+          PubCache().isGloballyActivatedFromSource('dswitch'))) {
     throw ExitException(
         1,
         'A new version of dswitch has been activated. '
