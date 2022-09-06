@@ -5,6 +5,7 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
 import '../dswitch.dart';
@@ -36,13 +37,19 @@ bool get isCurrentVersionInstalled {
   /// we need to find the latest version from pub cache
   /// as we are likely to be running in an old compiled version
   /// of the script.
-  final primary = PubCache().findPrimaryVersion('dswitch');
-  final installedVersion = (settings['version'] ?? '') as String;
+  final lastestInPubCache =
+      PubCache().findPrimaryVersion('dswitch') ?? Version.parse('0.0.1-fake.1');
+  final installedVersion =
+      Version.parse((settings['version'] ?? '0.0.1-fake.2') as String);
 
   verbose(() =>
       'Settings version: $installedVersion, PackageVersion: $packageVersion '
-      'PrimaryVersion: $primary');
-  return primary != null && installedVersion == primary.toString();
+      'PubCacheVersion: $lastestInPubCache');
+
+  // we allow an installed version greater than the pub-cache version
+  // in case we are running a dev version from source.
+  return installedVersion.compareTo(lastestInPubCache) >= 0;
+  // return installedVersion == primary.toString();
 }
 
 void createSettings() {
