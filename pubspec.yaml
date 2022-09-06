@@ -9,8 +9,8 @@ environment:
 dependencies: 
   archive: ^3.1.2
   args: ^2.1.1
-  dcli: 1.20.1
-  dcli_core: 1.20.1
+  dcli: 1.20.2
+  dcli_core: 1.20.2
   meta: ^1.0.0
   path: ^1.0.0
   pub_semver: ^2.0.0

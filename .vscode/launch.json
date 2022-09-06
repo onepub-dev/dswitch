@@ -26,5 +26,22 @@
             "type": "dart",
             "console": "terminal"
         },
+        {
+            "name": "dswitch stable list",
+            "program": "bin/dswitch.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": ["stable", "list"],
+            "console": "terminal"
+        },
+
+        {
+            "name": "dswitch --verbose stable unpin",
+            "program": "bin/dswitch.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": ["--verbose", "stable", "unpin"],
+            "console": "terminal"
+        },
     ]
 }
