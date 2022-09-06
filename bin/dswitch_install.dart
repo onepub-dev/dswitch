@@ -10,24 +10,41 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/channel.dart';
+import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:pubspec/pubspec.dart' as ps;
 
 void main(List<String> args) {
-  final parser = ArgParser()
+  final argParser = ArgParser()
     ..addFlag('verbose',
         abbr: 'v', negatable: false, help: 'Dump verbose logging information')
     ..addOption('stage2', help: 'Stage 2', hide: true)
     ..addOption('home', help: 'Users home directory.', hide: true);
+  try {
+    run(args, argParser);
+  } on ExitException catch (e) {
+    final String message;
+    if (e.code == 0) {
+      message = green(e.message);
+    } else {
+      message = red(e.message);
+    }
+    printerr(message);
+    if (e.showUsage) {
+      showUsage(e.argParser ?? argParser);
+    }
+  }
+}
 
+void run(List<String> args, ArgParser argParser) {
   final ArgResults parsed;
   try {
-    parsed = parser.parse(args);
+    parsed = argParser.parse(args);
   } on FormatException catch (e) {
     throw ExitException(1, red('Invalid command line option: ${e.message}'),
-        showUsage: true, argParser: parser);
+        showUsage: true, argParser: argParser);
   }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
