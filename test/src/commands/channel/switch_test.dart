@@ -23,36 +23,34 @@ void main() {
     await runner.run(['use', 'stable']);
 
     final tuple = selectVersions(channel);
-    final latest = tuple.latest;
+    final latest = tuple.selected;
     final prior = tuple.prior;
 
-    if (channel.isVersionCached(latest)) {
-      channel.delete(latest);
+    if (channel.isVersionCached(latest.toString())) {
+      channel.delete(latest.toString());
     }
 
-    if (!channel.isVersionCached(prior)) {
-      channel.download(prior);
+    if (!channel.isVersionCached(prior.toString())) {
+      channel.download(prior.toString());
     }
 
-    channel
-      ..currentVersion = prior
-      ..latestVersion = latest;
+    channel.currentVersion = prior.toString();
 
     /// now switch to beta and check we got the right version.
     await runner.run(['use', 'beta']);
     channel.reloadSettings;
     expect(channel.isActive, isTrue);
-    expect(channel.currentVersion, equals(prior));
+    expect(channel.currentVersion, equals(prior.toString()));
 
-    await runner.run(['beta', 'install', latest]);
+    await runner.run(['beta', 'install', latest.toString()]);
 
-    await runner.run(['beta', 'pin', prior]);
+    await runner.run(['beta', 'pin', prior.toString()]);
     channel.reloadSettings;
-    expect(channel.currentVersion, equals(prior));
+    expect(channel.currentVersion, equals(prior.toString()));
 
     await runner.run(['beta', 'unpin']);
     channel.reloadSettings;
-    expect(channel.currentVersion, equals(latest));
+    expect(channel.currentVersion, equals(latest.toString()));
 
     await runner.run(['use', 'stable']);
     stable.reloadSettings;

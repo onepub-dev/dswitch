@@ -31,10 +31,24 @@ Displays the status of the $channel channel.
   static void printStatus(String channel) {
     final ch = Channel(channel);
 
-    print(green('Status for channel $channel:'));
-    print('Current Version: ${ch.currentVersion}');
-    print('Is Pinned: ${ch.isPinned}');
+    print(colour(channel, 'Status for channel $channel:'));
+    print('Current Version: ${colour(channel, ch.currentVersion)}');
+    print('Is Pinned: ${colourPinned(isPinned: ch.isPinned)}');
     print('Lastest cached Version: ${ch.latestVersion}');
     print('Available for download: ${ch.fetchLatestVersion()}');
   }
+
+  static String colour(String channel, String message) {
+    if (channel == 'stable') {
+      return blue(message);
+    } else if (channel == 'beta') {
+      return cyan(message);
+    } else if (channel == 'dev') {
+      return magenta(message);
+    }
+    return green(message);
+  }
 }
+
+String colourPinned({required bool isPinned}) =>
+    isPinned ? orange('true') : green('false');

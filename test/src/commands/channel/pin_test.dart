@@ -2,15 +2,28 @@ import 'package:dswitch/src/channel.dart';
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:test/test.dart';
 
+import 'unpin_test.dart';
+
 void main() {
   test('pin beta <version>', () async {
     final runner = buildCommandRunner();
+    await runner.run(['use', 'stable']);
 
-    await runner.run(['beta', 'pin', '2.8.1']);
+    final channel = Channel('beta');
+
+    final tuple = selectVersions(channel);
+
+    final pinTo = tuple.prior.toString();
+
+    await runner.run(['beta', 'pin', pinTo]);
 
     /// now switch to beta and check we got the right version.
     await runner.run(['use', 'beta']);
+    channel.reloadSettings;
 
-    expect(Channel('beta').currentVersion, equals('2.8.1'));
+    expect(channel.currentVersion, equals(pinTo));
+
+    // reset our environment.
+    await runner.run(['use', 'stable']);
   });
 }

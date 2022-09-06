@@ -1,3 +1,14 @@
+# 4.4.0
+- upgraded  to dcli 1.20.2 as 1.20.0 had issues running in a pure dart 2.12 environment.
+- renamed isCurrentVersionInstalled to isLatestPubCacheVersionInstalled and added a flag to which controls whether a version installed from source is included. We do this so we can test dswitch from a global activation.
+- relaxed the first run test to allow  us to run a copy of dswitch from a source version with a higher version no. than the version in pub-cache.
+- the installer wasn't catching ExitExceptions. Added a try block and now output a nice message.
+- unit test improvements.
+- improved doco on releases.dart
+- forced the cachedVersions to be sorted. Added logic to the channel.latest to reset the version if it gets buggered up, this is probably only an issue in testing but does no harm.
+- Fixed the --verbose switch. It was print the word verbose and exiting.
+- Removed all calls to exit so we can extend the unit tests to error conditions.
+
 # 4.3.11
 - upgraded lint_hard version.
 - addec copyright notices.

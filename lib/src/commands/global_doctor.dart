@@ -35,7 +35,7 @@ Prints details on how DSwitch is configured.
     for (final channel in channels) {
       final ch = Channel(channel);
       if (ch.isActive) {
-        print(green('The active channel is $channel on ${ch.currentVersion}'));
+        print(orange('The active channel is $channel on ${ch.currentVersion}'));
         print('');
       }
     }

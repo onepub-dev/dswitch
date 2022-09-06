@@ -16,7 +16,7 @@ import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/first_run.dart';
 
 late final CommandRunner<void> runner;
-void main(List<String> args) async {
+Future<void> main(List<String> args) async {
   firstRun();
   runner = buildCommandRunner();
   try {

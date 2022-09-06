@@ -25,7 +25,7 @@ void main(List<String> args) {
   try {
     run(args, argParser);
   } on ExitException catch (e) {
-    final String message;
+    String message;
     if (e.code == 0) {
       message = green(e.message);
     } else {

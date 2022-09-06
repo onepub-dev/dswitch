@@ -156,10 +156,6 @@ class Channel {
 
   void download(String version) {
     DownloadVersion(name, version, _pathToVersion(version)).download();
-
-    if (Version.parse(version) > Version.parse(latestVersion)) {
-      latestVersion = version;
-    }
   }
 
   /// Downloads the list of versions available for this channel
@@ -184,23 +180,11 @@ class Channel {
 
   /// the most recent version we have downloaded.
   String get latestVersion {
-    var latest = settings['latestVersion'] as String?;
-
-    /// If latest hasn't been set then force it to be set.
-    if (latest != null) {
-      return latest;
-    }
+    String? latest;
     if (cachedVersions().isNotEmpty) {
       latest = basename(cachedVersions().first);
     }
-    latest ??= '0.0.1';
-    latestVersion = latest;
-    return latest;
-  }
-
-  set latestVersion(String version) {
-    settings['latestVersion'] = version;
-    settings.save();
+    return latest ?? '0.0.1';
   }
 
   /// If true then this channel is currently pinned.
@@ -220,8 +204,8 @@ class Channel {
           types: [Find.directory],
           recursive: false)
       .toList()
-    ..sort((a, b) =>
-        Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
+        ..sort((a, b) =>
+            Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
 
   void delete(String version) {
     deleteDir(_pathToVersion(version));

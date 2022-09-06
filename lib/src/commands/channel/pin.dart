@@ -39,7 +39,8 @@ Selects the given version for the $channel channel and makes it the active versi
             1,
             'You may only pass a single version no. '
             'Found ${argResults!.rest}',
-            showUsage: true, argParser: argParser);
+            showUsage: true,
+            argParser: argParser);
       }
 
       version = argResults!.rest[0];
