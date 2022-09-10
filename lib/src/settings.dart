@@ -24,7 +24,8 @@ void updateVersionNo(String pathToHome) {
   settings['version'] = packageVersion;
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
-  settings.save();
+  // ignore: discarded_futures
+  waitForEx(settings.save());
   verbose(() =>
       'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
 }
@@ -69,7 +70,8 @@ void createSettings() {
   );
 
   settings['version'] = packageVersion;
-  settings.save();
+  // ignore: discarded_futures
+  waitForEx(settings.save());
 }
 
 bool get settingsExist => exists(pathToSettings);

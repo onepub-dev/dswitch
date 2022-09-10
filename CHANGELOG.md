@@ -1,3 +1,11 @@
+# 4.4.1
+- Upgraded to latest settings_yaml to fix an async bug during saving of the .channel.yaml
+The path .dswitch/channels/stable/.channel.yaml.bak does not exists.
+#0      _Delete.delete (package:dcli_core/src/functions/delete.dart:22)
+#1      delete (package:dcli_core/src/functions/delete.dart:15)
+#2      SettingsYaml.save (package:settings_yaml/src/settings_yaml.dart:202)
+
+
 # 4.4.0
 - upgraded  to dcli 1.20.2 as 1.20.0 had issues running in a pure dart 2.12 environment.
 - renamed isCurrentVersionInstalled to isLatestPubCacheVersionInstalled and added a flag to which controls whether a version installed from source is included. We do this so we can test dswitch from a global activation.

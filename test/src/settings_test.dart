@@ -38,7 +38,8 @@ void main() {
       pathToSettings: pathToSettings,
     );
     settings['version'] = null;
-    settings.save();
+    // ignore: discarded_futures
+    waitForEx(settings.save());
     expect(settingsExist, isTrue);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
@@ -51,7 +52,8 @@ void main() {
     );
 
     settings['version'] = '0.0.1';
-    settings.save();
+    // ignore: discarded_futures
+    waitForEx(settings.save());
 
     expect(settingsExist, isTrue);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
@@ -64,7 +66,8 @@ void main() {
     );
 
     settings['version'] = '0.0.1';
-    settings.save();
+    // ignore: discarded_futures
+    waitForEx(settings.save());
     expect(settingsExist, isTrue);
 
     expect(isLatestPubCacheVersionInstalled(), isFalse);
@@ -83,7 +86,8 @@ void main() {
     );
 
     settings['version'] = '0.0.1';
-    settings.save();
+    // ignore: discarded_futures
+    waitForEx(settings.save());
 
     expect(settingsExist, isTrue);
 

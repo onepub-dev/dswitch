@@ -25,7 +25,6 @@ class Channel {
   }
 
   String name;
-  SettingsYaml? _settings;
 
   /// Returns true if this is the active channel
   bool get isActive {
@@ -103,14 +102,14 @@ class Channel {
 
   bool get isPinned => pinned == true;
 
-  SettingsYaml get settings =>
-      _settings ??= SettingsYaml.load(pathToSettings: pathToSettings);
+  late SettingsYaml _settings =
+      SettingsYaml.load(pathToSettings: _pathToSettings);
 
   /// Used by unit tests to force a reload of the settings when
   /// a spawned version of dswitch has updated it.
   @visibleForTesting
   void get reloadSettings =>
-      _settings = SettingsYaml.load(pathToSettings: pathToSettings);
+      _settings = SettingsYaml.load(pathToSettings: _pathToSettings);
 
   void createPaths() {
     createPath(dswitchPath);
@@ -138,7 +137,7 @@ class Channel {
   String get pathToCurrentVersion =>
       join(_pathToVersionSdk(currentVersion), 'bin');
 
-  String get pathToSettings => join(pathTo, '.channel.yaml');
+  String get _pathToSettings => join(pathTo, '.channel.yaml');
 
   String _pathToVersion(String version) => join(pathToVersions, version);
 
@@ -169,13 +168,14 @@ class Channel {
   /// This will normally be the same as the [latestVersion] unless
   /// this channel is pinned.
   String get currentVersion {
-    var _version = settings['currentVersion'] as String?;
+    var _version = _settings['currentVersion'] as String?;
     return _version ??= latestVersion;
   }
 
   set currentVersion(String version) {
-    settings['currentVersion'] = version;
-    settings.save();
+    _settings['currentVersion'] = version;
+    // ignore: discarded_futures
+    waitForEx(_settings.save());
   }
 
   /// the most recent version we have downloaded.
@@ -188,11 +188,12 @@ class Channel {
   }
 
   /// If true then this channel is currently pinned.
-  bool get pinned => settings['pinned'] as bool? ?? false;
+  bool get pinned => _settings['pinned'] as bool? ?? false;
 
   set pinned(bool pinned) {
-    settings['pinned'] = pinned;
-    settings.save();
+    _settings['pinned'] = pinned;
+    // ignore: discarded_futures
+    waitForEx(_settings.save());
   }
 
   static String channelPath(String channel) =>
