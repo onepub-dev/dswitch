@@ -1,3 +1,6 @@
+# 4.5.0
+- switch the dswitch install path to /usr/local/bin as /usr/bin on macos is a readonly file system.
+
 # 4.4.1
 - Upgraded to latest settings_yaml to fix an async bug during saving of the .channel.yaml
 The path .dswitch/channels/stable/.channel.yaml.bak does not exists.

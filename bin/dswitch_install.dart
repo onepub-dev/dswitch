@@ -171,6 +171,9 @@ void runStage2(String pathToDSwitch, {required String pathToHome}) {
   }
 
   print(blue('Installing dswitch into $target.'));
+  // per 4.5 we installed to /usr/bin
+  // so this is code to clean up old versions of dswitch if they exist.
+  removeOldDSwitch();
   copy(pathToDSwitch, target, overwrite: true);
   // save the version no. that we just installed so
   // that dswtich can check its running the current
@@ -178,6 +181,24 @@ void runStage2(String pathToDSwitch, {required String pathToHome}) {
   Shell.current.releasePrivileges();
   updateVersionNo(pathToHome);
   print('');
+}
+
+void removeOldDSwitch() {
+  // per 4.5 we installed to /usr/bin
+  // so this is code to clean up old versions of dswitch if they exist.
+  if (exists(join(rootPath, 'usr', 'bin', 'dswitch'))) {
+    try {
+      delete(join(rootPath, 'usr', 'bin', 'dswitch'));
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      printerr('''
+  Error trying to delete an old version of dswitch located at:
+  /usr/bin/dswitch
+  Please manually delete it as it may run instead of your newly installed
+  version.
+      ''');
+    }
+  }
 }
 
 String get pathToInstallDir {
