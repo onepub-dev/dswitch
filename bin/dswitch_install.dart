@@ -186,7 +186,7 @@ String get pathToInstallDir {
     target = join(
         env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
   } else {
-    target = '/usr/bin';
+    target = '/usr/local/bin';
   }
   return target;
 }
