@@ -205,8 +205,8 @@ class Channel {
           types: [Find.directory],
           recursive: false)
       .toList()
-    ..sort((a, b) =>
-        Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
+        ..sort((a, b) =>
+            Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
 
   void delete(String version) {
     deleteDir(_pathToVersion(version));

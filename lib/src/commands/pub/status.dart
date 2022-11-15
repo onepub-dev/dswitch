@@ -21,8 +21,7 @@ Displays the project's dart version and whether it has been pinned.
   String get name => 'status';
 
   @override
-  void run() {
-  }
+  void run() {}
 
   static void printStatus(String channel) {
     final ch = Channel(channel);

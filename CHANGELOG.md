@@ -1,3 +1,7 @@
+# 4.5.2
+- upgraded to scope 3.x
+- experiements to pin a package version.
+
 # 4.5.0
 - switch the dswitch install path to /usr/local/bin as /usr/bin on macos is a readonly file system.
 
