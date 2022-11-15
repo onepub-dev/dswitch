@@ -9,14 +9,14 @@ environment:
 dependencies: 
   archive: ^3.1.2
   args: ^2.1.1
-  dcli: 1.20.2
-  dcli_core: 1.20.2
+  dcli: 1.21.12
+  dcli_core: 1.21.12
   meta: ^1.0.0
   path: ^1.0.0
   pub_semver: ^2.0.0
   pubspec: ^2.0.1
-  scope: ^2.2.1
-  settings_yaml: ^3.5.0
+  scope: ^3.0.0
+  settings_yaml: ^3.5.1
   system_info: ^1.0.0
   win32: 2.0.5
 dev_dependencies: 

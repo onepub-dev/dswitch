@@ -101,7 +101,7 @@ void main() {
         /// create a pub-cache using the test scope's HOME
         Scope()
           ..value(PubCache.scopeKey, PubCache.forScope())
-          ..run(() {
+          ..runSync(() {
             final pubCache = PubCache();
 
             final sourceVersion = Version.parse(packageVersion);

@@ -126,14 +126,14 @@ packages:
       name: dcli
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.20.2"
+    version: "1.21.12"
   dcli_core:
     dependency: "direct main"
     description:
       name: dcli_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.20.2"
+    version: "1.21.12"
   equatable:
     dependency: transitive
     description:
@@ -357,14 +357,14 @@ packages:
       name: scope
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "3.0.0"
   settings_yaml:
     dependency: "direct main"
     description:
       name: settings_yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
+    version: "3.5.1"
   shelf:
     dependency: transitive
     description:
