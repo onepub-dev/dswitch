@@ -12,7 +12,11 @@ import '../../exceptions/exit.dart';
 import '../../first_run.dart';
 
 class PinCommand extends Command<void> {
-  PinCommand(this.channel);
+  PinCommand(this.channel) {
+    argParser.addFlag('force',
+        help: 'If required, the pinned dart version is downloaded and '
+            'installed without prompting the user.');
+  }
   String channel;
 
   @override
@@ -48,9 +52,11 @@ Selects the given version for the $channel channel and makes it the active versi
       version = ch.selectToInstall().version.toString();
     }
 
+    final force = argResults!['force'] as bool;
+
     if (!ch.isVersionCached(version)) {
       printerr(red("\nVersion $version isn't installed.\n"));
-      if (confirm('Install $version')) {
+      if (force || confirm('Install $version')) {
         installVersion(version);
       } else {
         throw ExitException(
