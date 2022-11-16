@@ -15,3 +15,9 @@ dswitch use beta
 ```
 
 Full documenation is on [gitbooks](https://dswitch.onepub.dev/).
+
+
+# Unit tests
+
+Use the critical_test package to run unit tests as we use a ct pre_hook to
+activate dswitch from source to run the tests.
