@@ -1,3 +1,7 @@
+# 4.6.0
+- Add: new --force switch to the pin command to download/install the requested version withouth prompting the user.
+- Add: a critical_test pre_hook to activate dswitch from source which is required before running unit tests.
+
 # 4.5.2
 - upgraded to scope 3.x
 - experiements to pin a package version.
