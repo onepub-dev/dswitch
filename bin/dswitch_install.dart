@@ -14,7 +14,7 @@ import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
-import 'package:pubspec/pubspec.dart' as ps;
+import 'package:pubspec2/pubspec2.dart' as ps;
 
 void main(List<String> args) {
   final argParser = ArgParser()

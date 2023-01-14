@@ -8,7 +8,7 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
-import 'package:system_info/system_info.dart';
+import 'package:system_info2/system_info2.dart';
 
 import 'channel.dart';
 import 'exceptions/exit.dart';
@@ -179,19 +179,19 @@ String resolveArchitecture() {
     }
   } else // linux
   {
-    final architecture = SysInfo.kernelArchitecture;
-
-    if (architecture == ProcessorArchitecture.AARCH64.name) {
+    final firstCore = SysInfo.cores[0];
+    final architecture = firstCore.architecture;
+    if (architecture == ProcessorArchitecture.arm64) {
       return 'ARMv8';
-    } else if (architecture == ProcessorArchitecture.ARM.name) {
+    } else if (architecture == ProcessorArchitecture.arm) {
       return 'ARMv7';
-    } else if (architecture == ProcessorArchitecture.IA64.name) {
+    } else if (architecture == ProcessorArchitecture.ia64) {
       return 'X64';
-    } else if (architecture == ProcessorArchitecture.MIPS.name) {
+    } else if (architecture == ProcessorArchitecture.mips) {
       throw const OSError('Mips is not a supported architecture.');
-    } else if (architecture == ProcessorArchitecture.X86.name) {
+    } else if (architecture == ProcessorArchitecture.x86) {
       return 'ia32';
-    } else if (architecture == ProcessorArchitecture.X86_64.name) {
+    } else if (architecture == ProcessorArchitecture.x86_64) {
       return 'x64';
     } else {
       return 'x64';

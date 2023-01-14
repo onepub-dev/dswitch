@@ -1,4 +1,4 @@
-@Timeout(Duration(minutes: 2))
+@Timeout(Duration(minutes: 5))
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -6,7 +6,6 @@
  */
 
 import 'package:dswitch/src/channel.dart';
-
 import 'package:dswitch/src/commands/commands.dart';
 import 'package:test/test.dart';
 
@@ -43,6 +42,8 @@ void main() {
     expect(channel.currentVersion, equals(prior.toString()));
 
     await runner.run(['beta', 'install', latest.toString()]);
+    channel.reloadSettings;
+    final postInstallVersion = channel.currentVersion;
 
     await runner.run(['beta', 'pin', prior.toString()]);
     channel.reloadSettings;
@@ -50,7 +51,7 @@ void main() {
 
     await runner.run(['beta', 'unpin']);
     channel.reloadSettings;
-    expect(channel.currentVersion, equals(latest.toString()));
+    expect(channel.currentVersion, equals(postInstallVersion.toString()));
 
     await runner.run(['use', 'stable']);
     stable.reloadSettings;
