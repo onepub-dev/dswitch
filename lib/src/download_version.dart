@@ -166,7 +166,8 @@ void clearLine() {
 
 void write(String text) => stdout.write(text);
 
-/// Converts the kernel architecture into one of the architecture names use by:
+/// Converts the kernel architecture into one of the architecture names use
+/// by:
 /// https://dart.dev/tools/sdk/archive
 String resolveArchitecture() {
   if (Platform.isMacOS) {
@@ -192,8 +193,8 @@ String resolveArchitecture() {
       return 'ia32';
     } else if (architecture == ProcessorArchitecture.x86_64) {
       return 'x64';
-    } else {
-      return 'x64';
     }
+    throw OSError(
+        '${SysInfo.rawKernelArchitecture} is not a supported architecture.');
   }
 }
