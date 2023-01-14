@@ -179,8 +179,7 @@ String resolveArchitecture() {
     }
   } else // linux
   {
-    final firstCore = SysInfo.cores[0];
-    final architecture = firstCore.architecture;
+    final architecture = SysInfo.kernelArchitecture;
     if (architecture == ProcessorArchitecture.arm64) {
       return 'ARMv8';
     } else if (architecture == ProcessorArchitecture.arm) {
