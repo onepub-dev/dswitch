@@ -1,3 +1,7 @@
+# 4.7.2
+- we now throw a OSError when we detect an unrecognized architecture.
+- upgraded to latest version of system_info2 to take advantage of the new kernelArchitecture call.
+
 # 4.7.0
 - Fixed a bug on the RPI. It was selecting the wrong cpu architecture resulting
 in x86 executables being downloaded.
