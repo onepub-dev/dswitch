@@ -182,17 +182,16 @@ String resolveArchitecture() {
   {
     final architecture = SysInfo.kernelArchitecture;
     if (architecture == ProcessorArchitecture.arm64) {
-      return 'ARMv8';
+      return 'arm64';
     } else if (architecture == ProcessorArchitecture.arm) {
-      return 'ARMv7';
-    } else if (architecture == ProcessorArchitecture.ia64) {
-      return 'X64';
+      return 'arm';
     } else if (architecture == ProcessorArchitecture.mips) {
       throw const OSError('Mips is not a supported architecture.');
     } else if (architecture == ProcessorArchitecture.x86) {
       return 'ia32';
-    } else if (architecture == ProcessorArchitecture.x86_64) {
-      return 'x64';
+    } else if (architecture == ProcessorArchitecture.ia64 ||
+        architecture == ProcessorArchitecture.x86_64) {
+      return 'X64';
     }
     throw OSError(
         '${SysInfo.rawKernelArchitecture} is not a supported architecture.');

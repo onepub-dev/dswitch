@@ -1,3 +1,6 @@
+# 4.7.3
+- corrected the archive paths for armv7 and armv8
+
 # 4.7.2
 - we now throw a OSError when we detect an unrecognized architecture.
 - upgraded to latest version of system_info2 to take advantage of the new kernelArchitecture call.
