@@ -191,7 +191,7 @@ String resolveArchitecture() {
       return 'ia32';
     } else if (architecture == ProcessorArchitecture.ia64 ||
         architecture == ProcessorArchitecture.x86_64) {
-      return 'X64';
+      return 'x64';
     }
     throw OSError(
         '${SysInfo.rawKernelArchitecture} is not a supported architecture.');
