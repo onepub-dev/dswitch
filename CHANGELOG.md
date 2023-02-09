@@ -1,3 +1,7 @@
+# 4.7.4
+- incorrect architecture X86 returned when it should be x86
+- Thanks to genesistms for the PR!
+
 # 4.7.3
 - corrected the archive paths for armv7 and armv8
 
