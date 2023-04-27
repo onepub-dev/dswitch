@@ -1,3 +1,6 @@
+# 4.7.5
+- added support for dart 2.19.5 which modified the .pub_cache path for hosted libraries.
+
 # 4.7.4
 - incorrect architecture X86 returned when it should be x86
 - Thanks to genesistms for the PR!

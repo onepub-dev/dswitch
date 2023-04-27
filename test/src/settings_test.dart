@@ -106,18 +106,18 @@ void main() {
 
             final sourceVersion = Version.parse(packageVersion);
 
-            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.1'),
+            createDir(join(pubCache.pathToHosted, 'dswitch-4.0.1'),
                 recursive: true);
-            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3'));
-            createDir(join(pubCache.pathToDartLang, 'dswitch-4.0.3-beta.1'));
+            createDir(join(pubCache.pathToHosted, 'dswitch-4.0.3'));
+            createDir(join(pubCache.pathToHosted, 'dswitch-4.0.3-beta.1'));
 
             expect(isLatestPubCacheVersionInstalled(), isFalse);
 
-            createDir(join(pubCache.pathToDartLang, 'dswitch-$packageVersion'));
+            createDir(join(pubCache.pathToHosted, 'dswitch-$packageVersion'));
             expect(isLatestPubCacheVersionInstalled(), isTrue);
 
             createDir(join(
-                pubCache.pathToDartLang, 'dswitch-${sourceVersion.nextMinor}'));
+                pubCache.pathToHosted, 'dswitch-${sourceVersion.nextMinor}'));
 
             expect(isLatestPubCacheVersionInstalled(), isFalse);
           });
