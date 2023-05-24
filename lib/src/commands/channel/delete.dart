@@ -5,7 +5,7 @@
  */
 
 import 'package:args/command_runner.dart';
-import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 
 import '../../channel.dart';
 import '../../exceptions/exit.dart';

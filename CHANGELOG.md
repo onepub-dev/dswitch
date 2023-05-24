@@ -1,3 +1,6 @@
+# 5.0.0
+- upgraded for dart 3.x support.
+
 # 4.7.5
 - added support for dart 2.19.5 which modified the .pub_cache path for hosted libraries.
 

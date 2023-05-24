@@ -7,6 +7,7 @@
 
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
 import 'package:dswitch/src/channel.dart';
@@ -14,6 +15,7 @@ import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
+import 'package:path/path.dart';
 import 'package:pubspec2/pubspec2.dart' as ps;
 
 void main(List<String> args) {
@@ -153,7 +155,7 @@ void hackPubspecForDev(String pathToDSwitch, String compileDir) {
       replacement['dcli'] = Dependency('dcli', pathRef);
       pubspec
         ..dependencyOverrides = replacement
-        ..saveToFile(pathToPubspec);
+        ..save(pathToPubspec);
     }
   }
 }

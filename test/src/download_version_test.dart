@@ -1,4 +1,6 @@
 @Timeout(Duration(minutes: 5))
+library;
+
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/src/download_version.dart';
 import 'package:test/test.dart';

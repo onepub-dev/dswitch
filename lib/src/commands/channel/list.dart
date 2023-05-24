@@ -6,6 +6,7 @@
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../../channel.dart';

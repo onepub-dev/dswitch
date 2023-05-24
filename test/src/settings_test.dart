@@ -1,4 +1,6 @@
 @Timeout(Duration(minutes: 10))
+library;
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -6,8 +8,10 @@
  */
 
 import 'package:dcli/dcli.dart';
+import 'package:dcli_core/dcli_core.dart' as core;
 import 'package:dswitch/src/settings.dart';
 import 'package:dswitch/src/version/version.g.dart';
+import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:scope/scope.dart';
 import 'package:settings_yaml/settings_yaml.dart';
@@ -73,7 +77,7 @@ void main() {
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
-  test('update version', () {
+  test('update version', () async {
     if (exists(pathToSettings)) {
       delete(pathToSettings);
     }
@@ -94,10 +98,10 @@ void main() {
     expect(isLatestPubCacheVersionInstalled(), isFalse);
     updateVersionNo(HOME);
 
-    withTempDir((mockCache) {
+    await core.withTempDir((mockCache) async {
       env[PubCache.envVarPubCache] = mockCache;
 
-      withEnvironment(() {
+      await withEnvironment(() async {
         /// create a pub-cache using the test scope's HOME
         Scope()
           ..value(PubCache.scopeKey, PubCache.forScope())

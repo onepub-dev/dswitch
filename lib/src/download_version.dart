@@ -8,6 +8,7 @@ import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:dcli/dcli.dart';
+import 'package:path/path.dart';
 import 'package:system_info2/system_info2.dart';
 
 import 'channel.dart';

@@ -7,6 +7,7 @@
 
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dcli/windows.dart';
@@ -14,6 +15,7 @@ import 'package:dswitch/src/commands/commands.dart';
 import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/first_run.dart';
+import 'package:path/path.dart';
 
 late final CommandRunner<void> runner;
 Future<void> main(List<String> args) async {

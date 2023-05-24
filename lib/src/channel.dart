@@ -6,8 +6,10 @@
 
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:settings_yaml/settings_yaml.dart';
 
@@ -205,8 +207,8 @@ class Channel {
           types: [Find.directory],
           recursive: false)
       .toList()
-        ..sort((a, b) =>
-            Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
+    ..sort((a, b) =>
+        Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
 
   void delete(String version) {
     deleteDir(_pathToVersion(version));
@@ -218,8 +220,7 @@ class Channel {
   Release selectToInstall() {
     final releases = Release.fetchReleases(name);
 
-    final release = menu<Release>(
-        prompt: 'Select Version to install:',
+    final release = menu<Release>('Select Version to install:',
         options: releases,
         limit: 20,
         format: (release) => release.version.toString());
@@ -230,7 +231,7 @@ class Channel {
   /// and asks the user to select one to install.
   String selectFromInstalled() {
     final version = menu<String>(
-      prompt: 'Select Version:',
+      'Select Version:',
       options: cachedVersions(),
       format: basename,
       limit: 20,
