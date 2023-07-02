@@ -1,3 +1,6 @@
+# 5.0.2
+- upgrade dependency versions
+
 # 5.0.0
 - upgraded for dart 3.x support.
 
