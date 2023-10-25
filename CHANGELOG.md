@@ -1,3 +1,6 @@
+# 5.1.0
+- moved to pubspec_manager
+
 # 5.0.2
 - upgrade dependency versions
 

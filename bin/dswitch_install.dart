@@ -16,7 +16,7 @@ import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:path/path.dart';
-import 'package:pubspec2/pubspec2.dart' as ps;
+import 'package:pubspec_manager/pubspec_manager.dart';
 
 void main(List<String> args) {
   final argParser = ArgParser()
@@ -141,22 +141,17 @@ void runStage1() {
 /// so the copied pubspec.yaml will still function.
 void hackPubspecForDev(String pathToDSwitch, String compileDir) {
   final pathToPubspec = truepath(compileDir, 'pubspec.yaml');
-  final pubspec = PubSpec.fromFile(pathToPubspec);
+  final pubspec = PubSpec.loadFromPath(pathToPubspec);
 
-  if (pubspec.dependencyOverrides.containsKey('dcli')) {
+  if (pubspec.dependencyOverrides.exists('dcli')) {
     final overrides = pubspec.dependencyOverrides;
 
-    final dcli = overrides['dcli'];
-    if (dcli!.reference is ps.PathReference) {
-      var pathRef = dcli.reference as ps.PathReference;
-      pathRef = ps.PathReference(truepath(pathToDSwitch, pathRef.path));
+    final dcliDependenchy = overrides['dcli']! as PathDependency;
 
-      final replacement = <String, Dependency>{}..addAll(overrides);
-      replacement['dcli'] = Dependency('dcli', pathRef);
-      pubspec
-        ..dependencyOverrides = replacement
-        ..save(pathToPubspec);
-    }
+    final absolutePathToDCli = truepath(pathToDSwitch, dcliDependenchy.path);
+    (overrides['dcli']! as PathDependency).path = absolutePathToDCli;
+
+    pubspec.saveTo(pathToPubspec);
   }
 }
 
