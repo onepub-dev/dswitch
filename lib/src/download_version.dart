@@ -87,12 +87,14 @@ class DownloadVersion {
     }
     delete(pathToZip);
 
-    /// recent dart archives don't seem to have the execute permission
-    /// set.
-    final pathToSdk = join(targetPathTo, 'dart-sdk', 'bin');
+    /// dunzip doesn't restore the execute permission.
+    final pathToSdk = join(targetPathTo, 'dart-sdk');
+    final pathToSdkBin = join(pathToSdk, 'bin');
     if (!Platform.isWindows) {
-      'chmod +x ${join(pathToSdk, 'dart')}'.run;
-      'chmod +x ${join(pathToSdk, 'dartaotruntime')}'.run;
+      'chmod +x ${join(pathToSdkBin, 'dart')}'.run;
+      'chmod +x ${join(pathToSdkBin, 'dartaotruntime')}'.run;
+      'chmod +x ${join(pathToSdkBin, 'utils', 'gen_snapshot')}'.run;
+      'chmod +x ${join(pathToSdkBin, 'utils', 'wasm-opt')}'.run;
     }
     print('Expansion complete.');
   }
