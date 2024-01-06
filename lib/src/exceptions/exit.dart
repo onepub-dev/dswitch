@@ -11,4 +11,7 @@ class ExitException implements Exception {
   /// if showUsage is true then the caller may
   /// set an argParser to be used to show the usage from.
   ArgParser? argParser;
+
+  @override
+  String toString() => 'ExitException: $code $message';
 }
