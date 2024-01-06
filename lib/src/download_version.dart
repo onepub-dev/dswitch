@@ -86,6 +86,14 @@ class DownloadVersion {
       dunzip(pathToZip, targetPathTo);
     }
     delete(pathToZip);
+
+    /// recent dart archives don't seem to have the execute permission
+    /// set.
+    final pathToSdk = join(targetPathTo, 'dart-sdk', 'bin');
+    if (!Platform.isWindows) {
+      'chmod +x ${join(pathToSdk, 'dart')}'.run;
+      'chmod +x ${join(pathToSdk, 'dartaotruntime')}'.run;
+    }
     print('Expansion complete.');
   }
 
