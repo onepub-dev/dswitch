@@ -60,34 +60,35 @@ Tuple selectVersions(Channel channel) {
   final releases = Release.fetchReleases(channel.name);
 
   Version? latest;
-  Version? firstUsable;
   Version? prior;
 
   final active = Version.parse(channel.currentVersion);
   for (final release in releases) {
+    // we prefer a cached version to speed things up.
     if (!channel.isVersionCached(release.version.toString())) {
       continue;
+    }
+    if (latest != null) {
+      prior = latest;
     }
     latest ??= release.version;
     if (release.version == active) {
       continue;
     }
-    final selected = release.version;
-    if (firstUsable == null) {
-      firstUsable = selected;
-      continue;
-    }
-    prior = selected;
+
     break;
   }
 
-  return Tuple(latest!, firstUsable!, prior!);
+  /// If nothing is cached then lastest and prior will be null.
+  latest ??= releases.first.version;
+  prior ??= releases[2].version;
+
+  return Tuple(latest, prior);
 }
 
 class Tuple {
-  Tuple(this.latest, this.selected, this.prior);
+  Tuple(this.latest, this.prior);
 
   Version latest;
-  Version selected;
   Version prior;
 }

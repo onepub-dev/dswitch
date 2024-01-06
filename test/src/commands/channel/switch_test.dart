@@ -24,7 +24,7 @@ void main() {
     await runner.run(['use', 'stable']);
 
     final tuple = selectVersions(channel);
-    final latest = tuple.selected;
+    final latest = tuple.latest;
     final prior = tuple.prior;
 
     if (channel.isVersionCached(latest.toString())) {

@@ -1,3 +1,7 @@
+# 5.2.0
+- added toString to ExitExeption so we see the problem in unit tests.
+- Added logic to add +x to the dart exe as I suspect that when we use ZipDecoder that it doesn't restore the execute flag.  This was seen when running dswitch under a docker that didn't have unzip installed.
+
 # 5.1.0
 - moved to pubspec_manager
 
