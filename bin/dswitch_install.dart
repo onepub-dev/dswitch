@@ -146,10 +146,10 @@ void hackPubspecForDev(String pathToDSwitch, String compileDir) {
   if (pubspec.dependencyOverrides.exists('dcli')) {
     final overrides = pubspec.dependencyOverrides;
 
-    final dcliDependenchy = overrides['dcli']! as PathDependency;
+    final dcliDependenchy = overrides['dcli']! as DependencyPath;
 
     final absolutePathToDCli = truepath(pathToDSwitch, dcliDependenchy.path);
-    (overrides['dcli']! as PathDependency).path = absolutePathToDCli;
+    (overrides['dcli']! as DependencyPath).path = absolutePathToDCli;
 
     pubspec.saveTo(pathToPubspec);
   }
