@@ -1,3 +1,7 @@
+# 5.3.0
+- upgraded te latest version of dcli
+- added permission to addtional exes.
+
 # 5.2.1
 - upgraded to archive 3.3.8 due to security issue.
 # 5.2.0
