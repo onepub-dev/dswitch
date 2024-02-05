@@ -1,3 +1,6 @@
+# 5.3.2
+- upgraded dcli to fix a null check.
+
 # 5.3.1
 - upgraded to the latest version of dcli to correctly detect when we are running in docker.
 
