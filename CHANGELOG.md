@@ -1,3 +1,6 @@
+# 5.3.1
+- upgraded to the latest version of dcli to correctly detect when we are running in docker.
+
 # 5.3.0
 - upgraded te latest version of dcli
 - added permission to addtional exes.
