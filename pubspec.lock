@@ -141,18 +141,18 @@ packages:
     dependency: "direct main"
     description:
       name: dcli
-      sha256: "60f921429c76455867d0930b0a348e753d3eb1e543338134ec9a2aba784c8038"
+      sha256: "0c315e040742da77fbbef4f4240a941637f025a89c5edf8721818aa11b474539"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.3.3"
   dcli_core:
     dependency: "direct main"
     description:
       name: dcli_core
-      sha256: ea6c9dbacd5c1b3de4d9fb1da698d10be0d10495a6a13d1ba1c1d570391b0d51
+      sha256: "17047b6bac29b9f54bddbea6ade23a9cfd5de53ef4915b2a3b98dc99e170d943"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.3.3"
   dcli_terminal:
     dependency: transitive
     description:
