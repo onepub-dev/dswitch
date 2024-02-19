@@ -23,14 +23,14 @@ Displays the project's dart version and whether it has been pinned.
   @override
   void run() {}
 
-  static void printStatus(String channel) {
+  static Future<void> printStatus(String channel) async {
     final ch = Channel(channel);
 
     print(colour(channel, 'Status for channel $channel:'));
     print('Current Version: ${colour(channel, ch.currentVersion)}');
     print('Is Pinned: ${colourPinned(isPinned: ch.isPinned)}');
     print('Lastest cached Version: ${ch.latestVersion}');
-    print('Available for download: ${ch.fetchLatestVersion()}');
+    print('Available for download: ${await ch.fetchLatestVersion()}');
   }
 
   static String colour(String channel, String message) {

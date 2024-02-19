@@ -24,9 +24,10 @@ Unpins the $channel channel.
   String get name => 'unpin';
 
   @override
-  void run() {
+  Future<void> run() async {
     checkIsFullyInstalled();
-    final ch = Channel(channel)..unpin();
+    final ch = Channel(channel);
+    await ch.unpin();
     print(green('Channel $channel is now on ${ch.currentVersion}'));
 
     // if (ch.isActive) {

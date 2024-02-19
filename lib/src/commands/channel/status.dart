@@ -24,18 +24,18 @@ Displays the status of the $channel channel.
   String get name => 'status';
 
   @override
-  void run() {
-    printStatus(channel);
+  Future<void> run() async {
+    await printStatus(channel);
   }
 
-  static void printStatus(String channel) {
+  static Future<void> printStatus(String channel) async {
     final ch = Channel(channel);
 
     print(colour(channel, 'Status for channel $channel:'));
     print('Current Version: ${colour(channel, ch.currentVersion)}');
     print('Is Pinned: ${colourPinned(isPinned: ch.isPinned)}');
     print('Lastest cached Version: ${ch.latestVersion}');
-    print('Available for download: ${ch.fetchLatestVersion()}');
+    print('Available for download: ${await ch.fetchLatestVersion()}');
   }
 
   static String colour(String channel, String message) {

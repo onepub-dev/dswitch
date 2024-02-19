@@ -19,7 +19,7 @@ import 'package:path/path.dart';
 
 late final CommandRunner<void> runner;
 Future<void> main(List<String> args) async {
-  firstRun();
+  await firstRun();
   runner = buildCommandRunner();
   try {
     await doit(args);

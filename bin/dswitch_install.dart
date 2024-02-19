@@ -5,7 +5,7 @@
  * Written by Brett Sutton <bsutton@onepub.dev>, Jan 2022
  */
 
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
@@ -18,14 +18,14 @@ import 'package:dswitch/src/settings.dart';
 import 'package:path/path.dart';
 import 'package:pubspec_manager/pubspec_manager.dart';
 
-void main(List<String> args) {
+void main(List<String> args) async {
   final argParser = ArgParser()
     ..addFlag('verbose',
         abbr: 'v', negatable: false, help: 'Dump verbose logging information')
     ..addOption('stage2', help: 'Stage 2', hide: true)
     ..addOption('home', help: 'Users home directory.', hide: true);
   try {
-    run(args, argParser);
+    await run(args, argParser);
   } on ExitException catch (e) {
     String message;
     if (e.code == 0) {
@@ -40,7 +40,7 @@ void main(List<String> args) {
   }
 }
 
-void run(List<String> args, ArgParser argParser) {
+Future<void> run(List<String> args, ArgParser argParser) async {
   final ArgResults parsed;
   try {
     parsed = argParser.parse(args);
@@ -52,11 +52,11 @@ void run(List<String> args, ArgParser argParser) {
 
   if (!parsed.wasParsed('stage2')) {
     runStage1();
-    installDart();
+    await installDart();
   } else {
     final pathToDSwitch = parsed['stage2'] as String;
     final pathToHome = parsed['home'] as String;
-    runStage2(pathToDSwitch, pathToHome: pathToHome);
+    await runStage2(pathToDSwitch, pathToHome: pathToHome);
 
     throw ExitException(0, 'Stage2 Completed successfully', showUsage: false);
   }
@@ -66,7 +66,7 @@ void run(List<String> args, ArgParser argParser) {
 
 void runStage1() {
   if (!Shell.current.isPrivilegedUser) {
-    if (Platform.isWindows) {
+    if (io.Platform.isWindows) {
       throw ExitException(
           1, 'Please run dswitch_install with Administrative privileges.',
           showUsage: false);
@@ -119,7 +119,7 @@ void runStage1() {
     //     join(compileDir, '${script.basename}2${extension(script.basename)}');
     // copy(script.pathToExe, duplicate, overwrite: true);
 
-    if (!Platform.isWindows) {
+    if (!io.Platform.isWindows) {
       print(green('Please provide your sudo password so we can install '
           'dswitch into your PATH'));
     }
@@ -156,7 +156,8 @@ void hackPubspecForDev(String pathToDSwitch, String compileDir) {
 }
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
-void runStage2(String pathToDSwitch, {required String pathToHome}) {
+Future<void> runStage2(String pathToDSwitch,
+    {required String pathToHome}) async {
   final target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
@@ -176,7 +177,7 @@ void runStage2(String pathToDSwitch, {required String pathToHome}) {
   // that dswtich can check its running the current
   // version each time it starts.
   Shell.current.releasePrivileges();
-  updateVersionNo(pathToHome);
+  await updateVersionNo(pathToHome);
   print('');
 }
 
@@ -200,7 +201,7 @@ void removeOldDSwitch() {
 
 String get pathToInstallDir {
   String target;
-  if (Platform.isWindows) {
+  if (io.Platform.isWindows) {
     target = join(
         env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
   } else {
@@ -209,7 +210,7 @@ String get pathToInstallDir {
   return target;
 }
 
-void installDart() {
+Future<void> installDart() async {
   Channel? active;
 
   /// Check we have an installed and active version of art.
@@ -222,8 +223,8 @@ void installDart() {
 
   /// if we don't have an active version then install and make it active.
   if (active == null) {
-    Channel('stable')
-      ..installLatestVersion()
-      ..use();
+    final channel = Channel('stable');
+    await channel.installLatestVersion();
+    channel.use();
   }
 }

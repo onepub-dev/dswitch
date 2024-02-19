@@ -19,14 +19,14 @@ final pathToSettings = join(HOME, relPathToSettings);
 /// HOME directory is /root.
 /// So we can update the user's settings.yaml in their
 /// home directory we must pass the home dir in.
-void updateVersionNo(String pathToHome) {
+Future<void> updateVersionNo(String pathToHome) async {
   final pathToSettings = join(pathToHome, relPathToSettings);
   final settings = SettingsYaml.load(pathToSettings: pathToSettings);
   settings['version'] = packageVersion;
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
   // ignore: discarded_futures
-  waitForEx(settings.save());
+  await settings.save();
   verbose(() =>
       'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
 }
@@ -61,7 +61,7 @@ bool isLatestPubCacheVersionInstalled({bool isActivatedFromSource = false}) {
   }
 }
 
-void createSettings() {
+Future<void> createSettings() async {
   if (!exists(dirname(pathToSettings))) {
     createDir(dirname(pathToSettings), recursive: true);
   }
@@ -72,7 +72,7 @@ void createSettings() {
 
   settings['version'] = packageVersion;
   // ignore: discarded_futures
-  waitForEx(settings.save());
+  await settings.save();
 }
 
 bool get settingsExist => exists(pathToSettings);

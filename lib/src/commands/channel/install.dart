@@ -29,10 +29,10 @@ If you pass the --select switch then a menu is displayed with the version availa
   String get name => 'install';
 
   @override
-  void run() {
+  Future<void> run() async {
     checkIsFullyInstalled();
     if (argResults!.wasParsed('select')) {
-      select();
+      await select();
     } else {
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
@@ -45,38 +45,38 @@ If you pass the --select switch then a menu is displayed with the version availa
         }
 
         final version = argResults!.rest[0];
-        installVersion(version);
+        await installVersion(version);
       } else {
-        installLatestVersion(channel);
+        await installLatestVersion(channel);
       }
     }
   }
 
-  void installLatestVersion(String channel) {
-    Channel(channel).installLatestVersion();
+  Future<void> installLatestVersion(String channel) async {
+    await Channel(channel).installLatestVersion();
   }
 
-  void select() {
+  Future<void> select() async {
     final ch = Channel(channel);
 
-    final selected = ch.selectToInstall();
+    final selected = await ch.selectToInstall();
 
     if (ch.isVersionCached(selected.version.toString())) {
       print(blue('The selected version is already installed.'));
     } else {
-      ch.download(selected.version.toString());
+      await ch.download(selected.version.toString());
     }
     print('Install of $channel channel complete.');
   }
 
-  void installVersion(String version) {
+  Future<void> installVersion(String version) async {
     print('Installing $channel version $version...');
     final ch = Channel(channel);
     if (ch.isVersionCached(version)) {
       throw ExitException(1, 'The selected version is already installed.',
           showUsage: false);
     }
-    ch.download(version);
+    await ch.download(version);
     print('Install of $channel channel complete. ');
   }
 }

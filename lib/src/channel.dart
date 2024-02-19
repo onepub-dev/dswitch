@@ -43,16 +43,16 @@ class Channel {
     }
   }
 
-  void installLatestVersion() {
+  Future<void> installLatestVersion() async {
     if (isDownloaded()) {
       print(orange('Channel is already installed and the current version is: '
           '$currentVersion'));
     } else {
-      final releases = Release.fetchReleases(name);
+      final releases = await Release.fetchReleases(name);
       final version = releases[0].version.toString();
       print('Installing $name ($version) ...');
-      download(version);
-      currentVersion = version;
+      await download(version);
+      await setCurrentVersion(version);
       _createChannelSymlink();
       print('Install of $name channel complete.');
     }
@@ -65,9 +65,9 @@ class Channel {
     _createChannelSymlink();
   }
 
-  void pin(String version) {
-    currentVersion = version;
-    pinned = true;
+  Future<void> pin(String version) async {
+    await setCurrentVersion(version);
+    await setPinned(pinned: true);
 
     /// If we are the active channel then we need to update the active link.
     if (isActive) {
@@ -76,9 +76,9 @@ class Channel {
     _createChannelSymlink();
   }
 
-  void unpin() {
-    currentVersion = latestVersion;
-    pinned = false;
+  Future<void> unpin() async {
+    await setCurrentVersion(latestVersion);
+    await setPinned(pinned: false);
 
     /// If we are the active channel then we need to update the active link.
     if (isActive) {
@@ -155,14 +155,14 @@ class Channel {
   /// been downloaded.
   bool isDownloaded() => isVersionCached(currentVersion);
 
-  void download(String version) {
-    DownloadVersion(name, version, _pathToVersion(version)).download();
+  Future<void> download(String version) async {
+    await DownloadVersion(name, version, _pathToVersion(version)).download();
   }
 
   /// Downloads the list of versions available for this channel
   /// and returns the must recent version.
-  String fetchLatestVersion() {
-    final releases = Release.fetchReleases(name);
+  Future<String> fetchLatestVersion() async {
+    final releases = await Release.fetchReleases(name);
     return releases[0].version.toString();
   }
 
@@ -174,10 +174,9 @@ class Channel {
     return _version ??= latestVersion;
   }
 
-  set currentVersion(String version) {
+  Future<void> setCurrentVersion(String version) async {
     _settings['currentVersion'] = version;
-    // ignore: discarded_futures
-    waitForEx(_settings.save());
+    await _settings.save();
   }
 
   /// the most recent version we have downloaded.
@@ -192,10 +191,10 @@ class Channel {
   /// If true then this channel is currently pinned.
   bool get pinned => _settings['pinned'] as bool? ?? false;
 
-  set pinned(bool pinned) {
+  Future<void> setPinned({required bool pinned}) async {
     _settings['pinned'] = pinned;
     // ignore: discarded_futures
-    waitForEx(_settings.save());
+    await _settings.save();
   }
 
   static String channelPath(String channel) =>
@@ -217,8 +216,8 @@ class Channel {
   /// Shows the user a menu with the 20 most recent version for the channel.
   ///
   /// Returns the version the user selected.
-  Release selectToInstall() {
-    final releases = Release.fetchReleases(name);
+  Future<Release> selectToInstall() async {
+    final releases = await Release.fetchReleases(name);
 
     final release = menu<Release>('Select Version to install:',
         options: releases,
@@ -242,21 +241,21 @@ class Channel {
   bool isVersionCached(String version) =>
       cachedVersions().any((element) => basename(element) == version);
 
-  void upgrade() {
+  Future<void> upgrade() async {
     if (isPinned) {
       printerr(
           red('The $name is pinned. Unpin the channel first and try again'));
     } else {
-      final version = fetchLatestVersion();
+      final version = await fetchLatestVersion();
 
       if (version == currentVersion) {
         print('You are already on the latest version ($version) for the '
             '$name channel');
       } else {
         print('Downloading $version...');
-        download(version);
+        await download(version);
 
-        currentVersion = version;
+        await setCurrentVersion(version);
 
         if (isActive) {
           /// if we are the active channel then calling swithTo

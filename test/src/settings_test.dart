@@ -26,52 +26,49 @@ void main() {
     expect(settingsExist, isFalse);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   }, skip: true);
-  test('no file', () {
-    createSettings();
+  test('no file', () async {
+    await createSettings();
 
     // No file
     delete(pathToSettings);
     expect(settingsExist, isFalse);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
-  test('no version', () {
-    createSettings();
+  test('no version', () async {
+    await createSettings();
 
     // No version
     final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
     settings['version'] = null;
-    // ignore: discarded_futures
-    waitForEx(settings.save());
+    await settings.save();
     expect(settingsExist, isTrue);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
-  test('old version', () {
-    createSettings();
+  test('old version', () async {
+    await createSettings();
 
     final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
     settings['version'] = '0.0.1';
-    // ignore: discarded_futures
-    waitForEx(settings.save());
+    await settings.save();
 
     expect(settingsExist, isTrue);
     expect(isLatestPubCacheVersionInstalled(), isFalse);
   });
 
-  test('current version', () {
-    createSettings();
+  test('current version', () async {
+    await createSettings();
     final settings = SettingsYaml.load(
       pathToSettings: pathToSettings,
     );
 
     settings['version'] = '0.0.1';
-    // ignore: discarded_futures
-    waitForEx(settings.save());
+    await settings.save();
     expect(settingsExist, isTrue);
 
     expect(isLatestPubCacheVersionInstalled(), isFalse);
@@ -90,18 +87,17 @@ void main() {
     );
 
     settings['version'] = '0.0.1';
-    // ignore: discarded_futures
-    waitForEx(settings.save());
+    await settings.save();
 
     expect(settingsExist, isTrue);
 
     expect(isLatestPubCacheVersionInstalled(), isFalse);
-    updateVersionNo(HOME);
+    await updateVersionNo(HOME);
 
-    await core.withTempDir((mockCache) async {
+    await core.withTempDirAsync((mockCache) async {
       env[PubCache.envVarPubCache] = mockCache;
 
-      await withEnvironment(() async {
+      await withEnvironmentAsync(() async {
         /// create a pub-cache using the test scope's HOME
         Scope()
           ..value(PubCache.scopeKey, PubCache.forScope())

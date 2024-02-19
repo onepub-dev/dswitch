@@ -1,3 +1,6 @@
+# 6.0.0-alpha.1
+- moved to the alpha version of dcli 4.x
+
 # 5.3.2
 - upgraded dcli to fix a null check.
 

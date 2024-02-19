@@ -13,9 +13,9 @@ import 'constants.dart';
 import 'exceptions/exit.dart';
 import 'settings.dart';
 
-void firstRun() {
+Future<void> firstRun() async {
   if (!settingsExist) {
-    createSettings();
+    await createSettings();
     firstRunMessage();
   }
 }

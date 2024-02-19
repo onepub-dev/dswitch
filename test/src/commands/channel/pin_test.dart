@@ -11,7 +11,7 @@ void main() {
 
     final channel = Channel('beta');
 
-    final tuple = selectVersions(channel);
+    final tuple = await selectVersions(channel);
 
     final pinTo = tuple.prior.toString();
 

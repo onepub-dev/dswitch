@@ -17,43 +17,51 @@ void main() {
   test('switch To beta', () async {
     final runner = buildCommandRunner();
 
-    final channel = Channel('beta');
+    final beta = Channel('beta');
     final stable = Channel('stable');
     final originalVersion = stable.currentVersion;
 
+    /// make certain we have viable versions of stable and beta.
+    await stable.installLatestVersion();
+    await beta.installLatestVersion();
+
     await runner.run(['use', 'stable']);
 
-    final tuple = selectVersions(channel);
+    final tuple = await selectVersions(beta);
     final latest = tuple.latest;
     final prior = tuple.prior;
 
-    if (channel.isVersionCached(latest.toString())) {
-      channel.delete(latest.toString());
+    // download the prior version
+    if (!beta.isVersionCached(prior.toString())) {
+      await beta.download(prior.toString());
     }
 
-    if (!channel.isVersionCached(prior.toString())) {
-      channel.download(prior.toString());
-    }
-
-    channel.currentVersion = prior.toString();
+    await beta.setCurrentVersion(prior.toString());
 
     /// now switch to beta and check we got the right version.
     await runner.run(['use', 'beta']);
-    channel.reloadSettings;
-    expect(channel.isActive, isTrue);
-    expect(channel.currentVersion, equals(prior.toString()));
+    beta.reloadSettings;
+    expect(beta.isActive, isTrue);
+    expect(beta.currentVersion, equals(prior.toString()));
+    if (beta.isVersionCached(latest.toString())) {
+      beta.delete(latest.toString());
+    }
+
+    /// back to the stable channel so we can manipulate the beta channel
+    /// without deleting dart from under ourself.
+    stable.use();
 
     await runner.run(['beta', 'install', latest.toString()]);
-    channel.reloadSettings;
-    final postInstallVersion = channel.currentVersion;
+    beta.reloadSettings;
+    final postInstallVersion = beta.currentVersion;
 
     await runner.run(['beta', 'pin', prior.toString()]);
-    channel.reloadSettings;
-    expect(channel.currentVersion, equals(prior.toString()));
+    beta.reloadSettings;
+    expect(beta.currentVersion, equals(prior.toString()));
 
     await runner.run(['beta', 'unpin']);
-    channel.reloadSettings;
-    expect(channel.currentVersion, equals(postInstallVersion));
+    beta.reloadSettings;
+    expect(beta.currentVersion, equals(postInstallVersion));
 
     await runner.run(['use', 'stable']);
     stable.reloadSettings;

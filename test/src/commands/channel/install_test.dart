@@ -31,7 +31,7 @@ void main() {
     final channel = Channel('stable');
 
     //find a version that isn't installed
-    final version = selectVersion(channel);
+    final version = await selectVersion(channel);
 
     final runner = buildCommandRunner();
 
@@ -41,9 +41,9 @@ void main() {
 
 /// select a version that we can install that isn't
 /// currently active
-String selectVersion(Channel channel) {
+Future<String> selectVersion(Channel channel) async {
   late String selected;
-  final releases = Release.fetchReleases(channel.name);
+  final releases = await Release.fetchReleases(channel.name);
 
   final active = channel.currentVersion;
   for (final release in releases.reversed) {

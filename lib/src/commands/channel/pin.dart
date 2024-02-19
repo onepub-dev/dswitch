@@ -31,7 +31,7 @@ Selects the given version for the $channel channel and makes it the active versi
   String get name => 'pin';
 
   @override
-  void run() {
+  Future<void> run() async {
     checkIsFullyInstalled();
     String version;
 
@@ -49,7 +49,8 @@ Selects the given version for the $channel channel and makes it the active versi
 
       version = argResults!.rest[0];
     } else {
-      version = ch.selectToInstall().version.toString();
+      final release = await ch.selectToInstall();
+      version = release.version.toString();
     }
 
     final force = argResults!['force'] as bool;
@@ -57,7 +58,7 @@ Selects the given version for the $channel channel and makes it the active versi
     if (!ch.isVersionCached(version)) {
       printerr(red("\nVersion $version isn't installed.\n"));
       if (force || confirm('Install $version')) {
-        installVersion(version);
+        await installVersion(version);
       } else {
         throw ExitException(
             0, 'To install $version Use: dswitch $channel install $version\n',
@@ -65,7 +66,7 @@ Selects the given version for the $channel channel and makes it the active versi
       }
     }
 
-    ch.pin(version);
+    await ch.pin(version);
     print(green('Channel $channel is now pinned to $version'));
 
     if (!ch.isActive) {
@@ -81,8 +82,8 @@ Selects the given version for the $channel channel and makes it the active versi
     // }
   }
 
-  void installVersion(String version) {
+  Future<void> installVersion(String version) async {
     print('Installing $channel version $version...');
-    Channel(channel).download(version);
+    await Channel(channel).download(version);
   }
 }

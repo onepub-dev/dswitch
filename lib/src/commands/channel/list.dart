@@ -28,19 +28,20 @@ class ListCommand extends Command<void> {
   String get name => 'list';
 
   @override
-  void run() {
+  Future<void> run() async {
     final showArchives = argResults!.wasParsed('archive');
 
-    listForChannel(channel, showArchives: showArchives);
+    await listForChannel(channel, showArchives: showArchives);
   }
 
-  static void listForChannel(String channel, {required bool showArchives}) {
+  static Future<void> listForChannel(String channel,
+      {required bool showArchives}) async {
     final ch = Channel(channel);
 
     print('');
     print(green('Channel $channel'));
     if (showArchives) {
-      final releases = Release.fetchReleases(channel);
+      final releases = await Release.fetchReleases(channel);
 
       print('Available to download:');
 

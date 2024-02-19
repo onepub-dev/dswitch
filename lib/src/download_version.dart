@@ -23,21 +23,21 @@ class DownloadVersion {
   String version;
   String saveToPath;
 
-  void download() {
+  Future<void> download() async {
     if (Platform.isLinux) {
-      fetchLinuxChannel();
+      await fetchLinuxChannel();
     }
     if (Platform.isWindows) {
-      fetchWindowsChannel();
+      await fetchWindowsChannel();
     }
 
     if (Platform.isMacOS) {
-      fetchMacOSChannel();
+      await fetchMacOSChannel();
     }
   }
 
-  void fetchMacOSChannel() {
-    downloadDart(
+  Future<void> fetchMacOSChannel() async {
+    await downloadDart(
         channel: channel,
         platform: 'macos',
         version: version,
@@ -45,8 +45,8 @@ class DownloadVersion {
     expandSdk();
   }
 
-  void fetchWindowsChannel() {
-    downloadDart(
+  Future<void> fetchWindowsChannel() async {
+    await downloadDart(
       channel: channel,
       platform: 'windows',
       version: version,
@@ -55,8 +55,8 @@ class DownloadVersion {
     expandSdk();
   }
 
-  void fetchLinuxChannel() {
-    downloadDart(
+  Future<void> fetchLinuxChannel() async {
+    await downloadDart(
         channel: channel,
         platform: 'linux',
         version: version,
@@ -122,11 +122,11 @@ class DownloadVersion {
     }
   }
 
-  void downloadDart(
+  Future<void> downloadDart(
       {required String channel,
       required String platform,
       required String version,
-      required String architecture}) {
+      required String architecture}) async {
     final downloadPath = sdkDownloadPath(channel);
 
     if (!exists(dirname(downloadPath))) {
@@ -139,7 +139,7 @@ class DownloadVersion {
     var last = 0;
 
     try {
-      fetch(
+      await fetch(
           url:
               'https://storage.googleapis.com/dart-archive/channels/$channel/release/$version/sdk/dartsdk-$platform-$architecture-release.zip',
           saveToPath: downloadPath,

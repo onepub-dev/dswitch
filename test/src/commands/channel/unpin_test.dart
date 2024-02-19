@@ -15,7 +15,7 @@ void main() {
     final runner = buildCommandRunner();
 
     final channel = Channel('beta');
-    final tuple = selectVersions(channel);
+    final tuple = await selectVersions(channel);
     final latest = tuple.latest.toString();
     final prior = tuple.prior.toString();
 
@@ -56,25 +56,24 @@ void main() {
 
 /// select a version that we can install that isn't
 /// currently active
-Tuple selectVersions(Channel channel) {
-  final releases = Release.fetchReleases(channel.name);
+Future<Tuple> selectVersions(Channel channel) async {
+  final releases = await Release.fetchReleases(channel.name);
 
   Version? latest;
   Version? prior;
 
   final active = Version.parse(channel.currentVersion);
   for (final release in releases) {
-    // we prefer a cached version to speed things up.
-    if (!channel.isVersionCached(release.version.toString())) {
-      continue;
-    }
-    if (latest != null) {
-      prior = latest;
-    }
-    latest ??= release.version;
+    // we are looking for a version which isn't currently active.
     if (release.version == active) {
       continue;
     }
+
+    if (latest == null) {
+      latest = release.version;
+      continue;
+    }
+    prior = release.version;
 
     break;
   }

@@ -24,10 +24,10 @@ class GlobalListCommand extends Command<void> {
   String get name => 'list';
 
   @override
-  void run() {
+  Future<void> run() async {
     final showArchives = argResults!.wasParsed('archive');
     for (final channel in channels) {
-      ListCommand.listForChannel(channel, showArchives: showArchives);
+      await ListCommand.listForChannel(channel, showArchives: showArchives);
     }
   }
 }

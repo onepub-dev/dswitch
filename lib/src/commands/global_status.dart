@@ -19,7 +19,7 @@ class GlobalStatusCommand extends Command<void> {
   String get name => 'status';
 
   @override
-  void run() {
+  Future<void> run() async {
     for (final channel in channels) {
       final ch = Channel(channel);
       if (ch.isActive) {
@@ -31,7 +31,7 @@ class GlobalStatusCommand extends Command<void> {
     for (final channel in channels) {
       final ch = Channel(channel);
       if (ch.isDownloaded()) {
-        StatusCommand.printStatus(channel);
+        await StatusCommand.printStatus(channel);
         print('');
       } else {
         print(green('Channel $channel has not been installed.'));

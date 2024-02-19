@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('releases ...', () async {
-    final releases = Release.fetchReleases('stable');
+    final releases = await Release.fetchReleases('stable');
 
     for (final release in releases) {
       print(release.version);

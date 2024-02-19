@@ -24,8 +24,8 @@ Upgrades the $channel channel to the latest version.
   String get name => 'upgrade';
 
   @override
-  void run() {
+  Future<void> run() async {
     checkIsFullyInstalled();
-    Channel(channel).upgrade();
+    await Channel(channel).upgrade();
   }
 }

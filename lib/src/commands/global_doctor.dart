@@ -8,8 +8,8 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:dcli/dcli.dart';
-import '../../dswitch.dart';
 
+import '../../dswitch.dart';
 import '../channel.dart';
 import '../constants.dart';
 import 'channel/status.dart';
@@ -26,7 +26,7 @@ Prints details on how DSwitch is configured.
   String get name => 'doctor';
 
   @override
-  void run() {
+  Future<void> run() async {
     print(green('DSwitch $packageVersion'));
     print('PATH: \n\t${PATH.join('\n\t')}');
 
@@ -43,7 +43,7 @@ Prints details on how DSwitch is configured.
     for (final channel in channels) {
       final ch = Channel(channel);
       if (ch.isDownloaded()) {
-        StatusCommand.printStatus(channel);
+        await StatusCommand.printStatus(channel);
         print('');
       } else {
         print(green('Channel $channel has not been installed.'));

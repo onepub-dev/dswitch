@@ -26,7 +26,7 @@ Switches to the passed channel.
   String get name => 'use';
 
   @override
-  void run() {
+  Future<void> run() async {
     checkIsFullyInstalled();
     String channel;
 
@@ -51,12 +51,11 @@ Switches to the passed channel.
       print('You are already on the $channel channel.');
     } else {
       if (!ch.isDownloaded()) {
-        final version = ch.fetchLatestVersion();
+        final version = await ch.fetchLatestVersion();
         print(orange('Downloading latest version ($version) for $channel'));
 
-        ch
-          ..download(version)
-          ..currentVersion = version;
+        await ch.download(version);
+        await ch.setCurrentVersion(version);
       }
 
       ch.use();
