@@ -1,3 +1,8 @@
+# 6.0.0-alpha.2
+- removed the logic that force an install of the stable version of dart
+  given we must already be running a dart version we don't need to install
+  one and by not installing one we are not forcing a specific version on the
+  user.
 # 6.0.0-alpha.1
 - moved to the alpha version of dcli 4.x
 

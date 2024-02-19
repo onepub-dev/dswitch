@@ -52,7 +52,6 @@ Future<void> run(List<String> args, ArgParser argParser) async {
 
   if (!parsed.wasParsed('stage2')) {
     runStage1();
-    await installDart();
   } else {
     final pathToDSwitch = parsed['stage2'] as String;
     final pathToHome = parsed['home'] as String;
@@ -213,7 +212,7 @@ String get pathToInstallDir {
 Future<void> installDart() async {
   Channel? active;
 
-  /// Check we have an installed and active version of art.
+  /// Check we have an installed and active version of dart.
   for (final channel in channels) {
     final ch = Channel(channel);
     if (ch.isActive) {
