@@ -1,3 +1,6 @@
+# 7.0.0
+- upgraded to dcli 4.x and dart 3.2 to fix the waitFor issue.
+
 # 6.0.0-alpha.2
 - removed the logic that force an install of the stable version of dart
   given we must already be running a dart version we don't need to install

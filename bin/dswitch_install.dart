@@ -10,9 +10,7 @@ import 'dart:io' as io;
 import 'package:args/args.dart';
 import 'package:dcli/dcli.dart';
 import 'package:dswitch/dswitch.dart';
-import 'package:dswitch/src/channel.dart';
 import 'package:dswitch/src/commands/commands.dart';
-import 'package:dswitch/src/constants.dart';
 import 'package:dswitch/src/exceptions/exit.dart';
 import 'package:dswitch/src/settings.dart';
 import 'package:path/path.dart';
@@ -51,7 +49,7 @@ Future<void> run(List<String> args, ArgParser argParser) async {
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   if (!parsed.wasParsed('stage2')) {
-    runStage1();
+    await runStage1();
   } else {
     final pathToDSwitch = parsed['stage2'] as String;
     final pathToHome = parsed['home'] as String;
@@ -63,7 +61,7 @@ Future<void> run(List<String> args, ArgParser argParser) async {
   print(orange('dswitch is ready to run'));
 }
 
-void runStage1() {
+Future<void> runStage1() async {
   if (!Shell.current.isPrivilegedUser) {
     if (io.Platform.isWindows) {
       throw ExitException(
@@ -209,21 +207,21 @@ String get pathToInstallDir {
   return target;
 }
 
-Future<void> installDart() async {
-  Channel? active;
+// Future<void> installDart() async {
+//   Channel? active;
 
-  /// Check we have an installed and active version of dart.
-  for (final channel in channels) {
-    final ch = Channel(channel);
-    if (ch.isActive) {
-      active = ch;
-    }
-  }
+//   /// Check we have an installed and active version of dart.
+//   for (final channel in channels) {
+//     final ch = Channel(channel);
+//     if (ch.isActive) {
+//       active = ch;
+//     }
+//   }
 
-  /// if we don't have an active version then install and make it active.
-  if (active == null) {
-    final channel = Channel('stable');
-    await channel.installLatestVersion();
-    channel.use();
-  }
-}
+//   /// if we don't have an active version then install and make it active.
+//   if (active == null) {
+//     final channel = Channel('stable');
+//     await channel.installLatestVersion();
+//     channel.use();
+//   }
+// }

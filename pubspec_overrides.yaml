@@ -1,3 +1,7 @@
-dependency_overrides:
-  # dcli:
-  #   path: ../dcli/dcli
+# dependency_overrides:
+#   dcli:
+#     path: ../dcli-4.x/dcli
+#   dcli_core:
+#     path: ../dcli-4.x/dcli_core
+#   dcli_terminal:
+#     path: ../dcli-4.x/dcli_terminal
