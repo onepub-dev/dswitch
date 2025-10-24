@@ -1,3 +1,6 @@
+# 7.2.0
+- lint fixes and upgraded all packages.
+
 # 7.0.0
 - upgraded to dcli 4.x and dart 3.2 to fix the waitFor issue.
 
