@@ -12,12 +12,13 @@ import '../../exceptions/exit.dart';
 import '../../first_run.dart';
 
 class PinCommand extends Command<void> {
+  String channel;
+
   PinCommand(this.channel) {
     argParser.addFlag('force',
         help: 'If required, the pinned dart version is downloaded and '
             'installed without prompting the user.');
   }
-  String channel;
 
   @override
   String get description => '''

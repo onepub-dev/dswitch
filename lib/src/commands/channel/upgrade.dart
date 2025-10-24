@@ -10,8 +10,9 @@ import '../../channel.dart';
 import '../../first_run.dart';
 
 class UpgradeCommand extends Command<void> {
-  UpgradeCommand(this.channel);
   String channel;
+
+  UpgradeCommand(this.channel);
 
   @override
   String get description => '''

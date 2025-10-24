@@ -7,13 +7,18 @@
 import 'dart:convert';
 
 import 'package:dcli/dcli.dart';
-import 'package:dcli_core/dcli_core.dart' hide Settings;
 import 'package:path/path.dart';
 import 'package:pub_semver/pub_semver.dart';
 
-Version unknown = Version(0, 0, 0);
+var unknown = Version(0, 0, 0);
 
 class Release {
+  late final Version version;
+
+  DateTime? released;
+
+  late bool validRelease;
+
   Release(String jsonRelease) {
     validRelease = false;
     // later conside fetching the release details from:
@@ -34,9 +39,6 @@ class Release {
     }
   }
 
-  late final Version version;
-  DateTime? released;
-  late bool validRelease;
   int compareTo(Release rhs) => version.compareTo(rhs.version);
 
   /// downloads and returns a list of available releases for

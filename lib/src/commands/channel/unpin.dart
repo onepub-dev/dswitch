@@ -11,8 +11,9 @@ import '../../channel.dart';
 import '../../first_run.dart';
 
 class UnpinCommand extends Command<void> {
-  UnpinCommand(this.channel);
   String channel;
+
+  UnpinCommand(this.channel);
 
   @override
   String get description => '''

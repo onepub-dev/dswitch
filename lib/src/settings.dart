@@ -25,7 +25,6 @@ Future<void> updateVersionNo(String pathToHome) async {
   settings['version'] = packageVersion;
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
-  // ignore: discarded_futures
   await settings.save();
   verbose(() =>
       'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
@@ -71,7 +70,6 @@ Future<void> createSettings() async {
   );
 
   settings['version'] = packageVersion;
-  // ignore: discarded_futures
   await settings.save();
 }
 

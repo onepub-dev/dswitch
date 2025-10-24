@@ -12,12 +12,13 @@ import '../../exceptions/exit.dart';
 import '../../first_run.dart';
 
 class InstallCommand extends Command<void> {
+  String channel;
+
   InstallCommand(this.channel) {
     argParser.addFlag('select',
         abbr: 's',
         help: 'Displays a list of available releases that you can select from');
   }
-  String channel;
 
   @override
   String get description => '''

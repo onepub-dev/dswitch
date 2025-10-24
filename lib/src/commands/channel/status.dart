@@ -10,8 +10,9 @@ import 'package:dcli/dcli.dart';
 import '../../channel.dart';
 
 class StatusCommand extends Command<void> {
-  StatusCommand(this.channel);
   String channel;
+
+  StatusCommand(this.channel);
 
   @override
   String get description => '''

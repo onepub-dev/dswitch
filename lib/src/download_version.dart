@@ -15,13 +15,16 @@ import 'channel.dart';
 import 'exceptions/exit.dart';
 
 class DownloadVersion {
-  DownloadVersion(this.channel, this.version, this.saveToPath);
-
   /// The path to the 'latest' version for a channel.
-  static const String latest = 'latest';
+  static const latest = 'latest';
+
   String channel;
+
   String version;
+
   String saveToPath;
+
+  DownloadVersion(this.channel, this.version, this.saveToPath);
 
   Future<void> download() async {
     if (Platform.isLinux) {

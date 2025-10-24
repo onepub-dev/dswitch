@@ -22,11 +22,13 @@ import 'releases.dart';
 ///
 
 class Channel {
+  String name;
+
+  late var _settings = SettingsYaml.load(pathToSettings: _pathToSettings);
+
   Channel(this.name) {
     createPaths();
   }
-
-  String name;
 
   /// Returns true if this is the active channel
   bool get isActive {
@@ -92,20 +94,18 @@ class Channel {
       deleteSymlink(_channelSymlink);
     }
 
-    symlink(pathToCurrentVersion, _channelSymlink);
+    createSymLink(targetPath: pathToCurrentVersion, linkPath: _channelSymlink);
   }
 
   void _createActiveSymLink() {
     if (exists(activeSymlinkPath, followLinks: false)) {
       deleteSymlink(activeSymlinkPath);
     }
-    symlink(pathToCurrentVersion, activeSymlinkPath);
+    createSymLink(
+        targetPath: pathToCurrentVersion, linkPath: activeSymlinkPath);
   }
 
-  bool get isPinned => pinned == true;
-
-  late SettingsYaml _settings =
-      SettingsYaml.load(pathToSettings: _pathToSettings);
+  bool get isPinned => pinned;
 
   /// Used by unit tests to force a reload of the settings when
   /// a spawned version of dswitch has updated it.
@@ -146,7 +146,7 @@ class Channel {
   String _pathToVersionSdk(String version) =>
       join(_pathToVersion(version), 'dart-sdk');
 
-  /// Channel Symlink - ~/.dswitch/<channel>
+  /// Channel Symlink - `~/.dswitch/<channel>`
   String get _channelSymlink => channelSymlink(name);
 
   static String channelSymlink(String channel) => join(dswitchPath, channel);
@@ -170,8 +170,8 @@ class Channel {
   /// This will normally be the same as the [latestVersion] unless
   /// this channel is pinned.
   String get currentVersion {
-    var _version = _settings['currentVersion'] as String?;
-    return _version ??= latestVersion;
+    var version = _settings['currentVersion'] as String?;
+    return version ??= latestVersion;
   }
 
   Future<void> setCurrentVersion(String version) async {
@@ -193,7 +193,6 @@ class Channel {
 
   Future<void> setPinned({required bool pinned}) async {
     _settings['pinned'] = pinned;
-    // ignore: discarded_futures
     await _settings.save();
   }
 

@@ -86,8 +86,9 @@ Future<Tuple> selectVersions(Channel channel) async {
 }
 
 class Tuple {
-  Tuple(this.latest, this.prior);
-
   Version latest;
+
   Version prior;
+
+  Tuple(this.latest, this.prior);
 }

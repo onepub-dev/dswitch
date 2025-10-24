@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 
 import 'channel.dart';
 
-List<String> channels = ['stable', 'beta', 'dev'];
+var channels = <String>['stable', 'beta', 'dev'];
 String dswitchPath = join(HOME, '.dswitch');
 String activeSymlinkPath = join(dswitchPath, 'active');
 String stableSymlinkPath = Channel.channelSymlink('stable');

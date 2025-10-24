@@ -94,7 +94,7 @@ Future<void> runStage1() async {
         showUsage: false);
   }
 
-  withTempDir((compileDir) {
+  await withTempDirAsync((compileDir) async {
     copyTree(pathToDSwitch, compileDir);
 
     hackPubspecForDev(pathToDSwitch, compileDir);
@@ -184,7 +184,6 @@ void removeOldDSwitch() {
   if (exists(join(rootPath, 'usr', 'bin', 'dswitch'))) {
     try {
       delete(join(rootPath, 'usr', 'bin', 'dswitch'));
-      // ignore: avoid_catches_without_on_clauses
     } catch (e) {
       printerr('''
   Error trying to delete an old version of dswitch located at:

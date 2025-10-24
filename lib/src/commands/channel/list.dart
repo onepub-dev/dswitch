@@ -13,12 +13,13 @@ import '../../channel.dart';
 import '../../releases.dart';
 
 class ListCommand extends Command<void> {
+  String channel;
+
   ListCommand(this.channel) {
     argParser.addFlag('archive',
         abbr: 'a',
         help: 'List all of the versions available in the Dart online archive');
   }
-  String channel;
 
   @override
   String get description => 'List all of the locally cached version of '
