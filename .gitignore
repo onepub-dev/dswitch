@@ -17,3 +17,4 @@ bin/dswitch
 **/*.vm.json
 .failed_tracker
 bin/dswitch_install
+logs/analyzer.txt
