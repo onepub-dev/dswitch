@@ -1,0 +1,2 @@
+# dswitch tests need to be serialised because the share sdk versions
+test-concurrency: 1

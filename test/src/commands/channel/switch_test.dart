@@ -26,6 +26,7 @@ void main() {
     await beta.installLatestVersion();
 
     await runner.run(['use', 'stable']);
+    addTearDown(() => runner.run(['use', 'stable']));
 
     final tuple = await selectVersions(beta);
     final latest = tuple.latest;
@@ -53,15 +54,20 @@ void main() {
 
     await runner.run(['beta', 'install', latest.toString()]);
     beta.reloadSettings;
-    final postInstallVersion = beta.currentVersion;
+    // Installing a version does not select it. Unpin selects the newest
+    // cached version, which may be newer than the version just installed.
+    final latestCachedVersion = beta.latestVersion;
+    expect(beta.isVersionCached(latest.toString()), isTrue);
 
+    await runner.run(['use', 'beta']);
     await runner.run(['beta', 'pin', prior.toString()]);
     beta.reloadSettings;
     expect(beta.currentVersion, equals(prior.toString()));
 
     await runner.run(['beta', 'unpin']);
     beta.reloadSettings;
-    expect(beta.currentVersion, equals(postInstallVersion));
+    expect(beta.currentVersion, equals(latestCachedVersion));
+    expect(beta.isPinned, isFalse);
 
     await runner.run(['use', 'stable']);
     stable.reloadSettings;

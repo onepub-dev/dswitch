@@ -1,3 +1,7 @@
+# 7.3.0
+- lint fixes and upgraded deps.
+- ignored logs
+
 # 7.2.0
 - lint fixes and upgraded all packages.
 

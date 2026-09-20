@@ -16,12 +16,21 @@ void main() {
 
     final channel = Channel('beta');
     final tuple = await selectVersions(channel);
-    final latest = tuple.latest.toString();
     final prior = tuple.prior.toString();
 
     await runner.run(['use', 'stable']);
+    addTearDown(() => runner.run(['use', 'stable']));
 
     expect(Channel('stable').isActive, isTrue);
+
+    // Prepare both releases so pinning never prompts for a download, and
+    // derive the unpin target from all cached versions, including newer ones.
+    for (final version in [tuple.latest.toString(), prior]) {
+      if (!channel.isVersionCached(version)) {
+        await channel.download(version);
+      }
+    }
+    final latest = channel.latestVersion;
 
     // put us onto the latest installed version of beta.
     await runner.run(['beta', 'unpin']);
@@ -30,16 +39,19 @@ void main() {
     expect(channel.currentVersion, equals(latest));
     expect(channel.isActive, isFalse);
 
+    await runner.run(['use', 'beta']);
     await runner.run(['beta', 'pin', prior]);
     channel.reloadSettings;
 
     expect(channel.currentVersion, equals(prior));
+    expect(channel.isPinned, isTrue);
     expect(channel.isActive, isTrue);
 
     await runner.run(['beta', 'unpin']);
     channel.reloadSettings;
 
     expect(channel.currentVersion, equals(latest));
+    expect(channel.isPinned, isFalse);
     expect(channel.isActive, isTrue);
 
     /// now switch to beta and check we got the right version.
