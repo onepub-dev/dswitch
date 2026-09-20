@@ -11,8 +11,8 @@ import 'package:settings_yaml/settings_yaml.dart';
 
 import '../dswitch.dart';
 
-final relPathToSettings = join('.dswitch', 'settings.yaml');
-final pathToSettings = join(HOME, relPathToSettings);
+final String relPathToSettings = join('.dswitch', 'settings.yaml');
+final String pathToSettings = join(HOME, relPathToSettings);
 
 /// This method is called from stage2 of the install.
 /// When run on linux stage2 is run under sudo so the
