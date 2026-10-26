@@ -8,13 +8,21 @@ For those interested, DSwitch is written in Dart using the [DCli](https://pub.de
 
 DSwitch can switch between Dart Channels (stable, beta, dev) as well as versions within those channels.
 
+## Upgrading to 8.0.0
+
+DSwitch 8.0.0 requires Dart 3.13 or later. SDKs downloaded by older DSwitch
+versions remain on disk, but DSwitch 8.0.0 only treats a version as cached after
+it has completed the new verified installation process. Reinstall a version with
+`dswitch <channel> install <version>` before switching to it. You can remove an
+old cached directory with `dswitch <channel> delete <version>`.
+
 Switching between Dart channels is as easy as:
 
 ```
 dswitch use beta
 ```
 
-Full documenation is on [gitbooks](https://dswitch.onepub.dev/).
+Full documentation is on [GitBook](https://dswitch.onepub.dev/).
 
 
 # Unit tests

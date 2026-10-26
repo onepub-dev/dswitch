@@ -1,3 +1,21 @@
+# 8.0.0
+- Validate Dart channel and version before using them in cache paths.
+- Download SDK ZIPs into private temporary directories and propagate network
+  failures instead of extracting error responses.
+- Extract and verify SDKs in a separate staging directory, then promote them
+  with rollback on ordinary failures so failed downloads cannot appear cached.
+  Previously cached SDKs
+  require reinstalling to receive a completion marker; legacy directories can
+  still be deleted through the CLI.
+- Keep active links in sync when reinstalling a channel, refuse to unpin when
+  no verified SDK is cached, and reinstall incomplete current SDKs on upgrade.
+  Switching to or installing a pinned channel reinstalls its selected version
+  when needed. Enabling DSwitch prepares a verified stable SDK before changing
+  active links.
+- Preserve paths with spaces during installer handoff and return nonzero exit
+  codes for handled command failures. Avoid logging the settings file contents.
+- Upgrade DCLI and use darchive's bounded ZIP extraction. Require Dart 3.13.
+
 # 7.3.0
 - lint fixes and upgraded deps.
 - ignored logs

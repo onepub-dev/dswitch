@@ -15,15 +15,19 @@ class InstallCommand extends Command<void> {
   String channel;
 
   InstallCommand(this.channel) {
-    argParser.addFlag('select',
-        abbr: 's',
-        help: 'Displays a list of available releases that you can select from');
+    argParser.addFlag(
+      'select',
+      abbr: 's',
+      help: 'Displays a list of available releases that you can select from',
+    );
   }
 
   @override
-  String get description => '''
+  String get description =>
+      '''
 Installs the given version for the $channel channel but does not switch to it.
-If you don't provide a version then the latest version is installed.
+If you don't provide a version then the latest version is installed, or the
+pinned version if the channel is pinned.
 If you pass the --select switch then a menu is displayed with the version available for download.''';
 
   @override
@@ -38,11 +42,12 @@ If you pass the --select switch then a menu is displayed with the version availa
       if (argResults!.rest.isNotEmpty) {
         if (argResults!.rest.length != 1) {
           throw ExitException(
-              1,
-              'You may only pass a single version no. '
-              'Found ${argResults!.rest}',
-              showUsage: true,
-              argParser: argParser);
+            1,
+            'You may only pass a single version no. '
+            'Found ${argResults!.rest}',
+            showUsage: true,
+            argParser: argParser,
+          );
         }
 
         final version = argResults!.rest[0];
@@ -74,8 +79,11 @@ If you pass the --select switch then a menu is displayed with the version availa
     print('Installing $channel version $version...');
     final ch = Channel(channel);
     if (ch.isVersionCached(version)) {
-      throw ExitException(1, 'The selected version is already installed.',
-          showUsage: false);
+      throw ExitException(
+        1,
+        'The selected version is already installed.',
+        showUsage: false,
+      );
     }
     await ch.download(version);
     print('Install of $channel channel complete. ');

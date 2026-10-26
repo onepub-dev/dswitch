@@ -5,12 +5,16 @@
  */
 
 import 'package:args/command_runner.dart';
+
 import '../channel.dart';
 
 import '../constants.dart';
 
 class GlobalEnableCommand extends Command<void> {
-  GlobalEnableCommand();
+  final Channel Function(String) channelFactory;
+
+  GlobalEnableCommand({Channel Function(String)? channelFactory})
+    : channelFactory = channelFactory ?? Channel.new;
 
   @override
   String get description => '''
@@ -21,14 +25,13 @@ Enables DSwitch, the Stable channel will be activated.
   String get name => 'enable';
 
   @override
-  void run() {
-    channels.forEach(enableChannel);
-
-    Channel('stable').use();
+  Future<void> run() async {
+    final stable = channelFactory('stable');
+    await stable.prepareForUse();
+    for (final name in channels) {
+      channelFactory(name).restoreChannelLinkIfCached();
+    }
+    stable.use();
     print('DSwitch has been enabled. The Stable channel is now active');
-  }
-
-  void enableChannel(String name) {
-    Channel(name).use();
   }
 }
