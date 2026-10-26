@@ -1,4 +1,5 @@
 #! /usr/bin/env dcli
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -18,13 +19,18 @@ import 'package:pubspec_manager/pubspec_manager.dart';
 
 void main(List<String> args) async {
   final argParser = ArgParser()
-    ..addFlag('verbose',
-        abbr: 'v', negatable: false, help: 'Dump verbose logging information')
+    ..addFlag(
+      'verbose',
+      abbr: 'v',
+      negatable: false,
+      help: 'Dump verbose logging information',
+    )
     ..addOption('stage2', help: 'Stage 2', hide: true)
     ..addOption('home', help: 'Users home directory.', hide: true);
   try {
     await run(args, argParser);
   } on ExitException catch (e) {
+    io.exitCode = e.code;
     String message;
     if (e.code == 0) {
       message = green(e.message);
@@ -43,16 +49,30 @@ Future<void> run(List<String> args, ArgParser argParser) async {
   try {
     parsed = argParser.parse(args);
   } on FormatException catch (e) {
-    throw ExitException(1, red('Invalid command line option: ${e.message}'),
-        showUsage: true, argParser: argParser);
+    throw ExitException(
+      1,
+      red('Invalid command line option: ${e.message}'),
+      showUsage: true,
+      argParser: argParser,
+    );
   }
   Settings().setVerbose(enabled: parsed['verbose'] as bool);
 
   if (!parsed.wasParsed('stage2')) {
     await runStage1();
   } else {
-    final pathToDSwitch = parsed['stage2'] as String;
-    final pathToHome = parsed['home'] as String;
+    final pathToDSwitch = parsed['stage2'] as String?;
+    final pathToHome = parsed['home'] as String?;
+    if (pathToDSwitch == null ||
+        pathToDSwitch.isEmpty ||
+        pathToHome == null ||
+        pathToHome.isEmpty) {
+      throw ExitException(
+        1,
+        'Stage 2 requires both --stage2 and --home.',
+        showUsage: false,
+      );
+    }
     await runStage2(pathToDSwitch, pathToHome: pathToHome);
 
     throw ExitException(0, 'Stage2 Completed successfully', showUsage: false);
@@ -65,8 +85,10 @@ Future<void> runStage1() async {
   if (!Shell.current.isPrivilegedUser) {
     if (io.Platform.isWindows) {
       throw ExitException(
-          1, 'Please run dswitch_install with Administrative privileges.',
-          showUsage: false);
+        1,
+        'Please run dswitch_install with Administrative privileges.',
+        showUsage: false,
+      );
     }
   }
 
@@ -88,18 +110,20 @@ Future<void> runStage1() async {
 
   if (!exists(join(pathToDSwitch, 'bin', 'dswitch_install.dart'))) {
     throw ExitException(
-        1,
-        'Could not find dswitch_install in pub cache. Please run '
-        "'dart pub global activate dswitch' and try again.",
-        showUsage: false);
+      1,
+      'Could not find dswitch_install in pub cache. Please run '
+      "'dart pub global activate dswitch' and try again.",
+      showUsage: false,
+    );
   }
 
   await withTempDirAsync((compileDir) async {
     copyTree(pathToDSwitch, compileDir);
 
     hackPubspecForDev(pathToDSwitch, compileDir);
-    final installScript =
-        DartScript.fromFile(join(compileDir, 'bin', 'dswitch_install.dart'));
+    final installScript = DartScript.fromFile(
+      join(compileDir, 'bin', 'dswitch_install.dart'),
+    );
     print('');
     print(blue('Compiling dswitch_install from ${truepath(pathToDSwitch)}'));
     DartSdk().runPubGet(compileDir, progress: Progress.printStdErr());
@@ -107,9 +131,9 @@ Future<void> runStage1() async {
 
     print('');
     print(blue('Compiling dswitch'));
-    final dswitchScript =
-        DartScript.fromFile(join(compileDir, 'bin', 'dswitch.dart'))
-          ..compile(workingDirectory: compileDir);
+    final dswitchScript = DartScript.fromFile(
+      join(compileDir, 'bin', 'dswitch.dart'),
+    )..compile(workingDirectory: compileDir);
 
     // /// duplicate the script as we may not be able to copy ourselves
     // final duplicate =
@@ -117,18 +141,23 @@ Future<void> runStage1() async {
     // copy(script.pathToExe, duplicate, overwrite: true);
 
     if (!io.Platform.isWindows) {
-      print(green('Please provide your sudo password so we can install '
-          'dswitch into your PATH'));
+      print(
+        green(
+          'Please provide your sudo password so we can install '
+          'dswitch into your PATH',
+        ),
+      );
     }
     print('');
     var verboseSwitch = '';
     if (Settings().isVerbose) {
       verboseSwitch = '-v';
     }
-    start(
-        '${installScript.pathToExe} --stage2=${dswitchScript.pathToExe} '
-        '$verboseSwitch --home="$HOME"',
-        privileged: true);
+    startFromArgs(installScript.pathToExe, [
+      '--stage2=${dswitchScript.pathToExe}',
+      if (verboseSwitch.isNotEmpty) verboseSwitch,
+      '--home=$HOME',
+    ], privileged: true);
   }, keep: true);
 }
 
@@ -153,27 +182,31 @@ void hackPubspecForDev(String pathToDSwitch, String compileDir) {
 }
 
 /// In stage 2 we are running from a compiled exe as a privilged user.
-Future<void> runStage2(String pathToDSwitch,
-    {required String pathToHome}) async {
+Future<void> runStage2(
+  String pathToDSwitch, {
+  required String pathToHome,
+}) async {
   final target = pathToInstallDir;
 
   if (!exists(pathToDSwitch)) {
     throw ExitException(
-        1,
-        'Could not find dswitch in pub cache. Please run '
-        "'dart pub global activate dswitch' and try again.",
-        showUsage: false);
+      1,
+      'Could not find dswitch in pub cache. Please run '
+      "'dart pub global activate dswitch' and try again.",
+      showUsage: false,
+    );
   }
 
   print(blue('Installing dswitch into $target.'));
   // per 4.5 we installed to /usr/bin
   // so this is code to clean up old versions of dswitch if they exist.
-  removeOldDSwitch();
-  copy(pathToDSwitch, target, overwrite: true);
-  // save the version no. that we just installed so
-  // that dswtich can check its running the current
-  // version each time it starts.
-  Shell.current.releasePrivileges();
+  try {
+    removeOldDSwitch();
+    copy(pathToDSwitch, target, overwrite: true);
+  } finally {
+    Shell.current.releasePrivileges();
+  }
+  // Save the installed version after dropping privileges.
   await updateVersionNo(pathToHome);
   print('');
 }
@@ -199,7 +232,12 @@ String get pathToInstallDir {
   String target;
   if (io.Platform.isWindows) {
     target = join(
-        env['USERPROFILE']!, 'AppData', 'Local', 'Microsoft', 'WindowsApps');
+      env['USERPROFILE']!,
+      'AppData',
+      'Local',
+      'Microsoft',
+      'WindowsApps',
+    );
   } else {
     target = '/usr/local/bin';
   }

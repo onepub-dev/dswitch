@@ -26,8 +26,6 @@ Future<void> updateVersionNo(String pathToHome) async {
   verbose(() => 'updateVersionNo to $packageVersion');
   verbose(() => 'Path to settings file $pathToSettings');
   await settings.save();
-  verbose(() =>
-      'Settings now contains: ${read(pathToSettings).toList().join('\n')}');
 }
 
 ///
@@ -35,21 +33,22 @@ Future<void> updateVersionNo(String pathToHome) async {
 /// You pass in [isActivatedFromSource] then the source version
 /// may be greater than the pub-cache version and this test will still pass.
 bool isLatestPubCacheVersionInstalled({bool isActivatedFromSource = false}) {
-  final settings = SettingsYaml.load(
-    pathToSettings: pathToSettings,
-  );
+  final settings = SettingsYaml.load(pathToSettings: pathToSettings);
 
   /// we need to find the latest version from pub cache
   /// as we are likely to be running in an old compiled version
   /// of the script.
   final lastestInPubCache =
       PubCache().findPrimaryVersion('dswitch') ?? Version.parse('0.0.1-fake.1');
-  final installedVersion =
-      Version.parse((settings['version'] ?? '0.0.1-fake.2') as String);
+  final installedVersion = Version.parse(
+    (settings['version'] ?? '0.0.1-fake.2') as String,
+  );
 
-  verbose(() =>
-      'Settings version: $installedVersion, PackageVersion: $packageVersion '
-      'PubCacheVersion: $lastestInPubCache');
+  verbose(
+    () =>
+        'Settings version: $installedVersion, PackageVersion: $packageVersion '
+        'PubCacheVersion: $lastestInPubCache',
+  );
 
   // we allow an installed version greater than the pub-cache version
   // in case we are running a dev version from source.
@@ -65,9 +64,7 @@ Future<void> createSettings() async {
     createDir(dirname(pathToSettings), recursive: true);
   }
 
-  final settings = SettingsYaml.load(
-    pathToSettings: pathToSettings,
-  );
+  final settings = SettingsYaml.load(pathToSettings: pathToSettings);
 
   settings['version'] = packageVersion;
   await settings.save();

@@ -1,4 +1,5 @@
 #! /usr/bin/env dcli
+
 /* Copyright (C) S. Brett Sutton - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -24,6 +25,7 @@ Future<void> main(List<String> args) async {
   try {
     await doit(args);
   } on ExitException catch (e) {
+    exitCode = e.code;
     final String message;
     if (e.code == 0) {
       message = green(e.message);
@@ -42,7 +44,8 @@ Future<void> doit(List<String> args) async {
   try {
     parsed = runner.parse(args);
   } on UsageException catch (e) {
-    final message = '''
+    final message =
+        '''
 ${e.message}
 
 ${e.usage}''';
@@ -57,8 +60,7 @@ ${e.usage}''';
   try {
     await runner.run(args);
   } on UsageException catch (e) {
-    printerr(red(e.message));
-    print(e.usage);
+    throw ExitException(1, '${e.message}\n${e.usage}', showUsage: false);
   }
 }
 
@@ -67,8 +69,10 @@ void checkConfig() {
       !(Shell.current.isPrivilegedUser ||
           (Shell.current as WindowsMixin).inDeveloperMode())) {
     throw ExitException(
-        1, 'You must run as an Administrator or enable Developer Mode',
-        showUsage: false);
+      1,
+      'You must run as an Administrator or enable Developer Mode',
+      showUsage: false,
+    );
   }
 
   /// are we on the path
@@ -77,10 +81,12 @@ void checkConfig() {
     if (Platform.isWindows) {
       final canonical = canonicalize(activeSymlinkPath);
       if (regGetUserPath().map(canonicalize).contains(canonical)) {
-        print(red('''
+        print(
+          red('''
 
 You need to restart your terminal so it can see the DSwitch PATH changes.
-  '''));
+  '''),
+        );
         missing = false;
       }
     }
@@ -95,9 +101,12 @@ You need to restart your terminal so it can see the DSwitch PATH changes.
     if (dartPaths.length > 1) {
       if (!dartPaths[0].startsWith(activeSymlinkPath)) {
         printerr(
-            red('dswitch found another version of Dart that is being used.'));
-        print('Please check that the dswitch path is '
-            'before any other dart paths');
+          red('dswitch found another version of Dart that is being used.'),
+        );
+        print(
+          'Please check that the dswitch path is '
+          'before any other dart paths',
+        );
         print('Prepend the following path to your PATH environment variable.');
         print(activeSymlinkPath);
         print('');

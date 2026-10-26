@@ -17,6 +17,7 @@ import 'constants.dart';
 import 'download_version.dart';
 import 'exceptions/exit.dart';
 import 'releases.dart';
+import 'validation.dart';
 
 /// Used to manage a channel
 ///
@@ -26,7 +27,7 @@ class Channel {
 
   late var _settings = SettingsYaml.load(pathToSettings: _pathToSettings);
 
-  Channel(this.name) {
+  Channel(String name) : name = validatedChannel(name) {
     createPaths();
   }
 
@@ -47,24 +48,45 @@ class Channel {
 
   Future<void> installLatestVersion() async {
     if (isDownloaded()) {
-      print(orange('Channel is already installed and the current version is: '
-          '$currentVersion'));
+      print(
+        orange(
+          'Channel is already installed and the current version is: '
+          '$currentVersion',
+        ),
+      );
     } else {
-      final releases = await Release.fetchReleases(name);
-      final version = releases[0].version.toString();
+      final version = isPinned ? currentVersion : await fetchLatestVersion();
       print('Installing $name ($version) ...');
       await download(version);
-      await setCurrentVersion(version);
+      if (!isPinned) {
+        await setCurrentVersion(version);
+      }
+      if (isActive) {
+        _createActiveSymLink();
+      }
       _createChannelSymlink();
       print('Install of $name channel complete.');
     }
   }
 
   void use() {
+    if (!isDownloaded()) {
+      throw ExitException(
+        1,
+        'No verified SDK is cached for $name. Reinstall a version first.',
+        showUsage: false,
+      );
+    }
     _createActiveSymLink();
 
     /// they may never run install so we need to create this.
     _createChannelSymlink();
+  }
+
+  void restoreChannelLinkIfCached() {
+    if (isDownloaded()) {
+      _createChannelSymlink();
+    }
   }
 
   Future<void> pin(String version) async {
@@ -79,7 +101,16 @@ class Channel {
   }
 
   Future<void> unpin() async {
-    await setCurrentVersion(latestVersion);
+    final versions = cachedVersions();
+    if (versions.isEmpty) {
+      throw ExitException(
+        1,
+        'No verified SDK is cached for $name. Reinstall a version before '
+        'unpinning.',
+        showUsage: false,
+      );
+    }
+    await setCurrentVersion(basename(versions.first));
     await setPinned(pinned: false);
 
     /// If we are the active channel then we need to update the active link.
@@ -102,10 +133,28 @@ class Channel {
       deleteSymlink(activeSymlinkPath);
     }
     createSymLink(
-        targetPath: pathToCurrentVersion, linkPath: activeSymlinkPath);
+      targetPath: pathToCurrentVersion,
+      linkPath: activeSymlinkPath,
+    );
   }
 
   bool get isPinned => pinned;
+
+  bool isActiveVersion(String version) {
+    final checkedVersion = validatedSdkVersion(version);
+    if (FileSystemEntity.typeSync(activeSymlinkPath, followLinks: false) !=
+        FileSystemEntityType.link) {
+      return false;
+    }
+    final linked = Link(activeSymlinkPath).targetSync();
+    final linkedPath = normalize(
+      isAbsolute(linked) ? linked : join(dirname(activeSymlinkPath), linked),
+    );
+    final expected = normalize(
+      absolute(join(_pathToVersionSdk(checkedVersion), 'bin')),
+    );
+    return equals(linkedPath, expected);
+  }
 
   /// Used by unit tests to force a reload of the settings when
   /// a spawned version of dswitch has updated it.
@@ -120,8 +169,12 @@ class Channel {
 
   void validateChannel(ArgParser parser, String channel) {
     if (!channels.contains(channel)) {
-      throw ExitException(1, 'Invalid command. $channel',
-          showUsage: true, argParser: parser);
+      throw ExitException(
+        1,
+        'Invalid command. $channel',
+        showUsage: true,
+        argParser: parser,
+      );
     }
   }
 
@@ -141,7 +194,8 @@ class Channel {
 
   String get _pathToSettings => join(pathTo, '.channel.yaml');
 
-  String _pathToVersion(String version) => join(pathToVersions, version);
+  String _pathToVersion(String version) =>
+      join(pathToVersions, validatedSdkVersion(version));
 
   String _pathToVersionSdk(String version) =>
       join(_pathToVersion(version), 'dart-sdk');
@@ -157,6 +211,19 @@ class Channel {
 
   Future<void> download(String version) async {
     await DownloadVersion(name, version, _pathToVersion(version)).download();
+  }
+
+  /// Makes the selected SDK available before switching to this channel.
+  Future<void> prepareForUse() async {
+    if (isDownloaded()) {
+      return;
+    }
+    final version = isPinned ? currentVersion : await fetchLatestVersion();
+    print(orange('Downloading version $version for $name'));
+    await download(version);
+    if (!isPinned) {
+      await setCurrentVersion(version);
+    }
   }
 
   /// Downloads the list of versions available for this channel
@@ -197,20 +264,27 @@ class Channel {
   }
 
   static String channelPath(String channel) =>
-      join(dswitchPath, 'channels', channel);
+      join(dswitchPath, 'channels', validatedChannel(channel));
 
   /// returns a list of the version that are cached locally.
-  List<String> cachedVersions() => find('*',
-          workingDirectory: pathToVersions,
-          types: [Find.directory],
-          recursive: false)
-      .toList()
-    ..sort((a, b) =>
-        Version.parse(basename(b)).compareTo(Version.parse(basename(a))));
+  List<String> cachedVersions() =>
+      find(
+        '*',
+        workingDirectory: pathToVersions,
+        types: [Find.directory],
+        recursive: false,
+      ).toList().where(_isCompleteSdk).toList()..sort(
+        (a, b) =>
+            Version.parse(basename(b)).compareTo(Version.parse(basename(a))),
+      );
 
   void delete(String version) {
     deleteDir(_pathToVersion(version));
   }
+
+  bool hasVersionDirectory(String version) =>
+      FileSystemEntity.typeSync(_pathToVersion(version), followLinks: false) ==
+      FileSystemEntityType.directory;
 
   /// Shows the user a menu with the 20 most recent version for the channel.
   ///
@@ -218,10 +292,12 @@ class Channel {
   Future<Release> selectToInstall() async {
     final releases = await Release.fetchReleases(name);
 
-    final release = menu<Release>('Select Version to install:',
-        options: releases,
-        limit: 20,
-        format: (release) => release.version.toString());
+    final release = menu<Release>(
+      'Select Version to install:',
+      options: releases,
+      limit: 20,
+      format: (release) => release.version.toString(),
+    );
     return release;
   }
 
@@ -238,18 +314,54 @@ class Channel {
   }
 
   bool isVersionCached(String version) =>
-      cachedVersions().any((element) => basename(element) == version);
+      _isCompleteSdk(_pathToVersion(validatedSdkVersion(version)));
+
+  bool _isCompleteSdk(String versionPath) {
+    try {
+      validatedSdkVersion(basename(versionPath));
+    } on FormatException {
+      return false;
+    }
+    if (FileSystemEntity.typeSync(versionPath, followLinks: false) !=
+        FileSystemEntityType.directory) {
+      return false;
+    }
+    final dartBinary = join(
+      versionPath,
+      'dart-sdk',
+      'bin',
+      Platform.isWindows ? 'dart.exe' : 'dart',
+    );
+    final marker = File(join(versionPath, '.dswitch-complete'));
+    if (FileSystemEntity.typeSync(dartBinary, followLinks: false) !=
+            FileSystemEntityType.file ||
+        FileSystemEntity.typeSync(marker.path, followLinks: false) !=
+            FileSystemEntityType.file) {
+      return false;
+    }
+    try {
+      return marker.lengthSync() <= 128 &&
+          marker.readAsStringSync().trim() == basename(versionPath);
+    } on FileSystemException {
+      return false;
+    } on FormatException {
+      return false;
+    }
+  }
 
   Future<void> upgrade() async {
     if (isPinned) {
       printerr(
-          red('The $name is pinned. Unpin the channel first and try again'));
+        red('The $name is pinned. Unpin the channel first and try again'),
+      );
     } else {
       final version = await fetchLatestVersion();
 
-      if (version == currentVersion) {
-        print('You are already on the latest version ($version) for the '
-            '$name channel');
+      if (version == currentVersion && isVersionCached(version)) {
+        print(
+          'You are already on the latest version ($version) for the '
+          '$name channel',
+        );
       } else {
         print('Downloading $version...');
         await download(version);
